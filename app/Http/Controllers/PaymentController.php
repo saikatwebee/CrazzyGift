@@ -6,18 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Cart;
 use App\Models\Address;
+use APP\Models\GST;
 use App\Models\Order;
 use Exception;
 use Illuminate\Support\Facades\DB;
-
 use App\Mail\OrderPlacedEmail;
 use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
-
-     
-
 
     public function payment()
     {
@@ -477,4 +474,156 @@ else{
      
 
     }
+
+    public function cancellShipment(Request $request){
+       
+        $order_id = $request->input('id');
+        $order = Order::where('id',$order_id)->first();
+
+
+        $apiUrl = 'https://api.ecomexpress.in/apiv2/cancel_awb/';
+        $username = 'HACREATIONSLLP914909';
+        $password = 'UlewRODjHc';
+        $awb = $order->awb;
+
+
+        $data = array(
+            'username' => $username,
+            'password' => $password,
+            'awbs' => $awb
+        );
+
+    $ch = curl_init($apiUrl);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+    $response = curl_exec($ch);
+
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($httpCode === 200) {
+            $orderStatus['order_status']=0;
+            Order::where('id',$order_id)->update($orderStatus);
+
+            $data=['msg'=>'Order Cancelled Successfully','code'=>200];
+        }
+        else{
+           $data=['msg'=>'Something went wrong','code'=>210];
+        }
+
+        return response()->json($data);
+        curl_close($ch);
+
+    }
+
+
+    public function generateInvoice($order_id){
+        $title = 'Invoice Generation | CrazzyGift'; 
+        $heading = "Invoice";
+        
+        $order=Order::with('user')->where('id',$order_id)->first();
+        $gst =DB::table('gst')
+        ->orderBy('id', 'desc')
+        ->first();
+
+        $productStr = $order->product_details;
+        $products = json_decode($productStr);
+            $subtotal =0;
+            foreach($products as $product){
+
+                $subtotal = $subtotal + ((int)$product->price * (int)$product->quantity);
+            }
+
+
+        $invoice['userDetails'] = $order->user;
+        $invoice['products'] = $products;
+        $invoice['amount_captured'] = $order->amount;
+        $invoice['billing_address'] = $order->billing_address;
+        $invoice['shipping_address'] = $order->shipping_address;
+        $invoice['subtotal']=$subtotal;
+        $invoice['cgst']=$gst->cgst;
+        $invoice['sgst']=$gst->sgst;
+
+        return view('common.InvoiceView',compact('title','heading','invoice'));
+    } 
+
+    public function orderStatusUpdate(){
+        $orders = Order::where(['order_status'=> 1])->orderBy('id', 'desc')->get();
+
+     //   $trackingData = [];
+        if ($orders) {
+            if (count($orders) > 0) {
+                foreach ($orders as $order) {
+
+
+                    $curl = curl_init();
+
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => 'https://plapi.ecomexpress.in/track_me/api/mawbd/',
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => '',
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => 'POST',
+                        CURLOPT_POSTFIELDS => array('username' => 'HACREATIONSLLP914909', 'password' => 'UlewRODjHc', 'awb' => $order->awb),
+                    )
+                    );
+
+                    $response = curl_exec($curl);
+
+                    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                    if ($httpCode === 200) {
+                        $order->track_shipping = simplexml_load_string($response);
+
+                    }
+
+                    curl_close($curl);
+                }
+            }
+        }
+
+        foreach ($orders as $order){
+            if ($order->track_shipping) {
+
+                $id = $order->id;
+                $reason_code_number = $order->track_shipping->object->field[14];
+
+                if($reason_code_number == 003){
+                    //order shipped update order_status as 2
+                    Order::where('id', $id)->update(['order_status' => 2]);
+
+                }
+                if($reason_code_number == 005){
+                    //order reached hub update order_status as 3
+                    Order::where('id', $id)->update(['order_status' => 3]);
+
+                }
+
+                if($reason_code_number == 006){
+                    //order out for delivery update order_status as 4
+                    Order::where('id', $id)->update(['order_status' => 4]);
+
+                }
+
+                if($reason_code_number == 999){
+                    //order deliverd update order_status as 5
+                    Order::where('id', $id)->update(['order_status' => 5]);
+
+                }
+
+                 
+            }
+        }
+
+        echo "<pre>";
+        var_dump($orders);
+        die;
+        
+
+    }
+
 }

@@ -132,6 +132,11 @@ Route::middleware(['auth', 'verifyUser'])->group(function () {
 
     Route::get('/awbAjax', [ProductController::class, "awbAjax"]);
     Route::get('/manifestAjax', [ProductController::class, "manifestAjax"]);
+    Route::post('/cancellShipment', [PaymentController::class, "cancellShipment"]);
+
+    //cron jobs for updating
+    Route::get('/orderStatusUpdate', [PaymentController::class, "orderStatusUpdate"]);
+    
     Route::post('/razorpay', [PaymentController::class, "Razorpay"]);
     Route::get('/payment/status/{payment_id}/{amount}', [PaymentController::class, "payment_status"])->name('paymentStatus');
 });
@@ -217,3 +222,4 @@ Route::middleware(['guest:admin'])->prefix('admin')->group(function () {
 
 
 Route::get('/error-denied', [ErrorController::class, "errorDenied"])->name('error-denied');
+Route::get('/generateInvoice/{order_id}', [PaymentController::class, "generateInvoice"])->name('generateInvoice');
