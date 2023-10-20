@@ -42,7 +42,7 @@
                     @endif
 
 
-                    <li><a href="{{ url('/products') }}">Products</a></li>
+                    <li><a href="{{ url('/products/all') }}">Products</a></li>
 
                     <li><a href="{{ url('/shippingCart') }}">Cart Page</a></li>
 
