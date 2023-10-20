@@ -166,8 +166,15 @@
                                             </div>
 
                                         </div> {{-- col-lg-6 end --}}
+                                        @if ($order->track_shipping)
+                                            @if($reason_code_number == 001 || $reason_code_number == 1220 || $reason_code_number == 1340)
+                                                <div class="w-100" style="text-align:right;"><button class="btn btn-outline-danger" style="border-radius:20px;" onclick="cancelOrder({{$order->id}})">Cancel Order</button></div>
+                                            @endif
 
-
+                                            @if($reason_code_number == 999)
+                                            <div class="w-100" style="text-align:right;"><button class="btn btn-outline-success" style="border-radius:20px;" onclick="downloadInvoice({{$order->id}})">Download Invoice</button></div>
+                                            @endif
+                                        @endif
                                     </div> {{-- child row end --}}
 
 
@@ -186,7 +193,72 @@
             @endif
         @endif
 
+                <script>
+                    function downloadInvoice(order_id){
 
+                        const url = "{{url('/generateInvoice')}}/"+order_id;
+                        window.open(url, '_blank');
+                    }
+
+
+
+                    function cancelOrder(order_id){
+
+                        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to cancel the order",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //put all code if yes
+
+                const url = "{{ url('/cancellShipment') }}";
+
+const csrfToken = getCsrfToken();
+
+const form_datas = {
+        id: order_id,
+
+ };
+
+fetch(url, {
+method: 'POST',
+body: JSON.stringify(form_datas),
+headers: {
+    'Content-Type': 'application/json',
+    'X-CSRF-TOKEN': csrfToken,
+},
+})
+.then(response => response.json())
+.then(data => {
+console.log(data);
+
+if(data.code==200){
+    toastr.success(data.msg,'Success',{
+        onHidden: function() {
+        location.reload();
+    }
+    })
+}
+else{
+    toastr.error("Something went wrong!",'oops',{
+    onHidden: function() {
+     location.reload();
+    }
+    })
+}
+})
+.catch(error => console.error(error));
+            }
+        })
+
+                }
+                    
+                </script>
 
     </section>
 @endsection

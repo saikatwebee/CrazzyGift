@@ -59,7 +59,8 @@ class OrderController extends Controller
                 }
             }
         }
-          
+
+
        return view('AllordersView', compact('title', 'orders'));
     }
 
