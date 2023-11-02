@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $status
  * @property string $created_at
  * @property string $updated_at
+ * @property Page[] $pages
  * @property Product[] $products
+ * @property SubCategory[] $subCategories
  */
 class MainCategory extends Model
 {
@@ -23,8 +25,24 @@ class MainCategory extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function pages()
+    {
+        return $this->hasMany('App\Models\Page', 'main_category');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function products()
     {
         return $this->hasMany('App\Models\Product', 'main_category');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subCategories()
+    {
+        return $this->hasMany('App\Models\SubCategory', 'main_category');
     }
 }

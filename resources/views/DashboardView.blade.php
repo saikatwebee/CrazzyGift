@@ -8,32 +8,26 @@
 
     <!-- Your page-specific content goes here -->
 
-    <section class="carousal container my-5">
+    <section class="carousal container mb-4" style="margin-top: 3vh;">
             <div class="slider-container">
-                <div class="slider-wrapper">
+                <div class="owl-slide">
 
                     @foreach($banners as $banner)
-                    <div class="slider-slide">
-                        <img src="{{ asset('/').'banners/'.$banner->image }}" alt="Slide">
+                    <div class="slick-item">
+                        <img src="{{ asset('/').'banners/'.$banner->image }}" alt="Slide" class="banners-pic" onclick="redirectBanner(event)" data-id="{{$banner->target}}">
                     </div>
 
                     @endforeach
                     
                     
                 </div>
-                <div class="slider-controls">
-                    <button class="slider-control back" onclick="prevSlide()">
-                        <i class="fa-solid fa-arrow-left"></i></button>
-                    <button class="slider-control next" onclick="nextSlide()">
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
+                
             </div>
         </section>
 
          
 
-        <section class="carousal container">
+        {{-- <section class="carousal container">
             <div class="slideTitle">
                 <h3>Featured Collection</h3>
             </div>
@@ -67,9 +61,43 @@
                     </button>
                 </div>
             </div>
+        </section> --}}
+
+        <section class="carousal container mb-4" style="margin-top: 3vh;">
+            <div class="slideTitle">
+                <h3>Featured Collection</h3>
+            </div>
+        <div class="wrapper">
+           
+                <div class="owl-slide1">
+
+                    @foreach($res1 as $row1)
+                  
+                    <div class="card-body">
+                        <div class="image-container">
+                            <img src="{{($row1['product_image']) ? asset('/products').'/'.$row1['product_image'] : asset('/products/dummyProduct.jpg') }}" class="slick-img" onclick="window.location.href='{{url('/productDetails').'/'.$row1['slug']}}';">
+                            <button type="button" class="btn btn-sm quick-view" onclick="window.location.href='{{url('/productDetails').'/'.$row1['slug']}}';">Quick View</button>
+                        </div>
+
+                        <div class="slide-caption" onclick="window.location.href='{{url('/productDetails').'/'.$row1['slug']}}';">
+                            <h2>{{$row1['title']}}</h2>
+                            <p><i class="fa-solid fa-indian-rupee-sign"></i> {{$row1['price']}}</p>
+                        </div>
+                    
+
+                    
+                  </div>
+                  @endforeach
+
+                </div>
+                  
+                </div>
+
+         
+          </div>
         </section>
 
-        <section class="container mb-5">
+        <section class="container mb-4">
             <div class="slideTitle">
                 <h3>Occasions</h3>
             </div>
@@ -110,47 +138,76 @@
             </div>
         </section>
 
-        <section class="carousal container">
+        {{-- <section class="carousal container">
             <div class="slideTitle">
                 <h3>Best Selling</h3>
             </div>
             <div class="slider-container">
                 <div class="slider-wrapper row">
                     @foreach($res2 as $row2)
-                    <div class="slider-slide2 col-lg-3">
-                        <div class="slide-image">
-                            <img src="{{($row2['product_image']) ? asset('/products').'/'.$row2['product_image'] : asset('/products/dummyProduct.jpg') }}" alt="Slide 1">
-                            <a href="{{ url('') . '/productDetails/'.$row2['id']}}" class="overlayBestSelling4">
-                                <button>Quick View</button>
-                            </a>
+
+                        <div class="owl-slide col-lg-3">
+                            <div class="slide-image">
+                                <img src="{{($row2['product_image']) ? asset('/products').'/'.$row2['product_image'] : asset('/products/dummyProduct.jpg') }}" alt="Slide 1">
+                                <a href="{{ url('') . '/productDetails/'.$row2['id']}}" class="overlayBestSelling4">
+                                    <button>Quick View</button>
+                                </a>
+                            </div>
+                            <div class="slide-caption">
+                                <h2>{{$row2['title']}}</h2>
+                                <p><i class="fa-solid fa-indian-rupee-sign"></i> {{$row2['price']}}</p>
+                            </div>
                         </div>
-                        <div class="slide-caption">
-                            <h2>{{$row2['title']}}</h2>
-                            <p><i class="fa-solid fa-indian-rupee-sign"></i> {{$row2['price']}}</p>
-                        </div>
-                    </div>
 
                     @endforeach
 
                 </div>
-                <div class="slider-controls2">
-                    <button class="slider-control2 back2" onclick="prevSlide2()">
-                        <i class="fa-solid fa-arrow-left"></i></button>
-                    <button class="slider-control2 next2" onclick="nextSlide2()">
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
+                
             </div>
+        </section> --}}
+
+        <section class="carousal container mb-4" style="margin-top: 3vh;">
+            <div class="slideTitle">
+                <h3>Best Selling</h3>
+            </div>
+        <div class="wrapper">
+           
+                <div class="owl-slide2">
+
+                    @foreach($res2 as $row2)
+                  
+                    <div class="card-body">
+                        <div class="image-container">
+                            <img src="{{($row2['product_image']) ? asset('/products').'/'.$row2['product_image'] : asset('/products/dummyProduct.jpg') }}" class="slick-img" onclick="window.location.href='{{url('/productDetails').'/'.$row1['slug']}}';">
+                            <button type="button" class="btn btn-sm quick-view" onclick="window.location.href='{{url('/productDetails').'/'.$row2['slug']}}';">Quick View</button>
+                        </div>
+
+                        <div class="slide-caption" onclick="window.location.href='{{url('/productDetails').'/'.$row1['slug']}}';">
+                            <h2>{{$row2['title']}}</h2>
+                            <p><i class="fa-solid fa-indian-rupee-sign"></i> {{$row2['price']}}</p>
+                        </div>
+                    
+
+                    
+                  </div>
+                  @endforeach
+
+                </div>
+                  
+                </div>
+
+         
+          </div>
         </section>
 
 
 
-        <section class="carousal container mb-5">
+        <section class="carousal container mb-4" style="margin-top: 3vh;">
             <div class="slideTitle">
                 <h3>Testimonials</h3>
             </div>
-            <div class="slider-container">
-                <div class="row marGin">
+           
+                <div class="row owl-slide3">
                     <div class="slider-slide3 col-lg-4">
                         <div class="testimonial-card">
                             <div class="testimonial-user-icon">
@@ -159,13 +216,12 @@
                             <div class="testimonial-header">
                                 <img src="{{ asset('images/icons/quote.png') }}" alt="Person 1">
                                 <div class="testimonial-name">
-                                    <h3>Shiva G</h3>
+                                    <h3>Ashmita Bose</h3>
                                     <p>India</p>
                                 </div>
                             </div>
                             <div class="testimonial-description">
-                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus voluptas aliquid
-                                    minima tempore quos numquam error fuga veniam autem nam.</p>
+                                <p  >Super happy after availing service from crazygift team. Be it speed or end product, all exceeded my expectations. Thanks you.</p>
                             </div>
                             <div class="testimonial-stars">
                                 <i class="fa fa-star checked"></i>
@@ -184,13 +240,12 @@
                             <div class="testimonial-header">
                                 <img src="{{ asset('images/icons/quote.png') }}" alt="Person 1">
                                 <div class="testimonial-name">
-                                    <h3>Lady Gaga</h3>
-                                    <p>Brazil</p>
+                                    <h3>SureshKumar Maruthiah</h3>
+                                    <p>India</p>
                                 </div>
                             </div>
                             <div class="testimonial-description">
-                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus voluptas aliquid
-                                    minima tempore quos numquam error fuga veniam autem nam.</p>
+                                <p  >Excellent work .. Gifts are amazing. . I ordered for my wife’s birthday. She likes it.. Fast delivery.. i git in second day.. Excellent work keep it .. Thanks❤</p>
                             </div>
                             <div class="testimonial-stars">
                                 <i class="fa fa-star checked"></i>
@@ -209,13 +264,60 @@
                             <div class="testimonial-header">
                                 <img src="{{ asset('images/icons/quote.png') }}" alt="Person 1">
                                 <div class="testimonial-name">
-                                    <h3>Alexy</h3>
-                                    <p>Georgia</p>
+                                    <h3>Nirav Prajapati</h3>
+                                    <p>India</p>
                                 </div>
                             </div>
                             <div class="testimonial-description">
-                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus voluptas aliquid
-                                    minima tempore quos numquam error fuga veniam autem nam.</p>
+                                <p  >Wonderful experience with them. They delivered my order on time and quality as promised. I do recommend buying gifts from CrazzyGift.</p>
+                            </div>
+                            <div class="testimonial-stars">
+                                <i class="fa fa-star checked"></i>
+                                <i class="fa fa-star checked"></i>
+                                <i class="fa fa-star checked"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-slide3 col-lg-4">
+                        <div class="testimonial-card">
+                            <div class="testimonial-user-icon">
+                                <img src="{{ asset('images/icons/user3.png') }}" alt="">
+                            </div>
+                            <div class="testimonial-header">
+                                <img src="{{ asset('images/icons/quote.png') }}" alt="Person 1">
+                                <div class="testimonial-name">
+                                    <h3>Avijit Shastri</h3>
+                                    <p>India</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-description">
+                                <p>A unique gift, which was delivered in time. Very proactive team - they immediately reached out for design finalisation and shipped the product the same day. Highly recommended .</p>
+                            </div>
+                            <div class="testimonial-stars">
+                                <i class="fa fa-star checked"></i>
+                                <i class="fa fa-star checked"></i>
+                                <i class="fa fa-star checked"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-slide3 col-lg-4">
+                        <div class="testimonial-card">
+                            <div class="testimonial-user-icon">
+                                <img src="{{ asset('images/icons/user3.png') }}" alt="">
+                            </div>
+                            <div class="testimonial-header">
+                                <img src="{{ asset('images/icons/quote.png') }}" alt="Person 1">
+                                <div class="testimonial-name">
+                                    <h3>Haresh Parekh</h3>
+                                    <p>India</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-description">
+                                <p  >I order 3D crystal cube. Was very good. I think is a very good memory and worth to have it. They shipped item in USA also. Delivery was quick.</p>
                             </div>
                             <div class="testimonial-stars">
                                 <i class="fa fa-star checked"></i>
@@ -227,14 +329,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="slider-controls3">
-                    <button class="slider-control3 back3" onclick="prevSlide3()">
-                        <i class="fa-solid fa-arrow-left"></i></button>
-                    <button class="slider-control3 next3" onclick="nextSlide3()">
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
+                
+            
         </section>
 
 
@@ -247,6 +343,11 @@
                 var staticRedirect = "{{url('/')}}"+static_uid;
 
                 window.location.href=staticRedirect;
+            }
+
+           function redirectBanner(event){
+                console.log(event.target.getAttribute('data-id'));
+                window.location.href=event.target.getAttribute('data-id');
             }
 
         </script>

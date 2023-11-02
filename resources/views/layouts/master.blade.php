@@ -15,21 +15,23 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link href='https://fonts.googleapis.com/css?family=DM Sans' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.28/sweetalert2.min.css"
         integrity="sha512-IScV5kvJo+TIPbxENerxZcEpu9VrLUGh1qYWv6Z9aylhxWE4k4Fch3CHl0IYYmN+jrnWQBPlpoTVoWfSMakoKA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
 
     <!--Slick Slider -->
 
-{{-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/> --}}
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -65,7 +67,11 @@
     integrity="sha512-CyYoxe9EczMRzqO/LsqGsDbTl3wBj9lvLh6BYtXzVXZegJ8VkrKE90fVZOk1BNq3/9pyg+wn+TR3AmDuRjjiRQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    {{-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/owl.carousel.min.js"></script>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<!-- Owl Carousel JavaScript -->
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js" integrity="sha512-9CWGXFSJ+/X0LWzSRCZFsOPhSfm6jbnL+Mpqo0o8Ke2SYr8rCTqb4/wGm+9n13HtDE1NQpAEOrMecDZw4FXQGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
 <script src="{{ asset('js/main.js') }}"></script>
 <script src="{{ asset('js/register.js') }}"></script>
@@ -90,6 +96,180 @@
 @endif
 
 <script>
+    function downloadInvoice(order_id) {
+
+        const url = "{{ url('/generateInvoice') }}/" + order_id;
+        window.open(url, '_blank');
+    }
+
+
+
+    function cancelOrder(order_id) {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to cancel the order",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //put all code if yes
+
+                const url = "{{ url('/cancellShipment') }}";
+
+                const csrfToken = getCsrfToken();
+
+                const form_datas = {
+                    id: order_id,
+
+                };
+
+                fetch(url, {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+
+                        if (data.code == 200) {
+                            toastr.success(data.msg, 'Success', {
+                                onHidden: function() {
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            toastr.error("Something went wrong!", 'oops', {
+                                onHidden: function() {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        })
+
+    }
+
+    $(document).ready(() => {
+        //     $('.owl-slide').owlCarousel()
+        // });
+
+        //     $(document).ready(function(){
+        //         $('.owl-slide2,.owl-slide1').slick({
+        //             dots: true,
+        //             arrows: false,
+        //   infinite: false,
+        //   speed: 300,
+        //   slidesToShow: 4,
+        //   slidesToScroll: 4,
+        //   autoplay: true,
+
+        // autoplaySpeed: 5000, 
+        //   responsive: [
+        //     {
+        //       breakpoint: 1024,
+        //       settings: {
+        //         slidesToShow: 3,
+        //         slidesToScroll: 3,
+        //         infinite: true,
+        //         dots: true
+        //       }
+        //     },
+        //     {
+        //       breakpoint: 600,
+        //       settings: {
+        //         slidesToShow: 2,
+        //         slidesToScroll: 2
+        //       }
+        //     },
+        //     {
+        //       breakpoint: 480,
+        //       settings: {
+        //         slidesToShow: 2,
+        //         slidesToScroll: 2
+        //       }
+        //     }
+        // ]
+
+        //         });
+
+
+        $('.owl-slide3,.owl-slide2,.owl-slide1').slick({
+            // dots: true,
+            arrows: true,
+            infinite: true,
+            speed: 300,
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            autoplay: true,
+            autoplaySpeed: 4000,
+            lazyLoad: 'ondemand',
+            responsive: [{
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3,
+                        infinite: true,
+                        dots: true
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2
+                    }
+                }
+            ]
+
+        });
+
+
+
+
+        $('.owl-slide').slick({
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            //   dots: true,
+            arrows: true,
+            autoplay: true,
+            autoplaySpeed: 4000,
+            speed: 500,
+            fade: true,
+            cssEase: 'linear'
+
+        });
+
+
+    });
+
+    function nextSlide1() {
+        $('.owl-slide').slick('slickNext');
+    }
+
+    function prevSlide1() {
+        $('.owl-slide').slick('slickPrev');
+    }
+
+
+
     function BillingValidation() {
 
         var name_billing = $("#name_billing").val();
@@ -392,15 +572,11 @@
                                 method: 'POST',
                                 body: formData,
                                 headers: {
+
                                     'X-CSRF-TOKEN': csrfToken,
                                 },
                             })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                }
-                                return response.json();
-                            })
+                            .then((response) => response.json())
                             .then(data => {
 
 
@@ -439,11 +615,42 @@
                                 }
 
 
-                                toastr.success(data.msg, 'Success', {
-                                    onHidden: function() {
-                                        window.location.reload();
+
+                                if (data.errors) {
+                                    var error = data.errors;
+                                    for (const fieldName in error) {
+                                        if (error.hasOwnProperty(fieldName)) {
+                                            const errorMessages = error[fieldName];
+                                            errorMessages.forEach(errorMessage => {
+                                                toastr.error(errorMessage, 'Oops', {
+                                                    onHidden: function() {
+                                                        $(".submit-container").css({
+                                                            'top': '0px',
+                                                            'width': 'auto'
+                                                        });
+                                                        $(".spinner").css({
+                                                            'display': 'none'
+                                                        });
+                                                        $("#" + clickedButtonId)
+                                                            .css({
+                                                                'pointer-events': 'auto',
+                                                                'background': '#004a8c'
+                                                            }).val('Upload');
+                                                    }
+                                                });
+                                            });
+                                        }
                                     }
-                                });
+                                }
+
+                                if (data.code == 200) {
+                                    toastr.success(data.msg, 'Success', {
+                                        onHidden: function() {
+                                            window.location.reload();
+                                        }
+                                    });
+                                }
+
 
 
                             })
@@ -701,7 +908,7 @@
                                         submitButton = targetEle.querySelector(
                                             'input[type="submit"]');
                                         submitButton.style.backgroundColor = "#004a8cab";
-                                        submitButton.value = 'edit';
+                                        submitButton.value = 'Save & Continue';
 
 
                                         toastr.success(data.msg, 'Success', {
@@ -723,13 +930,14 @@
                                 if (cartDataString) {
                                     cartDatas = JSON.parse(cartDataString);
                                     if (cartDatas.length > 0) {
-                                     
+
                                         const updatedItemIndex = cartDatas.findIndex(item => item.id ===
-                                        uid );
+                                            uid);
 
                                         if (updatedItemIndex !== -1) {
 
-                                            cartDatas[updatedItemIndex].custom_text = custom_text_edited;
+                                            cartDatas[updatedItemIndex].custom_text =
+                                                custom_text_edited;
                                             const updatedCartDataString = JSON.stringify(cartDatas);
                                             localStorage.setItem('cartData', updatedCartDataString);
 
@@ -753,8 +961,7 @@
                                                     window.location.reload();
                                                 }
                                             });
-                                        }
-                                        else {
+                                        } else {
                                             console.log(
                                                 `Product with productId ${uid} not found in the cart.`
                                             );
@@ -762,7 +969,7 @@
                                     }
                                 }
 
-                            } 
+                            }
                         });
 
 
@@ -815,7 +1022,7 @@
 
     function getUserStatus() {
         return new Promise((resolve, reject) => {
-            fetch('http://127.0.0.1:8000/checkUser', {
+            fetch('/checkUser', {
                     method: 'GET',
                 })
                 .then(response => {
@@ -865,7 +1072,7 @@
                         const clickedButtonId = $(this).find(':submit:focus').attr('id');
                         console.log(clickedButtonId);
                         //$("#" + clickedButtonId).html(html);
-                        $(".loader-container").css('display','flex');
+                        $(".loader-container").css('display', 'flex');
 
                         var pincode = $("#pincode_billing").val();
 
@@ -874,7 +1081,7 @@
                             .then(status => {
 
                                 if (status) {
-                                   
+
 
 
                                     fetch(formAction, {
@@ -903,7 +1110,7 @@
                                                         sresponse_str)
                                                     .razorpay_payment_id;
                                                 let redirecturl =
-                                                    "http://127.0.0.1:8000/payment/status/" +
+                                                    "/payment/status/" +
                                                     payment_id + "/" + amount;
                                                 window.location.href = redirecturl;
                                             }
@@ -922,14 +1129,14 @@
                                                     .metadata
                                                     .payment_id;
                                                 let redirecturl =
-                                                    "http://127.0.0.1:8000/payment/status/" +
+                                                    "/payment/status/" +
                                                     payment_id + "/" + amount;
                                                 window.location.href = redirecturl;
                                             });
 
-                                            $(".loader-container").css('display','none');
+                                            $(".loader-container").css('display', 'none');
                                             rzp1.open();
-                                            
+
 
                                         })
                                         .catch(error => {
@@ -939,10 +1146,10 @@
 
                                 } else {
 
-                                    $(".loader-container").css('display','none');
+                                    $(".loader-container").css('display', 'none');
 
 
-                                   // $("#" + clickedButtonId).html(resetbtn);
+                                    // $("#" + clickedButtonId).html(resetbtn);
 
                                     $("#pincode_billing").addClass('inputError');
 
@@ -961,7 +1168,7 @@
                             });
                     } else {
                         if (!shippingStatus) {
-                            $(".loader-container").css('display','none');
+                            $(".loader-container").css('display', 'none');
 
                             toastr.error('Shipping address is missing!');
                         }
@@ -990,7 +1197,7 @@
 
     function checkShippingCount() {
 
-        return fetch('http://127.0.0.1:8000/checkShipping', {
+        return fetch('/checkShipping', {
                 method: 'GET',
             })
             .then(response => {
@@ -1029,7 +1236,7 @@
                 location: pincode,
             };
 
-            fetch(" http://127.0.0.1:8000/serviceAjax", {
+            fetch("/serviceAjax", {
                     method: 'POST',
                     body: JSON.stringify(form_datas),
                     headers: {

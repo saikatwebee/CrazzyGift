@@ -56,6 +56,7 @@
                         <h3><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->price }}</h3>
                     </div>
 
+                    
                     <div class="quantity_selector">
                         <div class="quantityBtn">
                             <b>Quantity</b>
@@ -89,17 +90,22 @@
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" id="product_quantity" value="1">
                             <input type="hidden" name="pincode">
-                            <a href="javascript:void(0)" id="add_cart"><button id="add_cart_btn">Add to cart</button></a>
+                            <div class="cart-btns">
+                                <a href="javascript:void(0)" id="add_cart"><button id="add_cart_btn"><i class="fa-solid fa-cart-shopping" style="margin-right: 6px;"></i>Add to cart</button></a>
+                            
+                                <a href="{{url('/products/all')}}" id="continue_cart"><button type="button" id="continue_cart_btn" class="mt-3">Continue Shopping<i class="fa-solid fa-arrow-right-long" style="margin-left: 6px;"></i></button></a>
+                            </div>
+                           
                         </form>
 
                     </div>
 
                     <div class="productDescriptionDetail">
-                        <p>{{ $product->description }}</p>
+                        <p>{!! $product->description !!}</p>
 
                         <ul>
-                            <li><strong>Size</strong> - {{ $product->breadth }} (width) x {{ $product->height }} (height)
-                                x {{ $product->length }} (thickness)</li>
+                            <li><strong>Size</strong> - {{ $product->product_length }} (width) x {{ $product->product_height }} (height)
+                                x {{ $product->product_breadth }} (thickness)</li>
                             {{-- <li><strong>Material</strong> - European quality crystal</li> --}}
                             <li><strong>To Personalize</strong> - Email photo to designs@crazzygift.com with Order ID. Our
                                 designers will contact you for design approval.</li>
@@ -120,15 +126,14 @@
            
             @foreach ($similarProducts as $similarProduct)
                 <div class="col-lg-3 my-3">
-                    <div>
-                        <div class="slide-image" data-id="{{ url('') . '/productDetails/' . $product->id }}"
-                            onclick="redirectToCart(event)">
+                    <div class="products" onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">
+                        <div class="slide-image" onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">
                             <img src="{{($similarProduct->product_image) ? asset('/products').'/'.$similarProduct->product_image : asset('/products/dummyProduct.jpg') }}" alt="Slide 1" class="slide"
-                                data-id="{{ url('') . '/productDetails/' . $product->id }}"
-                                onclick="redirectToCart(event)">
-                            <a href="{{ url('') . '/productDetails/' . $similarProduct->id }}" class="overlay2">
+                            onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">
+                            {{-- <a href="{{ url('') . '/productDetails/' . $similarProduct->slug }}" class="overlay2">
                                 <button>Quick View</button>
-                            </a>
+                            </a> --}}
+                            <button type="button" class="btn btn-sm quick-view" onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">Quick View</button>
                         </div>
                         <div class="slide-caption">
                             <h2>{{ $similarProduct->title }}</h2>

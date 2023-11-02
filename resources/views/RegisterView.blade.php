@@ -32,7 +32,7 @@
                                 <div class="input-group">
 
                                     <input type="text" class="form-control register-inputText" id="userName"
-                                        name="name" placeholder="eg:John Doe" aria-label="Fullname" required>
+                                        name="name" placeholder="eg:John Doe" aria-label="Fullname" required style="border: 1px solid #CCCCCC;" >
 
                                 </div>
                                 <label for="userPhone">Mobile Number</label>
@@ -47,7 +47,7 @@
                                 <div class="input-group">
 
                                     <input type="text" class="form-control register-inputText" id="userEmail"
-                                        name="email" placeholder="eg:john@gmail.com" aria-label="Email" required>
+                                        name="email" placeholder="eg:john@gmail.com" aria-label="Email" required style="border: 1px solid #CCCCCC;" >
 
                                 </div>
 

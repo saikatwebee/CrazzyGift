@@ -10,6 +10,7 @@ use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\ProductInventoryController;
 use App\Http\Controllers\OrderInventoryController;
 use App\Http\Controllers\SliderController;
+use App\Models\Menu;;
 
 
 Route::middleware(['auth', 'verifyUser'])->group(function () {
@@ -35,55 +36,50 @@ Route::middleware(['auth', 'verifyUser'])->group(function () {
 
     //non authenticated routes
 
-    Route::get('/checkGoogle', [UserController::class, "checkGoogle"])->name('checkGoogle')->withoutMiddleware(['auth', 'verifyUser']);
-    Route::get('/demo', [UserController::class, "demo"])->name('demo')->withoutMiddleware('auth');
+Route::get('/shippingCart', [OrderController::class, "shippingCart"])->name('shippingcart')->withoutMiddleware('auth');
+Route::post('/serviceAjax', [ProductController::class, "serviceAjax"])->withoutMiddleware('auth');
+Route::post('/addToCart', [ProductController::class, "addToCart"])->withoutMiddleware('auth');
+Route::get('/checkUser', [UserController::class, "checkUser"])->name('checkUser')->withoutMiddleware(['auth', 'verifyUser']);
+Route::get('/search', [ProductController::class, "search"])->name('search')->withoutMiddleware('auth');
+Route::post('/customUpload', [ProductController::class, "customUpload"])->name('customUpload')->withoutMiddleware('auth');
+Route::post('/customMessage', [ProductController::class, "customMessage"])->name('customMessage')->withoutMiddleware('auth');
+Route::post('/guestCartImgDelete', [ProductController::class, "guestCartImgDelete"])->name('guestCartImgDelete')->withoutMiddleware('auth');
+Route::get('/productDetails/{product_id}', [ProductController::class, "details"])->name('productdetails')->withoutMiddleware('auth');
+Route::post('/sentMail', [UserController::class, "sentMail"])->name('sentMail')->withoutMiddleware('auth');
+Route::get('/shippingInformation', [OrderController::class, "shippingInfo"])->name('shippinginfo')->withoutMiddleware('auth');
+Route::get('/checkGoogle', [UserController::class, "checkGoogle"])->name('checkGoogle')->withoutMiddleware(['auth', 'verifyUser']);
+Route::get('/demo', [UserController::class, "demo"])->name('demo')->withoutMiddleware('auth');
 
-    Route::get('/', [UserController::class, "index"])->name('home')->withoutMiddleware('auth');
+ //Route::get('/', [UserController::class, "index"])->name('home')->withoutMiddleware('auth');
+   // Route::get('/about-us', [UserController::class, "aboutUs"])->name('about-us')->withoutMiddleware('auth');
+   // Route::get('/contact-us', [UserController::class, "contactUs"])->name('contact-us')->withoutMiddleware('auth');
+   // Route::get('/corporate-gifts', [UserController::class, "corporateGifts"])->name('corporate-gifts')->withoutMiddleware('auth');
+    
+//Route::get('/products/all', [ProductController::class, "index"])->name('products')->withoutMiddleware('auth');
 
+//Route::get('/products/3d-crystal', [ProductController::class, "product_3d_crystal"])->name('product-3d-crystal')->withoutMiddleware('auth');
 
-    Route::get('/shippingInformation', [OrderController::class, "shippingInfo"])->name('shippinginfo')->withoutMiddleware('auth');
+    //Route::get('/products/wooden-engraved', [ProductController::class, "wooden_engraved"])->name('wooden-engraved')->withoutMiddleware('auth');
 
-    Route::get('/shippingCart', [OrderController::class, "shippingCart"])->name('shippingcart')->withoutMiddleware('auth');
-
-    Route::get('/products/all', [ProductController::class, "index"])->name('products')->withoutMiddleware('auth');
-
-    Route::get('/productDetails/{product_id}', [ProductController::class, "details"])->name('productdetails')->withoutMiddleware('auth');
-
-
-    Route::get('/products/3d-crystal', [ProductController::class, "product_3d_crystal"])->name('product-3d-crystal')->withoutMiddleware('auth');
-
-    Route::get('/products/wooden-engraved', [ProductController::class, "wooden_engraved"])->name('wooden-engraved')->withoutMiddleware('auth');
-
-    Route::get('/products/photo-frames', [ProductController::class, "photo_frames"])->name('photo-frames')->withoutMiddleware('auth');
-
-
-    Route::get('/price/0-500', [ProductController::class, "product_price_low"])->name('product-price-low')->withoutMiddleware('auth');
-
-    Route::get('/price/1000-2000', [ProductController::class, "product_price_medium"])->name('product-price-medium')->withoutMiddleware('auth');
-
-    Route::get('/price/2000-above', [ProductController::class, "product_price_high"])->name('product-price-high')->withoutMiddleware('auth');
-
-
-    Route::get('/occasions', [ProductController::class, "occasions"])->name('occasions')->withoutMiddleware('auth');
-
-    Route::get('/occasions/anniversary', [ProductController::class, "product_anniversary"])->name('product-anniversary')->withoutMiddleware('auth');
-
-    Route::get('/occasions/birthday', [ProductController::class, "product_birthday"])->name('product-birthday')->withoutMiddleware('auth');
-
-    Route::get('/occasions/valentines-day', [ProductController::class, "product_valentines"])->name('product-valentines')->withoutMiddleware('auth');
-
-    Route::post('/serviceAjax', [ProductController::class, "serviceAjax"])->withoutMiddleware('auth');
-    Route::post('/addToCart', [ProductController::class, "addToCart"])->withoutMiddleware('auth');
-    Route::get('/checkUser', [UserController::class, "checkUser"])->name('checkUser')->withoutMiddleware(['auth', 'verifyUser']);
-
-    Route::get('/search', [ProductController::class, "search"])->name('search')->withoutMiddleware('auth');
-
-    Route::post('/customUpload', [ProductController::class, "customUpload"])->name('customUpload')->withoutMiddleware('auth');
-    Route::post('/customMessage', [ProductController::class, "customMessage"])->name('customMessage')->withoutMiddleware('auth');
-    Route::post('/guestCartImgDelete', [ProductController::class, "guestCartImgDelete"])->name('guestCartImgDelete')->withoutMiddleware('auth');
+   // Route::get('/products/photo-frames', [ProductController::class, "photo_frames"])->name('photo-frames')->withoutMiddleware('auth');
 
 
+   // Route::get('/price/0-500', [ProductController::class, "product_price_low"])->name('product-price-low')->withoutMiddleware('auth');
 
+   // Route::get('/price/1000-2000', [ProductController::class, "product_price_medium"])->name('product-price-medium')->withoutMiddleware('auth');
+
+  //  Route::get('/price/2000-above', [ProductController::class, "product_price_high"])->name('product-price-high')->withoutMiddleware('auth');
+
+
+   // Route::get('/occasions', [ProductController::class, "occasions"])->name('occasions')->withoutMiddleware('auth');
+
+//Route::get('/occasions/anniversary', [ProductController::class, "product_anniversary"])->name('product-anniversary')->withoutMiddleware('auth');
+
+   // Route::get('/occasions/birthday', [ProductController::class, "product_birthday"])->name('product-birthday')->withoutMiddleware('auth');
+
+   // Route::get('/occasions/valentines-day', [ProductController::class, "product_valentines"])->name('product-valentines')->withoutMiddleware('auth');
+
+ 
 
     //authenticated routes 
 
@@ -93,6 +89,8 @@ Route::middleware(['auth', 'verifyUser'])->group(function () {
     Route::post('/verifyOtpProfile', [UserController::class, 'verifyOtpProfile'])->name('verifyOtpProfile')->withoutMiddleware('verifyUser');
 
     Route::get('/myorder', [OrderController::class, "index"])->name('myorder');
+   
+    
 
 
     Route::get('/shippingInformation', [OrderController::class, "shippingInfo"])->name('shippinginfo');
@@ -134,12 +132,30 @@ Route::middleware(['auth', 'verifyUser'])->group(function () {
     Route::get('/manifestAjax', [ProductController::class, "manifestAjax"]);
     Route::post('/cancellShipment', [PaymentController::class, "cancellShipment"]);
 
-    //cron jobs for updating
-    Route::get('/orderStatusUpdate', [PaymentController::class, "orderStatusUpdate"]);
+   
     
     Route::post('/razorpay', [PaymentController::class, "Razorpay"]);
     Route::get('/payment/status/{payment_id}/{amount}', [PaymentController::class, "payment_status"])->name('paymentStatus');
 });
+
+//dynamic  routes for menus 
+Route::middleware(['auth', 'verifyUser'])->group(function () {
+
+    $urls = Menu::distinct()->pluck('url')->toArray();
+    
+    foreach ($urls as $url) {
+       
+        Route::get("/{".$url."}", [SliderController::class, 'showPageByMenuUrl'])
+            ->name($url)
+            ->withoutMiddleware(['auth', 'verifyUser']);
+        
+    }
+});
+      
+
+
+
+
 
 //Admin Routes starts from here...
 
@@ -151,15 +167,23 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
     // Route::get('/register', [AdminController::class, "register"])->name('adminRegister')->withoutMiddleware('auth');
     // Route::get('/registerSubmit', [AdminController::class, "registerSubmit"])->name('registerSubmit')->withoutMiddleware('auth');
 
-    Route::get('/product/all', [ProductInventoryController::class, 'all_product'])->name('AllProducts');
+    Route::get('/product/all', [ProductInventoryController::class, 'all_products'])->name('admin.product.all');
+    Route::get('/product/inactive', [ProductInventoryController::class, 'inactive_products'])->name('InactiveProducts');
 
 
     Route::get('/Addproducts', [ProductInventoryController::class, 'Addproducts'])->name('Addproducts');
     Route::get('/getAllProducts', [ProductInventoryController::class, 'getAllProducts'])->name('getAllProducts');
+     Route::get('/getAllInactiveProducts', [ProductInventoryController::class, 'getAllInactiveProducts'])->name('getAllInactiveProducts');
+    
+    
+    
     Route::post('/productDelete', [ProductInventoryController::class, 'productDelete'])->name('productDelete');
+    Route::post('/product_delete', [ProductInventoryController::class, 'product_delete'])->name('product_delete');
     Route::post('/subproducts', [ProductInventoryController::class, 'subproducts'])->name('subproducts');
 
     Route::post('/getProduct', [ProductInventoryController::class, 'getProduct'])->name('getProduct');
+    Route::post('/getUser', [AdminController::class, 'getUser'])->name('getUser');
+    
     Route::post('/editProduct', [ProductInventoryController::class, 'editProduct'])->name('editProduct');
 
 
@@ -174,6 +198,8 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
     
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/userReport', [AdminController::class, 'userReport'])->name('userReport');
+    Route::post('/userDelete', [AdminController::class, 'userDelete'])->name('userDelete');
+    
 
     
     
@@ -196,9 +222,53 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
     Route::get('/orderDetails/{order_id}', [OrderInventoryController::class, "orderDetails"])->name('orderDetails');
 
     Route::get('/slider-management', [SliderController::class, 'sliderManagement'])->name('sliderManagement');
+    Route::get('/getAllMenus', [SliderController::class, 'getAllMenus'])->name('getAllMenus');
+    Route::post('/menuDelete', [SliderController::class, 'menuDelete'])->name('menuDelete');
+    Route::post('/showMenu', [SliderController::class, 'showMenu'])->name('showMenu');
+    Route::post('/editMenu', [SliderController::class, 'editMenu'])->name('editMenu');
+    Route::post('/addMenu', [SliderController::class, 'addMenu'])->name('addMenu');
+    
+    
+    
+    
+   
+    Route::get('/menu-management', [SliderController::class, 'menuManagement'])->name('menuManagement');
+    Route::get('/add-menu', [SliderController::class, 'addMenuView'])->name('addMenuView');
+    Route::get('/edit-menu/{menu_id}', [SliderController::class, 'editMenuView'])->name('editMenuView');
+    
+
 
      Route::post('/addBanner', [SliderController::class, 'addBanner'])->name('addBanner');
      Route::post('/addSlider', [SliderController::class, 'addSlider'])->name('addSlider');
+     Route::post('/updateBanner', [SliderController::class, 'updateBanner'])->name('updateBanner'); 
+     Route::get('/getAllBanners', [SliderController::class, 'getAllBanners'])->name('getAllBanners');
+     Route::post('/getBanner', [SliderController::class, 'getBanner'])->name('getBanner');
+     Route::post('/getSlider', [SliderController::class, 'getSlider'])->name('getSlider');
+     Route::post('/updateSlider', [SliderController::class, 'updateSlider'])->name('updateSlider');
+     Route::post('/bannerDelete', [SliderController::class, 'bannerDelete'])->name('bannerDelete');
+     Route::post('/sliderDelete', [SliderController::class, 'sliderDelete'])->name('sliderDelete'); 
+     
+
+     Route::get('/getAllSliders', [SliderController::class, 'getAllSliders'])->name('getAllSliders');
+
+
+     Route::get('/category-management', [SliderController::class, 'categoryManagement'])->name('categoryManagement');
+     Route::get('/getAllCategories', [SliderController::class, 'getAllCategories'])->name('getAllCategories');
+    Route::get('/getAllSubcategories', [SliderController::class, 'getAllSubcategories'])->name('getAllSubcategories');  
+    Route::post('/addCategory', [SliderController::class, 'addCategory'])->name('addCategory');
+    Route::post('/addSubcategory', [SliderController::class, 'addSubcategory'])->name('addSubcategory');
+    Route::post('/getDependent', [ProductInventoryController::class, 'getDependent'])->name('getDependent');
+    Route::post('/getCategory', [ProductInventoryController::class, 'getCategory'])->name('getCategory');
+    Route::post('/getSubcategory', [ProductInventoryController::class, 'getSubcategory'])->name('getSubcategory');
+    
+    Route::post('/updateCategory', [ProductInventoryController::class, 'updateCategory'])->name('updateCategory');
+    Route::post('/updateSubcategory', [ProductInventoryController::class, 'updateSubcategory'])->name('updateSubcategory');
+    Route::post('/categoryDelete', [ProductInventoryController::class, 'categoryDelete'])->name('categoryDelete');
+    Route::post('/subcategoryDelete', [ProductInventoryController::class, 'subcategoryDelete'])->name('subcategoryDelete');
+    
+    
+    
+    
      
 
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('adminDashboard');
@@ -217,9 +287,10 @@ Route::middleware(['guest:admin'])->prefix('admin')->group(function () {
 });
 
 
-//error routes
+//error routes &cronjobs
 
-
+ //cron jobs for updating
+ Route::get('/orderStatusUpdate', [PaymentController::class, "orderStatusUpdate"]);
 
 Route::get('/error-denied', [ErrorController::class, "errorDenied"])->name('error-denied');
 Route::get('/generateInvoice/{order_id}', [PaymentController::class, "generateInvoice"])->name('generateInvoice');

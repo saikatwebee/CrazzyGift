@@ -32,7 +32,8 @@
                           <th>Name</th>
                           <th>Email</th>
                           <th>Phone</th>
-                          <th>status</th>
+                          <th>Is Verified</th>
+                          <th>Status</th>
                           <th>Created On</th>
                           
                         </tr>

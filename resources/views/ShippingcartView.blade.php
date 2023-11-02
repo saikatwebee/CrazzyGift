@@ -351,7 +351,7 @@
                     <div class="my-3" style="text-align: right;">
                         <div class="submit-container">
                             <i class="fa fa-spinner fa-spin spinner" style="display:none;"></i>
-                            <input type="submit" id="uploadcustomBtn" class="loginButton mt-4" value="Add">
+                            <input type="submit" id="uploadcustomBtn2" class="loginButton mt-4" value="Add">
                         </div>
                         <button type="button" id="close-button7">Close</button>
                     </div>
@@ -379,7 +379,7 @@
                     <div class="my-3" style="text-align: right;">
                         <div class="submit-container">
                             <i class="fa fa-spinner fa-spin spinner" style="display:none;"></i>
-                            <input type="submit" id="editCustombtn" class="loginButton mt-4" value="edit"
+                            <input type="submit" id="editCustombtn" class="loginButton mt-4" value="Save & Continue"
                                 style="width:auto;">
                         </div>
                         <button type="button" id="close-button8">Close</button>

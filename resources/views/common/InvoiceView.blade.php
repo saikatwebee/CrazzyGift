@@ -25,6 +25,16 @@
         background-color: #eee
     }
 
+    .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    }
+
+    .table .table-bordered {
+        border-top: 1px solid #CED4DA;
+    }
+
     .mt-50 {
         margin-top: 50px
     }
@@ -163,7 +173,7 @@
                             <div class="col-sm-6">
                                 <div class="mb-4 ">
                                     <div class="text-sm-right">
-                                        <h4 class="invoice-color mb-2 mt-md-2">Invoice #BBB1243</h4>
+                                        <h4 class="invoice-color mb-2 mt-md-2">{{$invoice['invoice_no']}}</h4>
                                         <ul class="list list-unstyled mb-0">
                                             <li>Date: <span class="font-weight-semibold">{{date("F j, Y")}}</span></li>
                                             

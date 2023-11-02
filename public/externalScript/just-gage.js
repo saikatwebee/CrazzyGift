@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       toplength: 10,
       bottomlength: 10,
       bottomwidth: 8,
-      color: '#000'
+      color: '#555555'
     },
     customSectors: [{
       color: "#ff0000",

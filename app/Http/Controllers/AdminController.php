@@ -14,6 +14,8 @@ use Laravel\Passport\RefreshTokenRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Admin;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 
 
@@ -32,9 +34,12 @@ class AdminController extends Controller
 
      public function dashboard(Request $request){
         $title = 'Admin Dashboard|CrazzyGift';
+        $order_count = Order::count();
+        $user_count = User::count();
+        $delivered_count = Order::where('order_status',5)->count();
+        $active_product_count = Product::where('status',1)->count();
 
-
-        return view('admin.DashboardView', compact('title'));
+        return view('admin.DashboardView', compact('title','order_count','user_count','delivered_count','active_product_count'));
     }
 
 
@@ -45,6 +50,8 @@ class AdminController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        
 
         if ($validator->fails()) {
             // return response()->json(['error' => $validator->errors()], 401);
@@ -144,6 +151,33 @@ class AdminController extends Controller
 
         return response()->json($orders);
 
+    }
+
+
+    public function getUser(Request $request){
+
+        if($request->has('id')){
+            $id = $request->input('id');
+            $user = User::where('id',$id)->first();
+
+            return response()->json($user);
+        }
+
+    }
+
+    public function userDelete(Request $request){
+        if($request->has('id')){
+
+            $id = $request->input('id');
+
+            $user = User::find($id);
+            $user->status = ($user->status == 1) ? 2 : 1;
+            $user->updated_at =date('Y-m-d H:i:s');
+            $res=$user->save();
+             if($res){
+                return response()->json(['code'=>200,'msg'=>'user status changed successfully'],200);
+            }
+        }
     }
 
 

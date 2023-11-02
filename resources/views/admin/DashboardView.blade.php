@@ -8,7 +8,7 @@
 
       <div class="main-panel">
         <div class="content-wrapper">
-          <div class="row">
+          {{-- <div class="row">
             <div class="col-md-12 grid-margin">
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
@@ -32,9 +32,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
           <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
+            {{-- <div class="col-md-6 grid-margin stretch-card">
               <div class="card tale-bg">
                 <div class="card-people mt-auto">
                   <img src="{{ asset('img/dashboard/people.svg') }}" alt="people">
@@ -51,44 +51,44 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6 grid-margin transparent">
+            </div> --}}
+            <div class="col-lg-12 grid-margin transparent">
               <div class="row">
                 <div class="col-md-6 mb-4 stretch-card transparent">
                   <div class="card card-tale">
                     <div class="card-body">
-                      <p class="mb-4">Total Users</p>
-                      <p class="fs-30 mb-2">4006</p>
-                      <p>10.00% (30 days)</p>
+                      <p class="mb-4 boxp"><i class="fa-solid fa-user-lock"></i> Total Users</p>
+                      <p class="fs-30 mb-2">{{$user_count}}</p>
+                      {{-- <p>10.00% </p> --}}
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 mb-4 stretch-card transparent">
+                <div class="col-lg-6 mb-4 stretch-card transparent">
                   <div class="card card-dark-blue">
                     <div class="card-body">
-                      <p class="mb-4">Total Orders</p>
-                      <p class="fs-30 mb-2">61344</p>
-                      <p>22.00% (30 days)</p>
+                      <p class="mb-4 boxp"><i class="fa-solid fa-bookmark"></i> Total Orders</p>
+                      <p class="fs-30 mb-2">{{$order_count}}</p>
+                      {{-- <p>22.00% </p> --}}
                     </div>
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                <div class="col-lg-6 mb-4 mb-lg-0 stretch-card transparent">
                   <div class="card card-light-blue">
                     <div class="card-body">
-                      <p class="mb-4">Number of Products</p>
-                      <p class="fs-30 mb-2">34040</p>
-                      <p>2.00% (30 days)</p>
+                      <p class="mb-4 boxp"><i class="fa-solid fa-bag-shopping"></i> Number of active Products</p>
+                      <p class="fs-30 mb-2">{{$active_product_count}}</p>
+                      {{-- <p>2.00% </p> --}}
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 stretch-card transparent">
+                <div class="col-lg-6 stretch-card transparent">
                   <div class="card card-light-danger">
                     <div class="card-body">
-                      <p class="mb-4">Number of Cities</p>
-                      <p class="fs-30 mb-2">5</p>
-                      <p>0.22% (30 days)</p>
+                      <p class="mb-4 boxp"><i class="fa-solid fa-plane-departure"></i> Total orders Delivered</p>
+                      <p class="fs-30 mb-2">{{$delivered_count        }}</p>
+                      {{-- <p>0.22% </p> --}}
                     </div>
                   </div>
                 </div>

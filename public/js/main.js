@@ -243,7 +243,7 @@ $(document).ready(() => {
 $(document).on("click", "#add_cart", (e) => {
 
         var html = '<i class="fa fa-spinner fa-spin" ></i>';
-        var resetbtn = "Add to cart";
+        var resetbtn = "<i class='fa-solid fa-cart-shopping'></i> Go to cart";
         var targetEl = e.target;
 
         $("#add_cart_btn").css({'pointer-events':'none','background':'#004a8cab'}).html(html);
@@ -270,13 +270,16 @@ $(document).on("click", "#add_cart", (e) => {
             })
             .then(result => {
 
-                 $("#add_cart_btn").html(resetbtn);
+
+
+                $("#add_cart_btn").html(resetbtn).prop('type', 'button').attr('onclick', 'window.location.href="/shippingCart";').css({'pointer-events': 'auto', 'background': '#004a8c'});
+
                 
                 if (result.code == 200) {
                     toastr.success(result.message,'Success',{
                                 onHidden: function() {
-                                       // $("#add_cart_btn").css({'pointer-events':'auto','background':'#004a8c'});
-                                    window.location.href = "http://127.0.0.1:8000/shippingCart";
+                                       //cart icon needs to update
+                                       cartCount();
                                 },
                             });
 
@@ -316,14 +319,14 @@ $(document).on("click", "#add_cart", (e) => {
                   
                     toastr.success(result.message,'Success',{
                                 onHidden: function() {
-                                       // $("#add_cart_btn").css({'pointer-events':'auto','background':'#004a8c'});
-                                    window.location.href = "http://127.0.0.1:8000/shippingCart";
+                                    //cart icon needs to update
+                                    cartCount();
                                 },
                             });
 
                 }
 
-                $("#servicecheckForm").trigger('reset');
+                //$("#servicecheckForm").trigger('reset');
                 //settimeout for redirect to cart page
 
              
@@ -354,10 +357,10 @@ $(document).ready(() => {
 
 
             if(cart.product_image){
-                imgUrl ="http://127.0.0.1:8000/products/"+cart.product_image;
+                imgUrl ="/products/"+cart.product_image;
             }
             else{
-                imgUrl ="http://127.0.0.1:8000/products/dummyProduct.jpg";
+                imgUrl ="/products/dummyProduct.jpg";
             }
 
 
@@ -438,7 +441,7 @@ $(document).ready(() => {
                                 id: uid,
                             };
 
-                            fetch(" http://127.0.0.1:8000/normalCartImgDelete", {
+                            fetch("/normalCartImgDelete", {
                                     method: 'POST',
                                     body: JSON.stringify(form_datas),
                                     headers: {
@@ -489,7 +492,7 @@ $(document).ready(() => {
                                                 custom_image: guestcrtImg,
                                             };
 
-                                            fetch(" http://127.0.0.1:8000/guestCartImgDelete", {
+                                            fetch("/guestCartImgDelete", {
                                                     method: 'POST',
                                                     body: JSON.stringify(form_datas),
                                                     headers: {
@@ -552,7 +555,7 @@ $(document).ready(() => {
         console.log(data_id);
         console.log(cart_id);
 
-        var imageUrl = "http://127.0.0.1:8000/cart/" + data_id;
+        var imageUrl = "/cart/" + data_id;
 
         // Open the image in a new tab
         window.open(imageUrl, '_blank');
@@ -593,7 +596,7 @@ $(document).ready(function () {
 
 
 
-                    fetch('http://127.0.0.1:8000/checkUser', {
+                    fetch('/checkUser', {
                             method: 'GET',
                         })
                         .then(response => {
@@ -610,7 +613,7 @@ $(document).ready(function () {
                                     id: dataId,
                                 };
 
-                                fetch(" http://127.0.0.1:8000/deleteCart", {
+                                fetch("/deleteCart", {
                                         method: 'POST',
                                         body: JSON.stringify(form_datas),
                                         headers: {
@@ -657,7 +660,7 @@ $(document).ready(function () {
                                             custom_image: guestcrtImg,
                                         };
 
-                                        fetch(" http://127.0.0.1:8000/guestCartImgDelete", {
+                                        fetch("/guestCartImgDelete", {
                                                 method: 'POST',
                                                 body: JSON.stringify(form_datas),
                                                 headers: {
@@ -747,10 +750,12 @@ $(document).ready(function () {
 
 
 $(document).ready(() => {
+    cartCount();
+});
 
-    //request for checking the user is logged in or not
 
-    fetch('http://127.0.0.1:8000/checkUser', {
+function cartCount(){
+    fetch('/checkUser', {
             method: 'GET',
         })
         .then(response => {
@@ -785,8 +790,7 @@ $(document).ready(() => {
         .catch(error => {
             console.error('Fetch error:', error);
         });
-
-});
+}
 
 
 
@@ -794,7 +798,7 @@ $(document).on("click", ".checkoutBtn", () => {
 
 
 
-    fetch('http://127.0.0.1:8000/checkUser', {
+    fetch('/checkUser', {
             method: 'GET',
         })
         .then(response => {
@@ -808,7 +812,7 @@ $(document).on("click", ".checkoutBtn", () => {
             if (result.code == 200) {
                 //logged in user
 
-                fetch('http://127.0.0.1:8000/cartValidation', {
+                fetch('/cartValidation', {
                                 method: 'GET',
                         }).then(res => {
                                 if (!res.ok) {
@@ -818,7 +822,7 @@ $(document).on("click", ".checkoutBtn", () => {
                     }).then(res => {
                         console.log(res);
                         if(res.code==200){
-                            window.location.href = 'http://127.0.0.1:8000/shippingInformation';
+                            window.location.href = '/shippingInformation';
                         }
                         else{
                             toastr.error(res.msg);
@@ -830,7 +834,7 @@ $(document).on("click", ".checkoutBtn", () => {
 
             } else if (result.code == 210) {
                 //guest user
-                //window.location.href = 'http://127.0.0.1:8000/signin';
+                //window.location.href = '/signin';
                
                 const localStorageData = JSON.parse(localStorage.getItem('cartData'));
                 const hasBothCustomData = localStorageData.every(item => {
@@ -841,7 +845,7 @@ $(document).on("click", ".checkoutBtn", () => {
                 if (hasBothCustomData) {
                   
                     
-                    window.location.href = 'http://127.0.0.1:8000/signin';
+                    window.location.href = '/signin';
                 } else {
                   
                     console.log("Please make sure each item has both 'custom-text' and 'custom-image' present.");
@@ -914,37 +918,44 @@ toggleBtn.addEventListener('click', () => {
 
 // carousal
 
-let currentSlide = 0;
-const slides = document.querySelectorAll(".slider-slide");
-const slideCount = slides.length;
+// let currentSlide = 0;
+// const slides = document.querySelectorAll(".slider-slide");
+// const slideCount = slides.length;
 
-function showSlide() {
-    for (let i = 0; i < slideCount; i++) {
-        slides[i].style.transform = `translateX(-${currentSlide * 100}%)`;
-    }
-}
+// function showSlide() {
+//     for (let i = 0; i < slideCount; i++) {
+//         if (i === currentSlide) {
+//             slides[i].style.transform = "translateX(0)";
+//         } else {
+//             slides[i].style.transform = "translateX(100%)";
+//         }
+//     }
+// }
 
-function nextSlide() {
-    if (currentSlide < slideCount - 1) {
-        currentSlide++;
-    } else {
-        currentSlide = 0;
-    }
-    showSlide();
-}
+// function nextSlide() {
+//     if (currentSlide < slideCount - 1) {
+//         currentSlide++;
+//     } else {
+//         currentSlide = 0;
+//     }
+//     showSlide();
+// }
 
-function prevSlide() {
-    if (currentSlide > 0) {
-        currentSlide--;
-    } else {
-        currentSlide = slideCount - 1;
-    }
-    showSlide();
-}
+// function prevSlide() {
+//     if (currentSlide > 0) {
+//         currentSlide--;
+//     } else {
+//         currentSlide = slideCount - 1;
+//     }
+//     showSlide();
+// }
 
-setInterval(() => {
-  nextSlide();
-}, 3000);
+// setInterval(() => {
+//     nextSlide();
+// }, 3000);
+
+// showSlide();
+
 
 
 // carousal 2
@@ -983,7 +994,7 @@ function prevSlide1() {
 // carousal 3
 
 let currentSlide2 = 0;
-const slides2 = document.querySelectorAll(".slider-slide2");
+const slides2 = document.querySelectorAll(".owl-slide");
 const slideCount2 = slides2.length;
 
 function showSlide2() {
@@ -1008,7 +1019,10 @@ function prevSlide2() {
         currentSlide2 = slideCount2 - 1;
     }
     showSlide2();
-}
+} 
+
+
+
 
 
 
@@ -1206,7 +1220,7 @@ function quantityUpdate(quantity, dataId, price) {
                 };
                 const csrfToken = getCsrfToken();
 
-                fetch("http://127.0.0.1:8000/cartUpdateNormal", {
+                fetch("/cartUpdateNormal", {
                         method: 'POST',
                         body: JSON.stringify(form_datas),
                         headers: {
@@ -1324,7 +1338,7 @@ function quantityUpdate(quantity, dataId, price) {
 
 function getUserStatus() {
     return new Promise((resolve, reject) => {
-        fetch('http://127.0.0.1:8000/checkUser', {
+        fetch('/checkUser', {
                 method: 'GET',
             })
             .then(response => {
@@ -1478,7 +1492,7 @@ $(document).ready(function () {
                 };
                 const csrfToken = getCsrfToken();
 
-                fetch("http://127.0.0.1:8000/getShippingAddress", {
+                fetch("/getShippingAddress", {
                         method: 'POST',
                         body: JSON.stringify(form_datas),
                         headers: {
@@ -1590,7 +1604,7 @@ $(document).ready(function () {
 
                     const csrfToken = getCsrfToken();
 
-                    fetch('http://127.0.0.1:8000/selectShipping', {
+                    fetch('/selectShipping', {
                             method: 'POST',
                             body: JSON.stringify(obj),
                             headers: {
@@ -1657,7 +1671,7 @@ $(document).ready(function () {
 
                         const csrfToken = getCsrfToken();
 
-                        fetch('http://127.0.0.1:8000/deleteShipping', {
+                        fetch('/deleteShipping', {
                                 method: 'POST',
                                 body: JSON.stringify(obj),
                                 headers: {

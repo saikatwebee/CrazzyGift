@@ -19,6 +19,9 @@ use Laravel\Passport\RefreshTokenRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use App\Mail\contactEmail;
+use Illuminate\Support\Facades\Mail;
+
 class UserController extends Controller
 {
 
@@ -27,15 +30,16 @@ class UserController extends Controller
     public function index()
     {
         $title = 'Home|CrazzyGift';
-        $banners = Banner::latest()->get();
-        $featured_collection = DB::table('sliders')->where('type',1)->latest('created_at')->first();
-        $best_selling = DB::table('sliders')->where('type',2)->latest('created_at')->first();
+        $banners = Banner::where('status',1)->orderBy('id','desc')->get();
+        $featured_collection = DB::table('sliders')->where(['type'=>1,'status'=>1])->orderBy('id', 'desc')->first();
+        $best_selling = DB::table('sliders')->where(['type'=>2,'status'=>1])->orderBy('id', 'desc')->first();
 
         $productsString1 = $featured_collection->products;
         $productsString2 = $best_selling->products; 
         $featured_products_ids = explode(',', $productsString1);
         $best_products_ids = explode(',', $productsString2);
 
+        
         $res1=[];
         foreach($featured_products_ids as $id1){
            $featured_products = Product::where('id',$id1)->first();
@@ -43,6 +47,7 @@ class UserController extends Controller
            $data1['product_image']=$featured_products->product_image;
            $data1['title']=$featured_products->title;
            $data1['price']=$featured_products->price;
+           $data1['slug']=$featured_products->slug;
 
            $res1[]=$data1;
         }
@@ -54,12 +59,30 @@ class UserController extends Controller
           $data2['product_image']=$best_products->product_image;
           $data2['title']=$best_products->title;
           $data2['price']=$best_products->price;
-
+          $data2['slug']=$best_products->slug;
            $res2[]=$data2;
         }
 
    
         return view('DashboardView', compact('title','banners','res1','res2'));
+    }
+
+    public function aboutUs(){
+        $title = 'About Us | CrazzyGift';
+        $heading = 'About Us';
+        return view('aboutUs', compact('title','heading'));
+    }
+
+    public function contactUs(){
+        $title = 'Contact Us | CrazzyGift';
+        $heading = 'Contact Us';
+        return view('contactUs', compact('title','heading'));
+    }
+
+    public function corporateGifts(){
+        $title = 'Corporate Gifts | CrazzyGift';
+        $heading = 'Corporate Gifts';
+        return view('corporateGift', compact('title','heading'));
     }
 
 
@@ -104,7 +127,7 @@ class UserController extends Controller
     {
         $title = 'My Profile|CrazzyGift';
         $user_id = auth()->user()->id;
-        $orders = Order::where(['user_id' => $user_id,'order_status'=> 1])->get();
+        $orders = Order::where(['user_id' => $user_id])->orderBy('id','desc')->get();
          $trackingData = [];
         if ($orders) {
             if (count($orders) > 0) {
@@ -130,7 +153,14 @@ class UserController extends Controller
 
                     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
                     if ($httpCode === 200) {
-                        $order->track_shipping = simplexml_load_string($response);
+
+                        $trackShipping = simplexml_load_string($response);
+                       if(count($trackShipping->object) > 0){
+                            $order->track_shipping = $trackShipping;
+                       }
+                       else{
+                        $order->track_shipping = null;
+                        }
 
                     }
 
@@ -180,10 +210,13 @@ class UserController extends Controller
                 $user_id = auth()->user()->id;
                 $res = $this->transferCartFromGoogle($user_id);
 
-              
+                if($res){
+                    return redirect('/shippingCart');
+                }
+                else{
+                    return redirect('/');
+                }
 
-                    return redirect('/Myprofile');
-               
 
             } else {
 
@@ -212,10 +245,12 @@ class UserController extends Controller
 
                     $user_id = auth()->user()->id;
                     $res = $this->transferCartFromGoogle($user_id);
-
-                    
-
-                        return redirect('/Myprofile');
+                    if($res){
+                        return redirect('/shippingCart');
+                    }
+                    else{
+                        return redirect('/');
+                    }
                   
 
                 } else {
@@ -263,6 +298,10 @@ class UserController extends Controller
                 return true;
 
             }
+            else{
+                return false;
+            }
+            
         }
     }
 
@@ -272,12 +311,30 @@ class UserController extends Controller
     {
 
         try {
+
+
+            $rules = [
+                'name' => 'required|string',
+                'phone'=> 'required|unique:users',
+                'email' => 'required'
+              
+            ];
+    
+             $validator = Validator::make($request->all(), $rules);
+            
+               
+                if ($validator->fails()) {
+                    return response()->json(['errors' => $validator->errors()], 400);
+                }
+
+
+
             $name = trim($request->input('name'));
             $phone = trim($request->input('phone'));
             $email = trim($request->input('email'));
 
 
-            if (User::where('username', $phone)->exists()) {
+            if (User::where('username', $phone)->orWhere('phone', $phone)->exists()) {
 
                 //user Already Exist error will be shown here.
                 $response = ['msg' => 'User already exist,kindly Login to continue', 'code' => 210];
@@ -285,13 +342,22 @@ class UserController extends Controller
 
                 $recipientMobileNumber = "91" . $request->input('phone');
                 $otp = rand(1000, 9999);
-                $authKey = '120132A9wLo7oCT63fc9230P1';
+                //$authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
+                $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
+                
+                 //$senderId = "SLMYCL"; //sellMySell sendeId
+                $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
 
-                $senderId = "SLMYCL";
-                $msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone.";
+                //$msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
+                 $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
+
+                //  $dlt_id="1307161933111595817"; //sellmycell dlt
+                  $dlt_id="1707169709936342305"; //crazzygift dlt
+
+
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=1307161933111595817';
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -305,7 +371,7 @@ class UserController extends Controller
 
                     // insert the record in database after succesfully call the msg91 api
 
-                    User::create([
+                   $user = User::create([
                         'name' => $name,
                         'phone' => $phone,
                         'email' => $email,
@@ -314,9 +380,12 @@ class UserController extends Controller
                         'password' => Hash::make('Zikra@Byte'),
                     ]);
 
+                    //mail to be sent for registration
+                    Mail::to($user->email)->send(new registerEmail($user));
+
                     $response = ['msg' => 'Otp has been sent successfully', 'code' => 200];
                 } else {
-                    $response = ['msg' => 'Something went wrong!', 'code' => 210];
+                    $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
                 }
             }
 
@@ -327,24 +396,73 @@ class UserController extends Controller
     }
 
 
+    public function sentMail(Request $request){
+
+        $data = $request->all();
+        if (isset($data)) {
+            $updata = [];
+            foreach ($data as $row) {
+                $updata[$row['name']] = $row['value'];
+            }
+    
+            $rules = [
+                'name' => 'required|string',
+                'email' => 'required|email',
+                'phone' => 'required',
+                'desc' => 'required'
+               
+            ];
+        
+           
+            $validator = Validator::make($updata, $rules);
+        
+           
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+
+            
+
+            Mail::to($updata['email'])->send(new contactEmail($updata));
+                
+            return response()->json(['code'=>200,'msg'=>'Thank you for reaching out. Our team will promptly attend to your inquiry and will be in touch shortly.'],200);
+
+
+        }
+       
+    }
+
+
     public function sentLoginOtp(Request $request)
     {
         try {
 
             $phone = trim($request->input('phone'));
 
-            if (User::where('username', $phone)->exists()) {
+            if (User::where('username', $phone)->orWhere('phone', $phone)->exists()) {
 
+                $user = User::where('username', $phone)->orWhere('phone', $phone)->first();
+                $username = $user->username;
                 //if user exist //sent otp 
 
                 $recipientMobileNumber = "91" . $request->input('phone');
                 $otp = rand(1000, 9999);
-                $authKey = '120132A9wLo7oCT63fc9230P1';
-                $senderId = "SLMYCL";
-                $msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone.";
+                //$authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
+                $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
+                
+                 //$senderId = "SLMYCL"; //sellMySell sendeId
+                $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
+
+               // $msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
+                 $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
+
+                //  $dlt_id="1307161933111595817"; //sellmycell dlt
+                  $dlt_id="1707169709936342305"; //crazzygift dlt
+
+
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=1307161933111595817';
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -357,16 +475,16 @@ class UserController extends Controller
                 if ($httpCode == 200) {
                     //update the otp in database after succesfully call the msg91 api
                     $data['otp'] = (int) $otp;
-                    User::where(['username' => $phone])->update($data);
+                    User::where(['username' => $username])->update($data);
                     $response = ['msg' => 'Otp has been sent successfully!', 'code' => 200];
                 } else {
-                    $response = ['msg' => 'Something went wrong,check your Internet Connection!', 'code' => 210];
+                    $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
                 }
 
 
 
             } else {
-                $response = ['msg' => 'You have not registered yet,kindly Register to continue', 'code' => 210];
+                $response = ['msg' => 'Phone number not found. Please verify the Phone number and try again.', 'code' => 210];
             }
 
             return response()->json($response, 200);
@@ -386,25 +504,26 @@ class UserController extends Controller
 
 
 
-            if (User::where(['username' => $phone, 'otp' => $userOtp])->exists()) {
-                //verified
+            if (User::where('username', $phone)->orWhere('phone', $phone)->where('otp', $userOtp)->exists()) {
 
+              
+                    $user = User::where('username', $phone)->orWhere('phone', $phone)->where('otp', $userOtp)->first();
+                    $username = $user->username;
+                        
                 // authentication attempt
-                if (auth()->attempt(['username' => $phone, 'password' => 'Zikra@Byte'])) {
+                if (auth()->attempt(['username' => $username, 'password' => 'Zikra@Byte'])) {
                     $token = auth()->user()->createToken('passport_token')->accessToken;
 
                     if(User::where(['id'=>auth()->user()->id,'is_verified'=>0])->exists()){
-
-                        
-                            $data['is_verified']=1;
-                            User::where('id',auth()->user()->id)->update($data);
+                        $data['is_verified']=1;
+                        User::where('id',auth()->user()->id)->update($data);
                     }
-                    
 
-                    $response = ['msg' => 'OTP Verified successfully!', 'code' => 200];
+                        $response = ['msg' => 'OTP Verified successfully!', 'code' => 200];
+
                 } else {
 
-                    $response = ['msg' => 'Something went wrong!', 'code' => 210];
+                    $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
                 }
             } else {
 
@@ -417,25 +536,38 @@ class UserController extends Controller
         }
     }
 
-
+    //only for login with otp
     public function resendOtp(Request $request){
 
         if($request->input('phone')!=""){
             
             $phone = $request->input('phone');
 
-             if (User::where('username', $phone)->exists()) {
+             if (User::where('username', $phone)->orWhere('phone', $phone)->exists()) {
+
+                $user = User::where('username', $phone)->orWhere('phone', $phone)->first();
+                $username = $user->username;
 
                 //if user exist //sent otp 
 
                 $recipientMobileNumber = "91" . $request->input('phone');
                 $otp = rand(1000, 9999);
-                $authKey = '120132A9wLo7oCT63fc9230P1';
-                $senderId = "SLMYCL";
-                $msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone.";
+                //$authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
+                $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
+                
+                 //$senderId = "SLMYCL"; //sellMySell sendeId
+                $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
+
+                //$msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
+                 $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
+
+                //  $dlt_id="1307161933111595817"; //sellmycell dlt
+                    $dlt_id="1707169709936342305"; //crazzygift dlt
+
+
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=1307161933111595817';
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -448,16 +580,18 @@ class UserController extends Controller
                 if ($httpCode == 200) {
                     //update the otp in database after succesfully call the msg91 api
                     $data['otp'] = (int) $otp;
-                    User::where(['username' => $phone])->update($data);
+
+
+                    User::where(['username' => $username])->update($data);
                     $response = ['msg' => 'Otp has been sent successfully!', 'code' => 200];
                 } else {
-                    $response = ['msg' => 'Something went wrong,check your Internet Connection!', 'code' => 210];
+                    $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
                 }
 
 
 
             } else {
-                $response = ['msg' => 'You have not registered yet,kindly Register to continue', 'code' => 210];
+                $response = ['msg' => 'Phone number not found. Please verify the Phone number and try again.', 'code' => 210];
             }
 
             return response()->json($response, 200);
@@ -468,6 +602,7 @@ class UserController extends Controller
         $str = $request->input('otp1') . "" . $request->input('otp2') . "" . $request->input('otp3') . "" . $request->input('otp4');
         $userOtp = (int) $str;
         $user_id = auth()->user()->id;
+
         if($userOtp!=""){
                 if (User::where(['id' =>$user_id ,'otp' => $userOtp])->exists()) {
             //verfied
@@ -559,14 +694,24 @@ class UserController extends Controller
             $data['email'] = trim($request->input('email'));
 
             if(auth()->user()->is_verified==0){
-                 $recipientMobileNumber = "91" . $request->input('phone');
+                $recipientMobileNumber = "91" . $request->input('phone');
                 $otp = rand(1000, 9999);
-                $authKey = '120132A9wLo7oCT63fc9230P1';
-                $senderId = "SLMYCL";
-                $msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone.";
+               // $authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
+                $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
+                
+                 //$senderId = "SLMYCL"; //sellMySell sendeId
+                $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
+
+                //$msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
+                $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
+
+                //  $dlt_id="1307161933111595817"; //sellmycell dlt
+                  $dlt_id="1707169709936342305"; //crazzygift dlt
+
+
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=1307161933111595817';
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -586,7 +731,7 @@ class UserController extends Controller
                     return response()->json(['msg'=>'Profile updated successfully!','code'=>200,'is_verified'=>'0'],200);
                 } else {
                     
-                    return response()->json(['msg'=>'Something went wrong,check your Internet Connection!','code'=>210],200);
+                    return response()->json(['msg'=>'Something went wrong,check your Internet Connection & try again','code'=>210],200);
                 }
 
             }else{

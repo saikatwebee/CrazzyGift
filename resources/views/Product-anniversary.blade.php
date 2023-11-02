@@ -47,20 +47,19 @@
             </div>
         </div>
 
-
+        @if(count($products)>0)
         <div class="row my-3">
 
             @foreach ($products as $product)
                 <div class="col-lg-3 my-3">
-                    <div>
-                        <div class="slide-image" data-id="{{ url('') . '/productDetails/' . $product->id }}"
-                            onclick="redirectToCart(event)">
+                    <div class="products"  onclick="window.location.href='{{url('/productDetails').'/'.$product->slug}}';">
+                        <div class="slide-image" onclick="window.location.href='{{url('/productDetails').'/'.$product->slug}}';">
                             <img src="{{($product->product_image) ? asset('/products').'/'.$product->product_image : asset('/products/dummyProduct.jpg') }}" alt="Slide 1" class="slide"
-                                data-id="{{ url('') . '/productDetails/' . $product->id }}"
-                                onclick="redirectToCart(event)">
-                            <a href="{{ url('') . '/productDetails/' . $product->id }}" class="overlay2">
+                            onclick="window.location.href='{{url('/productDetails').'/'.$product->slug}}';">
+                            {{-- <a href="{{ url('') . '/productDetails/' .$product->slug }}" class="overlay2">
                                 <button>Quick View</button>
-                            </a>
+                            </a> --}}
+                            <button type="button" class="btn btn-sm quick-view" onclick="window.location.href='{{url('/productDetails').'/'.$product->slug}}';">Quick View</button>
                         </div>
                         <div class="slide-caption">
                             <h2>{{ $product->title }}</h2>
@@ -94,13 +93,18 @@
             @endif
 
         </div>
+        @else
+        <div class=" p-3 my-3"  style="display: block;font-weight: 700;background: #f3f5f8; border-radius: 10px;">
+            <p class="text-center">No Products Available</p>
+        </div>
+        @endif
 
         <script>
-            function redirectToCart(event) {
-                redirectUrl = event.target.getAttribute('data-id');
-                console.log(redirectUrl);
-                window.location.href = redirectUrl;
-            }
+            // function redirectToCart(event) {
+            //     redirectUrl = event.target.getAttribute('data-id');
+            //     console.log(redirectUrl);
+            //     window.location.href = redirectUrl;
+            // }
             var selectElement = document.getElementById("sort-select");
 
             selectElement.addEventListener("change", function() {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * @property integer $id
  * @property int $main_category
@@ -47,6 +48,8 @@ class Product extends Model
      */
     protected $fillable = ['main_category', 'sub_category', 'title', 'code', 'L3_category', 'description', 'product_image', 'product_alt_image1', 'product_alt_image2', 'product_alt_image3', 'product_type', 'weight', 'height', 'length', 'breadth', 'price', 'gst', 'discount', 'sale', 'status', 'created_at', 'updated_at'];
 
+   
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -78,4 +81,6 @@ class Product extends Model
     {
         return $this->hasMany('App\Models\Cart');
     }
+
+    
 }
