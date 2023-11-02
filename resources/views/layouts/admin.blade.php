@@ -43,14 +43,162 @@
     <!-- Datepicker -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+    <script src="https://cdn.tiny.cloud/1/b5gxdstl3drpbhi4wp3e0ca3pte4634i2rcas0lcbc06rhnb/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+
+
+
     <style>
         .tooltipHover:hover {
+            cursor: pointer;
+        }
+
+        .fa-pen-to-square:hover {
+            cursor: pointer;
+        }
+
+        .fa-toggle-on:hover {
+            cursor: pointer;
+        }
+
+        .fa-toggle-off:hover {
+            cursor: pointer;
+        }
+
+        .fa-power-off:hover {
             cursor: pointer;
         }
 
         .fa-delete-left:hover {
             cursor: pointer;
         }
+
+        .fa-trash:hover {
+            cursor: pointer;
+        }
+
+        .fa-eye:hover {
+            cursor: pointer;
+        }
+
+
+        .ribbon {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .ribbon-cancelled::before,
+        .ribbon-cancelled::after {
+            position: absolute;
+            z-index: -1;
+            content: '';
+            display: block;
+            border: 5px solid #fc665b;
+        }
+
+        .ribbon-cancelled span {
+            position: absolute;
+            display: block;
+            width: 225px;
+            padding: 15px 0;
+            background-color: #fb483a;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+            text-align: center;
+        }
+
+        .ribbon-processing::before,
+        .ribbon-processing::after {
+            position: absolute;
+            z-index: -1;
+            content: '';
+            display: block;
+            border: 5px solid #c4a646;
+        }
+
+        .ribbon-processing span {
+            position: absolute;
+            display: block;
+            width: 225px;
+            padding: 15px 0;
+            background-color: #d4ae35;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+            text-align: center;
+        }
+
+        .ribbon-delivered::before,
+        .ribbon-delivered::after {
+            position: absolute;
+            z-index: -1;
+            content: '';
+            display: block;
+            border: 5px solid #5cb05f;
+        }
+
+        .ribbon-delivered span {
+            position: absolute;
+            display: block;
+            width: 225px;
+            padding: 15px 0;
+            background-color: #4caf50;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+            text-align: center;
+        }
+
+        /* top right*/
+        .ribbon-box {
+            position: relative;
+        }
+
+        .ribbon-top-right {
+            top: -7px;
+            right: -7px;
+        }
+
+        .ribbon-top-right::before,
+        .ribbon-top-right::after {
+            border-top-color: transparent;
+            border-right-color: transparent;
+        }
+
+        .ribbon-top-right::before {
+            top: 0;
+            left: 0;
+        }
+
+        .ribbon-top-right::after {
+            bottom: 0;
+            right: 0;
+        }
+
+        .ribbon-top-right span {
+            left: -25px;
+            top: 30px;
+            transform: rotate(45deg);
+        }
+
+
+        #deliveredMsg {
+            font-family: 'DM Sans';
+            font-weight: 900;
+            font-size: 15px;
+            line-height: 20px;
+            color: #00AD30;
+        }
+
 
         /* toaster custom css added */
         .toast-success {
@@ -133,6 +281,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 5vh;
         }
 
         .flex-item {
@@ -288,6 +437,14 @@
             color: #555;
         }
 
+        .banner-hearder-card:hover {
+            cursor: pointer;
+        }
+
+        .slider-hearder-card:hover {
+            cursor: pointer;
+        }
+
         #active small {
             font-family: 'DM Sans';
             font-style: normal;
@@ -394,6 +551,73 @@
             top: 0px;
             z-index: 1;
         }
+
+        .profilebox-item {
+            margin: 5px;
+            padding: 4px;
+        }
+
+        .panel-active {
+            background: #4B49AC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .tab {
+            display: none;
+        }
+
+        .panel-inactive {
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            font-weight: 600;
+
+        }
+
+        .panel-active h4 {
+            color: #ffffff !important;
+            margin-bottom: 4px !important;
+        }
+
+        .panel-dective h4 {
+            color: #555555 !important;
+            margin-bottom: 4px !important;
+        }
+
+        .profile-picture {
+            width: 130px;
+            height: 130px;
+            border: 5px solid #004a8c;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            margin: auto;
+        }
+
+        .profile-picture2 {
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .boxp {
+            font-size: 18px;
+            font-weight: 500;
+        }
     </style>
 
 </head>
@@ -418,7 +642,7 @@
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_settings-panel.html -->
             <div class="theme-setting-wrapper">
-                <div id="settings-trigger"><i class="ti-settings"></i></div>
+                {{-- <div id="settings-trigger"><i class="ti-settings"></i></div> --}}
                 <div id="theme-settings" class="settings-panel">
                     <i class="settings-close ti-close"></i>
                     <p class="settings-heading">SIDEBAR SKINS</p>
@@ -641,21 +865,25 @@
                         </a>
                         <div class="collapse" id="form-elements">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"><a class="nav-link" href="{{ url('/admin/product/all') }}">All
-                                        Products</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/admin/Addproducts') }}">Add
                                         Products</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/admin/product/all') }}">All
+                                        Products</a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ url('/admin/product/inactive') }}">Inactive
+                                        Products</a></li>
+
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="{{url('admin/users')}}" aria-expanded="false"
+                        <a class="nav-link" href="{{ url('admin/users') }}" aria-expanded="false"
                             aria-controls="charts">
                             <i class="icon-bar-graph menu-icon"></i>
                             <span class="menu-title">Users</span>
-                            
+
                         </a>
-                        
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false"
@@ -668,14 +896,15 @@
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link"
                                         href="{{ url('admin/orderReport') }}">Order Reports</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="{{url('admin/userReport')}}">User Reports</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('admin/userReport') }}">User
+                                        Reports</a></li>
 
                             </ul>
                         </div>
                     </li>
 
-                     <!--  <li class="nav-item">
-                        <a class="nav-link"  href="{{url('admin/users')}}" aria-expanded="false"
+                    <!--  <li class="nav-item">
+                        <a class="nav-link"  href="{{ url('admin/users') }}" aria-expanded="false"
                             aria-controls="charts">
                             <i class="icon-bar-graph menu-icon"></i>
                             <span class="menu-title">Invoice</span>
@@ -684,7 +913,7 @@
                         
                     </li> -->
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false"
                             aria-controls="icons">
                             <i class="icon-contract menu-icon"></i>
@@ -701,7 +930,7 @@
 
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
 
 
 
@@ -715,6 +944,13 @@
                         </a>
                         <div class="collapse" id="error">
                             <ul class="nav flex-column sub-menu">
+
+                                <li class="nav-item"> <a class="nav-link"
+                                        href="{{ url('admin/menu-management') }}">Menu Management</a></li>
+                                <li class="nav-item"> <a class="nav-link"
+                                        href="{{ url('admin/slider-management') }}">Slider Management</a></li>
+                                <li class="nav-item"> <a class="nav-link"
+                                        href="{{ url('admin/category-management') }}">Category Management</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('admin/logout') }}">Logout
                                     </a></li>
 
@@ -741,6 +977,69 @@
     <!-- container-scroller -->
 
     @include('common.adminFooter')
+
+
+    {{-- user view model --}}
+
+    <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">User Details</h5>
+
+                    <i class="fa-solid fa-delete-left" data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body">
+
+                    <div class="profilebox-item">
+
+                        <div class="profile-picture">
+                            <img src="{{ asset('img/logo.png') }}" alt="Profile Picture" id="user_pic">
+
+                        </div>
+
+                    </div>
+
+                    <form id="editUserForm" method="post" action="{{ url('/admin/viewUser') }}"
+                        enctype="multipart/form-data">
+                        {{-- <input type="hidden" name="id" id="uid" > --}}
+                        <div class="form-group">
+                            <label for="edit_name">Name</label>
+                            <input type="text" name="name" id="edit_name" required placeholder="Enter Name"
+                                class="form-control" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_email">Email</label>
+                            <input type="text" name="email" id="edit_email" required placeholder="Enter Email"
+                                class="form-control" disabled>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="edit_phone">Phone</label>
+                            <input type="number" name="phone" id="edit_phone" required placeholder="Enter Phone"
+                                class="form-control" disabled>
+                        </div>
+
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-primary" id="viewUserBtn">Save changes</button> --}}
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 
     @if (session('success'))
         <script>
@@ -788,6 +1087,532 @@
     });
 
 
+
+    //menu data table 
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getAllMenus') }}";
+        const tableId = "menuTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editMenu(${row.id})"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteMenu(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editMenu(${row.id})"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteMenu(${row.id})"></i>
+            
+        `;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'url'
+                    },
+
+                    {
+                        data: 'parent_name',
+                        render: function(data) {
+                            return data ? data : "NA"; // Display "NA" if 'icon' is blank or null
+                        }
+                    },
+
+                    // {
+                    //     data: 'parent_id',
+                    //     render: function(data) {
+                    //         return data ? data : "NA"; // Display "NA" if 'icon' is blank or null
+                    //     }
+                    // },
+
+                    {
+                        data: 'icon',
+                        render: function(data) {
+                            return data ? data : "NA"; // Display "NA" if 'icon' is blank or null
+                        }
+                    },
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+
+    //banner datatable
+
+
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getAllBanners') }}";
+        const tableId = "bannerTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editBanner(${row.id})"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteBanner(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editBanner(${row.id})"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteBanner(${row.id})"></i>
+            
+        `;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'target'
+                    },
+                    {
+                        data: 'image',
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                const imageUrl = `{{ asset('banners/${data}') }}`;
+                                return `<img src="${imageUrl}"  style="border-radius:5px; width:100px;height:auto;" />`;
+                            }
+                            return data;
+                        }
+                    },
+
+
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+
+                                if (data === null || data === '1970-01-01') {
+                                    return 'NA';
+                                }
+
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+
+    //slider datatable
+
+
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getAllSliders') }}";
+        const tableId = "sliderTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editSlider(${row.id})"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteSlider(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editSlider(${row.id})"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteSlider(${row.id})"></i>
+            
+        `;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'type',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return 'Featured Collection';
+                                } else if (data == 2) {
+                                    return 'Best Selling';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'product_images',
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                console.log('data:', data);
+                                const productImages = data.map(image =>
+                                    `<img src="{{ asset('products/${image}') }}" alt="Product Image" style="border-radius:5px; width:60px; height:auto;" />`
+                                );
+                                console.log('productImages:', productImages);
+                                return productImages.join(', ');
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+
+                                if (data === null || data === '1970-01-01') {
+                                    return 'NA';
+                                }
+
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+
+    //category datatable
+
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getAllCategories') }}";
+        const tableId = "categoryTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editCategory(${row.id})"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deletecategory(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editCategory(${row.id})"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deletecategory(${row.id})"></i>
+            
+        `;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    },
+
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+
+                                if (data === null || data === '1970-01-01') {
+                                    return 'NA';
+                                }
+
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+
+    //sub category datatable
+
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getAllSubcategories') }}";
+        const tableId = "subcategoryTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editSubcategory(${row.id})"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteSubcategory(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editSubcategory(${row.id})"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteSubcategory(${row.id})"></i>
+            
+        `;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    //new
+
+
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    },
+
+                    {
+                        data: 'main_category.name',
+                        name: 'main_category.name',
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                return data;
+                            }
+                            return data;
+                        }
+                    },
+
+
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+
+                                if (data === null || data === '1970-01-01') {
+                                    return 'NA';
+                                }
+
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+
     //All products datatable
 
 
@@ -804,25 +1629,231 @@
                 console.log(data);
 
                 const columns = [
+
+                    //old
+                    //     {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="editProduct(${row.id},event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" onclick="editProduct(${row.id},event)"></i></button>
+                    //     <button class="btn btn-danger" onclick="deleteProduct(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteProduct(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
+
+                    //new
+
                     {
                         data: null,
                         render: function(data, type, row) {
                             if (type === 'display') {
 
-                                return `
-                    <button class="btn btn-primary" data-id="${row.id}" onclick="editProduct(${row.id},event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" onclick="editProduct(${row.id},event)"></i></button>
-                    <button class="btn btn-danger" onclick="deleteProduct(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteProduct(${row.id})"></i></button>
-                    
-                `;
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editProduct(${row.id},event)"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteProduct(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editProduct(${row.id},event)"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteProduct(${row.id})"></i>
+            
+        `;
+                                }
+
+
                             }
                             return data;
                         }
                     },
+
+
+
+
                     {
                         data: 'id'
                     },
                     {
                         data: 'title'
+                    },
+                    {
+                        data: 'sku'
+                    },
+                    {
+                        data: 'code'
+                    },
+                    {
+                        data: 'main_category.name',
+                        name: 'main_category.name',
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                if (row.main_category && row.main_category.name !== null) {
+                                    return row.main_category.name;
+                                } else {
+                                    return 'NA';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'sub_category.name',
+                        name: 'sub_category.name',
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                if (row.sub_category && row.sub_category.name !== null) {
+                                    return row.sub_category.name;
+                                } else {
+                                    return 'NA';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    // {
+                    //     data: 'description',
+                    //     render: function(data, type, row) {
+                    //         if (type === 'display') {
+                    //             if (data.length > 20) {
+                    //                 return `<span class="tooltipHover" title="${data}">${data.slice(0, 20)}...</span>`;
+                    //             } else {
+                    //                 return data;
+                    //             }
+                    //         }
+                    //         return data;
+                    //     }
+                    // },
+                    {
+                        data: 'price'
+                    },
+
+                    // {
+                    //     data: 'status',
+                    //     render: function(data, type, row) {
+                    //         if (type == 'display') {
+                    //             if (data == 1) {
+                    //                 return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                    //             } else if (data == 2) {
+                    //                 return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                    //             } else {
+                    //                 // Handle any other cases or unexpected values
+                    //                 return 'Unknown Status';
+                    //             }
+                    //         }
+                    //         return data;
+                    //     }
+                    // },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' +
+                                    minutes + ':' + seconds;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+    //inactive products datatable
+
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getAllInactiveProducts') }}";
+        const tableId = "productInactive";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [
+
+                    //old
+                    //     {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="editProduct(${row.id},event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" onclick="editProduct(${row.id},event)"></i></button>
+                    //     <button class="btn btn-danger" onclick="deleteProduct(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteProduct(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
+
+                    //new
+
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+    <i class="fa-solid fa-trash text-danger" title="Delete Product" style="margin-left:4px;font-size:20px;" onclick="delete_product(${row.id})"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteProduct(${row.id})"></i>
+    
+`;
+                                } else {
+                                    return `
+    <i class="fa-solid fa-trash text-danger"  title="Delete Product" style="margin-left:4px;font-size:20px;" onclick="delete_product(${row.id})"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteProduct(${row.id})"></i>
+    
+`;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+
+
+
+
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'title'
+                    },
+                    {
+                        data: 'sku'
                     },
                     {
                         data: 'code'
@@ -849,30 +1880,70 @@
                         }
                     },
 
-                    {
-                        data: 'description',
-                        render: function(data, type, row) {
-                            if (type === 'display') {
-                                if (data.length > 20) {
-                                    return `<span class="tooltipHover" title="${data}">${data.slice(0, 20)}...</span>`;
-                                } else {
-                                    return data;
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    // {
+                    //     data: 'description',
+                    //     render: function(data, type, row) {
+                    //         if (type === 'display') {
+                    //             if (data.length > 20) {
+                    //                 return `<span class="tooltipHover" title="${data}">${data.slice(0, 20)}...</span>`;
+                    //             } else {
+                    //                 return data;
+                    //             }
+                    //         }
+                    //         return data;
+                    //     }
+                    // },
                     {
                         data: 'price'
                     },
-                    
+
+                    // {
+                    //     data: 'status',
+                    //     render: function(data, type, row) {
+                    //         if (type == 'display') {
+                    //             if (data == 1) {
+                    //                 return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                    //             } else if (data == 2) {
+                    //                 return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                    //             } else {
+                    //                 // Handle any other cases or unexpected values
+                    //                 return 'Unknown Status';
+                    //             }
+                    //         }
+                    //         return data;
+                    //     }
+                    // },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' +
+                                    minutes + ':' + seconds;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+
                 ];
 
                 populateTable(data, tableId, columns);
             })
             .catch(error => console.error(error));
     });
-
 
 
 
@@ -886,7 +1957,7 @@
         const url = "{{ url('admin/getAllOrders') }}";
 
         const tableId1 = "allOrdersTable1";
-      //  const tableId2 = "allOrdersTable2";
+        //  const tableId2 = "allOrdersTable2";
 
         fetch(url, {
                 method: 'GET'
@@ -898,16 +1969,36 @@
                 const columns = [
 
 
+                    //     {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
+                    //     <button class="btn btn-danger" title="Delete" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
+
                     {
                         data: null,
                         render: function(data, type, row) {
                             if (type === 'display') {
 
+
                                 return `
-                    <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
-                    <button class="btn btn-danger" title="Delete" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
-                    
-                `;
+            <i class="fa-regular fa-eye text-primary" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewOrder(event)"></i>
+            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrder(${row.id})"></i>
+            
+        `;
+
+
+
+
                             }
                             return data;
                         }
@@ -920,6 +2011,10 @@
                         data: 'user.name'
                     },
                     {
+                        data: 'user.phone'
+                    },
+
+                    {
                         data: 'amount'
                     },
 
@@ -931,18 +2026,20 @@
                         render: function(data, type, row) {
                             if (type == 'display') {
                                 if (data == 0) {
-                                    return 'Cancelled Order';
+                                    return '<button class="btn-danger btn btn-sm" style="padding: 7px 10px 7px 10px;">Cancelled Order</button>';
                                 } else if (data == 1) {
-                                    return 'Order Placed';
+                                    return '<button class="btn-primary btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Placed</button>';
                                 } else if (data == 2) {
-                                    return 'Order Reached Hub';
+                                    return '<button class="btn-info btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Shipped</button>';
                                 } else if (data == 3) {
-                                    return 'Out for Delivery';
+                                    return '<button class="btn-warning btn btn-sm" style="padding: 7px 10px 7px 10px;">Reached Hub</button>';
                                 } else if (data == 4) {
-                                    return 'Order Delivered';
+                                    return '<button class="btn-light btn btn-sm" style="padding: 7px 10px 7px 10px;">Out for Delivery</button>';
+                                } else if (data == 5) {
+                                    return '<button class="btn-success btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Delivered</button>';
                                 } else {
                                     // Handle any other cases or unexpected values
-                                    return 'Unknown Status';
+                                    return '<button class="btn-default btn btn-sm" style="padding: 7px 10px 7px 10px;">Status Unknown</button>';
                                 }
                             }
                             return data;
@@ -950,21 +2047,26 @@
                     },
 
 
-                    {
-                        data: 'transaction_id'
-                    },
+                    // {
+                    //     data: 'transaction_id'
+                    // },
 
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
                             if (type === 'display' || type === 'filter') {
                                 // Assuming 'created_at' is in the default ISO 8601 format
-                                var date = new Date(data);
-                                var year = date.getFullYear();
-                                var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
-                                var day = date.getDate().toString().padStart(2, '0');
-                                return year + '-' + month + '-' + day;
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' +
+                                    minutes + ':' + seconds;
                             } else {
                                 return data;
                             }
@@ -975,7 +2077,7 @@
                 ];
 
                 populateTable(data, tableId1, columns);
-               
+
             })
             .catch(error => console.error(error));
     });
@@ -983,13 +2085,13 @@
 
     //All users datatable
 
-     $(document).ready(function() {
+    $(document).ready(function() {
 
 
         const url = "{{ url('admin/getAllUsers') }}";
 
         const tableId = "usersTable1";
-     
+
 
         fetch(url, {
                 method: 'GET'
@@ -1001,206 +2103,45 @@
                 const columns = [
 
 
+                    //     {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewUser(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewUser(event)"></i></button>
+                    //     <button class="btn btn-danger" title="Delete" onclick="deleteUser(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
                     {
                         data: null,
                         render: function(data, type, row) {
                             if (type === 'display') {
 
-                                return `
-                    <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewUser(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewUser(event)"></i></button>
-                    <button class="btn btn-danger" title="Delete" onclick="deleteUser(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;"></i></button>
-                    
-                `;
-                            }
-                            return data;
-                        }
-                    },
-
-                    {
-                        data: 'id'
-                    },
-                    {
-                        data: 'name'
-                    },
-                    {
-                        data: 'email'
-                    },
-
-                   {
-                        data: 'phone'
-                    },
-                    {
-                        data: 'status',
-                        render: function(data, type, row) {
-                            if (type == 'display') {
-                                if (data == 0) {
-                                    return 'Not Verified';
-                                } else if (data == 1) {
-                                    return 'Verified';
-                                } else {
-                                    // Handle any other cases or unexpected values
-                                    return 'Unknown Status';
-                                }
-                            }
-                            return data;
-                        }
-                    },
-
-                    {
-                        data: 'created_at',
-                        render: function(data, type, row) {
-                            if (type === 'display' || type === 'filter') {
-                                // Assuming 'created_at' is in the default ISO 8601 format
-                                var date = new Date(data);
-                                var year = date.getFullYear();
-                                var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
-                                var day = date.getDate().toString().padStart(2, '0');
-                                return year + '-' + month + '-' + day;
-                            } else {
-                                return data;
-                            }
-                        }
-                    }
-
-
-                ];
-
-                populateTable(data, tableId, columns);
-               
-            })
-            .catch(error => console.error(error));
-    });
-
-
-    function orderReport(){
-        const url = "{{ url('admin/getAllOrders') }}";
-
-
-    const tableId = "allOrdersTable2";
-
-fetch(url, {
-        method: 'GET'
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-
-        const columns = [
-             {
-                data: null,
-                render: function(data, type, row) {
-                    if (type === 'display') {
-
-                        return `
-            <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
-            <button class="btn btn-danger" title="Delete" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-eye" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewUser(event)"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteUser(${row.id})"></i>
             
         `;
-                    }
-                    return data;
-                }
-            },
-
-            {
-                data: 'order_id'
-            },
-            {
-                data: 'user.name'
-            },
-            {
-                data: 'amount'
-            },
-
-            // {
-            //     data: 'order_status'
-            // },
-            {
-                data: 'order_status',
-                render: function(data, type, row) {
-                    if (type == 'display') {
-                        if (data == 0) {
-                            return 'Cancelled Order';
-                        } else if (data == 1) {
-                            return 'Order Placed';
-                        } else if (data == 2) {
-                            return 'Order Reached Hub';
-                        } else if (data == 3) {
-                            return 'Out for Delivery';
-                        } else if (data == 4) {
-                            return 'Order Delivered';
-                        } else {
-                            // Handle any other cases or unexpected values
-                            return 'Unknown Status';
-                        }
-                    }
-                    return data;
-                }
-            },
+                                } else {
+                                    return `
+            <i class="fa-regular fa-eye"  style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewUser(event)"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteUser(${row.id})"></i>
+            
+        `;
+                                }
 
 
-            {
-                data: 'transaction_id'
-            },
-
-            {
-                data: 'created_at',
-                render: function(data, type, row) {
-                    if (type === 'display' || type === 'filter') {
-                        // Assuming 'created_at' is in the default ISO 8601 format
-                        var date = new Date(data);
-                        var year = date.getFullYear();
-                        var month = (date.getMonth() + 1).toString().padStart(2,
-                        '0'); // Add 1 to month because it's zero-based
-                        var day = date.getDate().toString().padStart(2, '0');
-                        return year + '-' + month + '-' + day;
-                    } else {
-                        return data;
-                    }
-                }
-            },
-
-
-           
-        ];
-
-       
-        populateTable(data, tableId, columns);
-    })
-    .catch(error => console.error(error));
-    }
-
-
-    function userReport(){
-        const url = "{{ url('admin/getAllUsers') }}";
-
-        const tableId = "usersTable2";
-     
-
-        fetch(url, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-
-                const columns = [
-
-
-                    {
-                        data: null,
-                        render: function(data, type, row) {
-                            if (type === 'display') {
-
-                                return `
-                    <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewUser(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewUser(event)"></i></button>
-                    <button class="btn btn-danger" title="Delete" onclick="deleteUser(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteUser(${row.id})"></i></button>
-                    
-                `;
                             }
                             return data;
                         }
                     },
+
 
                     {
                         data: 'id'
@@ -1212,7 +2153,7 @@ fetch(url, {
                         data: 'email'
                     },
 
-                   {
+                    {
                         data: 'phone'
                     },
                     {
@@ -1233,6 +2174,22 @@ fetch(url, {
                     },
 
                     {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+                    {
                         data: 'created_at',
                         render: function(data, type, row) {
                             if (type === 'display' || type === 'filter') {
@@ -1240,7 +2197,7 @@ fetch(url, {
                                 var date = new Date(data);
                                 var year = date.getFullYear();
                                 var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
+                                    '0'); // Add 1 to month because it's zero-based
                                 var day = date.getDate().toString().padStart(2, '0');
                                 return year + '-' + month + '-' + day;
                             } else {
@@ -1253,14 +2210,255 @@ fetch(url, {
                 ];
 
                 populateTable(data, tableId, columns);
-              
+
+            })
+            .catch(error => console.error(error));
+    });
+
+
+    function orderReport() {
+        const url = "{{ url('admin/getAllOrders') }}";
+
+
+        const tableId = "allOrdersTable2";
+
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [
+                    //      {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
+                    //     <button class="btn btn-danger" title="Delete" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+
+                                return `
+            <i class="fa-regular fa-eye text-primary" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewOrder(event)"></i>
+            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrder(${row.id})"></i>
+            
+        `;
+
+
+
+
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'order_id'
+                    },
+                    {
+                        data: 'user.name'
+                    },
+                    {
+                        data: 'user.phone'
+                    },
+                    {
+                        data: 'amount'
+                    },
+
+                    // {
+                    //     data: 'order_status'
+                    // },
+                    {
+                        data: 'order_status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 0) {
+                                    return '<button class="btn-danger btn btn-sm" style="padding: 7px 10px 7px 10px;">Cancelled Order</button>';
+                                } else if (data == 1) {
+                                    return '<button class="btn-primary btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Placed</button>';
+                                } else if (data == 2) {
+                                    return '<button class="btn-info btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Shipped</button>';
+                                } else if (data == 3) {
+                                    return '<button class="btn-warning btn btn-sm" style="padding: 7px 10px 7px 10px;">Reached Hub</button>';
+                                } else if (data == 4) {
+                                    return '<button class="btn-light btn btn-sm" style="padding: 7px 10px 7px 10px;">Out for Delivery</button>';
+                                } else if (data == 5) {
+                                    return '<button class="btn-success btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Delivered</button>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return '<button class="btn-default btn btn-sm" style="padding: 7px 10px 7px 10px;">Status Unknown</button>';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+
+
+                    // {
+                    //     data: 'transaction_id'
+                    // },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' +
+                                    seconds;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+
+                ];
+
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    }
+
+
+    function userReport() {
+        const url = "{{ url('admin/getAllUsers') }}";
+
+        const tableId = "usersTable2";
+
+
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [
+
+
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-eye" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewUser(event)"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteUser(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-eye"  style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewUser(event)"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteUser(${row.id})"></i>
+            
+        `;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'email'
+                    },
+
+                    {
+                        data: 'phone'
+                    },
+                    {
+                        data: 'is_verified',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 0) {
+                                    return 'Not Verified';
+                                } else if (data == 1) {
+                                    return 'Verified';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+
             })
             .catch(error => console.error(error));
     }
 
 
 
-    $(document).ready(()=>{
+    $(document).ready(() => {
         orderReport();
         userReport();
     });
@@ -1285,7 +2483,7 @@ fetch(url, {
     });
 
 
-      $(document).on("click", "#filter_user", function(e) {
+    $(document).on("click", "#filter_user", function(e) {
         e.preventDefault();
 
         var startDate = $("#startDate").val();
@@ -1300,7 +2498,7 @@ fetch(url, {
     });
 
 
-      function filterRecords(startDate, endDate){
+    function filterRecords(startDate, endDate) {
         console.log(startDate);
         console.log(endDate);
 
@@ -1327,7 +2525,7 @@ fetch(url, {
             .then(data => {
                 console.log(data);
 
-                 const columns = [
+                const columns = [
 
 
                     {
@@ -1335,11 +2533,21 @@ fetch(url, {
                         render: function(data, type, row) {
                             if (type === 'display') {
 
-                                return `
-                    <button class="btn btn-primary" title="View" data-id="${row.id}" onclick="viewUser(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewUser(event)"></i></button>
-                    <button class="btn btn-danger" title="Delete" onclick="deleteUser(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteUser(${row.id})"></i></button>
-                    
-                `;
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-eye" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewUser(event)"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteUser(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-eye"  style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewUser(event)"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteUser(${row.id})"></i>
+            
+        `;
+                                }
+
+
                             }
                             return data;
                         }
@@ -1355,7 +2563,7 @@ fetch(url, {
                         data: 'email'
                     },
 
-                   {
+                    {
                         data: 'phone'
                     },
                     {
@@ -1374,7 +2582,22 @@ fetch(url, {
                             return data;
                         }
                     },
-
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
@@ -1383,7 +2606,7 @@ fetch(url, {
                                 var date = new Date(data);
                                 var year = date.getFullYear();
                                 var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
+                                    '0'); // Add 1 to month because it's zero-based
                                 var day = date.getDate().toString().padStart(2, '0');
                                 return year + '-' + month + '-' + day;
                             } else {
@@ -1398,11 +2621,11 @@ fetch(url, {
                 populateTable(data, tableId, columns);
 
 
-            
+
 
             })
             .catch(error => console.error(error));
-      }
+    }
 
 
     function filter_records(start_date, end_date) {
@@ -1433,16 +2656,35 @@ fetch(url, {
                 console.log(data);
 
                 const columns = [
-                     {
+                    //      {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
+                    //     <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
+                    {
                         data: null,
                         render: function(data, type, row) {
                             if (type === 'display') {
 
+
                                 return `
-                    <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
-                    <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
-                    
-                `;
+            <i class="fa-regular fa-eye text-primary" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewOrder(event)"></i>
+            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrder(${row.id})"></i>
+            
+        `;
+
+
+
+
                             }
                             return data;
                         }
@@ -1452,6 +2694,9 @@ fetch(url, {
                     },
                     {
                         data: 'user.name'
+                    },
+                    {
+                        data: 'user.phone'
                     },
                     {
                         data: 'amount'
@@ -1465,18 +2710,20 @@ fetch(url, {
                         render: function(data, type, row) {
                             if (type == 'display') {
                                 if (data == 0) {
-                                    return 'Cancelled Order';
+                                    return '<button class="btn-danger btn btn-sm" style="padding: 7px 10px 7px 10px;">Cancelled Order</button>';
                                 } else if (data == 1) {
-                                    return 'Order Placed';
+                                    return '<button class="btn-primary btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Placed</button>';
                                 } else if (data == 2) {
-                                    return 'Order Reached Hub';
+                                    return '<button class="btn-info btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Shipped</button>';
                                 } else if (data == 3) {
-                                    return 'Out for Delivery';
+                                    return '<button class="btn-warning btn btn-sm" style="padding: 7px 10px 7px 10px;">Reached Hub</button>';
                                 } else if (data == 4) {
-                                    return 'Order Delivered';
+                                    return '<button class="btn-light btn btn-sm" style="padding: 7px 10px 7px 10px;">Out for Delivery</button>';
+                                } else if (data == 5) {
+                                    return '<button class="btn-success btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Delivered</button>';
                                 } else {
                                     // Handle any other cases or unexpected values
-                                    return 'Unknown Status';
+                                    return '<button class="btn-default btn btn-sm" style="padding: 7px 10px 7px 10px;">Status Unknown</button>';
                                 }
                             }
                             return data;
@@ -1484,29 +2731,33 @@ fetch(url, {
                     },
 
 
-                    {
-                        data: 'transaction_id'
-                    },
+
+                    // {
+                    //     data: 'transaction_id'
+                    // },
 
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
                             if (type === 'display' || type === 'filter') {
                                 // Assuming 'created_at' is in the default ISO 8601 format
-                                var date = new Date(data);
-                                var year = date.getFullYear();
-                                var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
-                                var day = date.getDate().toString().padStart(2, '0');
-                                return year + '-' + month + '-' + day;
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' +
+                                    seconds;
                             } else {
                                 return data;
                             }
                         }
-                    },
+                    }
 
-
-                   
                 ];
 
                 populateTable(data, tableId, columns);
@@ -1528,11 +2779,11 @@ fetch(url, {
         $('#allOrdersTable2').DataTable().destroy();
         orderReport();
 
-        
+
     });
 
 
-     $(document).on("click", "#reset_user", function(e) {
+    $(document).on("click", "#reset_user", function(e) {
         e.preventDefault();
 
         $("#startDate").val(''); // empty value
@@ -1541,7 +2792,7 @@ fetch(url, {
         $('#usersTable2').DataTable().destroy();
         userReport();
 
-        
+
     });
 
 
@@ -1564,25 +2815,47 @@ fetch(url, {
                 console.log(data);
 
                 const columns = [
+                    //     {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+                    //                 return `
+                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
+                    //     <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
                     {
                         data: null,
                         render: function(data, type, row) {
                             if (type === 'display') {
+
+
                                 return `
-                    <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
-                    <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
-                    
-                `;
+            <i class="fa-regular fa-eye text-primary" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewOrder(event)"></i>
+            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrder(${row.id})"></i>
+            
+        `;
+
+
+
                             }
                             return data;
                         }
                     },
+
 
                     {
                         data: 'order_id'
                     },
                     {
                         data: 'user.name'
+                    },
+                    {
+                        data: 'user.phone'
                     },
                     {
                         data: 'amount'
@@ -1597,18 +2870,20 @@ fetch(url, {
                         render: function(data, type, row) {
                             if (type == 'display') {
                                 if (data == 0) {
-                                    return 'Cancelled Order';
+                                    return '<button class="btn-danger btn btn-sm" style="padding: 7px 10px 7px 10px;">Cancelled Order</button>';
                                 } else if (data == 1) {
-                                    return 'Order Placed';
+                                    return '<button class="btn-primary btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Placed</button>';
                                 } else if (data == 2) {
-                                    return 'Order Reached Hub';
+                                    return '<button class="btn-info btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Shipped</button>';
                                 } else if (data == 3) {
-                                    return 'Out for Delivery';
+                                    return '<button class="btn-warning btn btn-sm" style="padding: 7px 10px 7px 10px;">Reached Hub</button>';
                                 } else if (data == 4) {
-                                    return 'Order Delivered';
+                                    return '<button class="btn-light btn btn-sm" style="padding: 7px 10px 7px 10px;">Out for Delivery</button>';
+                                } else if (data == 5) {
+                                    return '<button class="btn-success btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Delivered</button>';
                                 } else {
                                     // Handle any other cases or unexpected values
-                                    return 'Unknown Status';
+                                    return '<button class="btn-default btn btn-sm" style="padding: 7px 10px 7px 10px;">Status Unknown</button>';
                                 }
                             }
                             return data;
@@ -1617,28 +2892,34 @@ fetch(url, {
 
 
 
-                    {
-                        data: 'transaction_id'
-                    },
+
+                    // {
+                    //     data: 'transaction_id'
+                    // },
 
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
                             if (type === 'display' || type === 'filter') {
                                 // Assuming 'created_at' is in the default ISO 8601 format
-                                var date = new Date(data);
-                                var year = date.getFullYear();
-                                var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
-                                var day = date.getDate().toString().padStart(2, '0');
-                                return year + '-' + month + '-' + day;
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' +
+                                    minutes + ':' + seconds;
                             } else {
                                 return data;
                             }
                         }
-                    },
+                    }
 
-                    
+
                 ];
 
                 populateTable(data, tableId, columns);
@@ -1662,16 +2943,36 @@ fetch(url, {
                 console.log(data);
 
                 const columns = [
-                      {
+                    //       {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
+                    //     <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
+
+                    {
                         data: null,
                         render: function(data, type, row) {
                             if (type === 'display') {
 
+
                                 return `
-                    <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
-                    <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
-                    
-                `;
+            <i class="fa-regular fa-eye text-primary" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewOrder(event)"></i>
+            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrder(${row.id})"></i>
+            
+        `;
+
+
+
+
                             }
                             return data;
                         }
@@ -1682,6 +2983,9 @@ fetch(url, {
                     },
                     {
                         data: 'user.name'
+                    },
+                    {
+                        data: 'user.phone'
                     },
                     {
                         data: 'amount'
@@ -1696,18 +3000,20 @@ fetch(url, {
                         render: function(data, type, row) {
                             if (type == 'display') {
                                 if (data == 0) {
-                                    return 'Cancelled Order';
+                                    return '<button class="btn-danger btn btn-sm" style="padding: 7px 10px 7px 10px;">Cancelled Order</button>';
                                 } else if (data == 1) {
-                                    return 'Order Placed';
+                                    return '<button class="btn-primary btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Placed</button>';
                                 } else if (data == 2) {
-                                    return 'Order Reached Hub';
+                                    return '<button class="btn-info btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Shipped</button>';
                                 } else if (data == 3) {
-                                    return 'Out for Delivery';
+                                    return '<button class="btn-warning btn btn-sm" style="padding: 7px 10px 7px 10px;">Reached Hub</button>';
                                 } else if (data == 4) {
-                                    return 'Order Delivered';
+                                    return '<button class="btn-light btn btn-sm" style="padding: 7px 10px 7px 10px;">Out for Delivery</button>';
+                                } else if (data == 5) {
+                                    return '<button class="btn-success btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Delivered</button>';
                                 } else {
                                     // Handle any other cases or unexpected values
-                                    return 'Unknown Status';
+                                    return '<button class="btn-default btn btn-sm" style="padding: 7px 10px 7px 10px;">Status Unknown</button>';
                                 }
                             }
                             return data;
@@ -1715,28 +3021,32 @@ fetch(url, {
                     },
 
 
-                    {
-                        data: 'transaction_id'
-                    },
+                    // {
+                    //     data: 'transaction_id'
+                    // },
 
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
                             if (type === 'display' || type === 'filter') {
                                 // Assuming 'created_at' is in the default ISO 8601 format
-                                var date = new Date(data);
-                                var year = date.getFullYear();
-                                var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
-                                var day = date.getDate().toString().padStart(2, '0');
-                                return year + '-' + month + '-' + day;
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' +
+                                    minutes + ':' + seconds;
                             } else {
                                 return data;
                             }
                         }
-                    },
+                    }
 
-                  
                 ];
 
                 populateTable(data, tableId, columns);
@@ -1760,16 +3070,34 @@ fetch(url, {
                 console.log(data);
 
                 const columns = [
-                      {
+                    //       {
+                    //         data: null,
+                    //         render: function(data, type, row) {
+                    //             if (type === 'display') {
+
+                    //                 return `
+                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
+                    //     <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
+
+                    // `;
+                    //             }
+                    //             return data;
+                    //         }
+                    //     },
+                    {
                         data: null,
                         render: function(data, type, row) {
                             if (type === 'display') {
 
+
                                 return `
-                    <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
-                    <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
-                    
-                `;
+            <i class="fa-regular fa-eye text-primary" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewOrder(event)"></i>
+            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrder(${row.id})"></i>
+            
+        `;
+
+
+
                             }
                             return data;
                         }
@@ -1779,6 +3107,9 @@ fetch(url, {
                     },
                     {
                         data: 'user.name'
+                    },
+                    {
+                        data: 'user.phone'
                     },
                     {
                         data: 'amount'
@@ -1793,46 +3124,54 @@ fetch(url, {
                         render: function(data, type, row) {
                             if (type == 'display') {
                                 if (data == 0) {
-                                    return 'Cancelled Order';
+                                    return '<button class="btn-danger btn btn-sm" style="padding: 7px 10px 7px 10px;">Cancelled Order</button>';
                                 } else if (data == 1) {
-                                    return 'Order Placed';
+                                    return '<button class="btn-primary btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Placed</button>';
                                 } else if (data == 2) {
-                                    return 'Order Reached Hub';
+                                    return '<button class="btn-info btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Shipped</button>';
                                 } else if (data == 3) {
-                                    return 'Out for Delivery';
+                                    return '<button class="btn-warning btn btn-sm" style="padding: 7px 10px 7px 10px;">Reached Hub</button>';
                                 } else if (data == 4) {
-                                    return 'Order Delivered';
+                                    return '<button class="btn-light btn btn-sm" style="padding: 7px 10px 7px 10px;">Out for Delivery</button>';
+                                } else if (data == 5) {
+                                    return '<button class="btn-success btn btn-sm" style="padding: 7px 10px 7px 10px;">Order Delivered</button>';
                                 } else {
                                     // Handle any other cases or unexpected values
-                                    return 'Unknown Status';
+                                    return '<button class="btn-default btn btn-sm" style="padding: 7px 10px 7px 10px;">Status Unknown</button>';
                                 }
                             }
                             return data;
                         }
                     },
 
-                    {
-                        data: 'transaction_id'
-                    },
+
+                    // {
+                    //     data: 'transaction_id'
+                    // },
 
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
                             if (type === 'display' || type === 'filter') {
                                 // Assuming 'created_at' is in the default ISO 8601 format
-                                var date = new Date(data);
-                                var year = date.getFullYear();
-                                var month = (date.getMonth() + 1).toString().padStart(2,
-                                '0'); // Add 1 to month because it's zero-based
-                                var day = date.getDate().toString().padStart(2, '0');
-                                return year + '-' + month + '-' + day;
+                                var datetime = new Date(data);
+                                var year = datetime.getFullYear();
+                                var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                var day = datetime.getDate().toString().padStart(2, '0');
+                                var hours = datetime.getHours().toString().padStart(2, '0');
+                                var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                return year + '-' + month + '-' + day + ' ' + hours + ':' +
+                                    minutes + ':' + seconds;
                             } else {
                                 return data;
                             }
                         }
-                    },
+                    }
 
-                  
+
                 ];
 
                 populateTable(data, tableId, columns);
@@ -1841,7 +3180,7 @@ fetch(url, {
     });
 
 
-    
+
 
 
 
@@ -1862,12 +3201,204 @@ fetch(url, {
             "oLanguage": {
                 "sEmptyTable": "No records found."
             },
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+            }],
             columns: columns,
 
 
         });
     }
 
+
+    function editCategory(id) {
+
+        const csrfToken = getCsrfToken();
+        $("#cid").val(id);
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getCategory') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#EditCategoryModal").modal('show');
+                $("#edit_category_name").val(data.name);
+                //  const Bannerurl = "{{ asset('/banners') }}/"+data.image;
+                //  $("#edit_banner_img").attr('src',Bannerurl);
+
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+    }
+
+
+    function editSubcategory(id) {
+
+
+        const csrfToken = getCsrfToken();
+        $("#subid").val(id);
+        const form_datas = {
+            id: id,
+        };
+
+        fetch("{{ url('/admin/getSubcategory') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#EditSubModal").modal('show');
+                $("#edit_sub_name").val(data.name);
+
+                console.log(data.main_category);
+
+                var selectElement = document.getElementById("edit_main_category");
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    if (selectElement.options[i].value == data.main_category) {
+                        selectElement.options[i].selected = true;
+                        break;
+                    }
+                }
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
+    }
+
+
+
+    function editBanner(id) {
+        $("#bid").val(id);
+        $("#EditBannerModal").modal('show');
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getBanner') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#edit_target_url").val(data.target);
+                const Bannerurl = "{{ asset('/banners') }}/" + data.image;
+                $("#edit_banner_img").attr('src', Bannerurl);
+
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    }
+
+    function editSlider(id) {
+        $("#sid").val(id);
+        $("#EditSliderModal").modal('show');
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getSlider') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#sid").val(data.id);
+
+                var selectElement = document.getElementById("edit_type");
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    if (selectElement.options[i].value == data.type) {
+                        selectElement.options[i].selected = true;
+                        break;
+                    }
+                }
+
+
+                var productStr = data.products;
+
+                var products = productStr.split(',');
+                console.log(productStr);
+
+                $('#edit_products').selectpicker('val', products);
+
+
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
+
+    }
 
 
     function viewOrder(event) {
@@ -1884,15 +3415,68 @@ fetch(url, {
 
     function viewUser(event) {
 
+
+
         var userId = event.target.getAttribute('data-id');
-        alert(userId);
+        //alert(userId);
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: userId,
+        };
+
+
+        fetch("{{ url('/admin/getUser') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#edit_name").val(data.name);
+                $("#edit_email").val(data.email);
+                $("#edit_phone").val(data.phone);
+
+                imgName = data.profile_image;
+                if (imgName != null) {
+                    imgUrl = "{{ asset('/profile') }}/" + imgName;
+                } else {
+                    imgUrl = "{{ asset('images/logo.png') }}";
+                }
+
+                console.log(imgUrl);
+
+                $("#user_pic").attr('src', imgUrl);
+
+                $("#viewUserModal").modal('show');
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
 
     }
 
 
     function editProduct(id, event) {
 
-       
+        document.getElementById('edit_subcategory').innHTML = "";
+        var loader = document.querySelector(".loader-container");
+        loader.style.display = "flex";
 
         const csrfToken = getCsrfToken();
 
@@ -1916,19 +3500,24 @@ fetch(url, {
             })
             .then(data => {
 
-                console.log(data);
+                console.log(data.slug);
+
+                const imgurl = "{{ asset('/products') }}/" + data.product_image;
+                $("#edit_product_img").attr('src', imgurl);
+
                 $("#edit_title").val(data.title);
                 $("#edit_code").val(data.code);
-                
+                $("#edit_sku").val(data.sku);
+                $("#edit_slug").val(data.slug);
 
+                loader.style.display = "none";
                 $("#editproductModal").modal('show');
+
 
                 var edit_category = document.getElementById('edit_category');
 
                 var edit_subcategory = document.getElementById('edit_subcategory');
                 var edit_product_status = document.getElementById('edit_product_status');
-
-
 
                 for (var i = 0; i < edit_category.options.length; i++) {
 
@@ -1941,7 +3530,7 @@ fetch(url, {
 
                 for (var i = 0; i < edit_subcategory.options.length; i++) {
 
-                    if (edit_subcategory.options[i].value == data.main_category) {
+                    if (edit_subcategory.options[i].value == data.sub_category) {
 
                         edit_subcategory.options[i].selected = true;
                     }
@@ -1960,13 +3549,19 @@ fetch(url, {
 
                 $("#eid").val(data.id);
 
-                $("#edit_description").val(data.description);
+                
+                tinymce.get('edit_description').setContent(data.description);
                 $("#edit_weight").val(data.weight);
                 $("#edit_height").val(data.height);
                 $("#edit_length").val(data.length);
 
                 $("#edit_breadth").val(data.breadth);
                 $("#edit_price").val(data.price);
+
+                $("#edit_product_height").val(data.product_height);
+                $("#edit_product_breadth").val(data.product_breadth);
+                $("#edit_product_length").val(data.product_length);
+
 
             })
             .catch(error => {
@@ -1976,98 +3571,209 @@ fetch(url, {
     }
 
 
+    //new form submit for product edit
 
-    const editProductBtn = document.getElementById('editProductBtn');
+    // 
 
+    document.addEventListener("DOMContentLoaded", function() {
+        var editProductForm = document.getElementById('editProductForm');
 
-    if (editProductBtn) {
+        if (editProductForm) {
+            editProductForm.onsubmit = function(event) {
 
-        editProductBtn.addEventListener('click', function() {
+                event.preventDefault();
 
-            var html = '<i class="fa fa-spinner fa-spin" ></i>';
-            var resetbtn = "Save changes";
+                let formElement = event.target;
+                const formData = new FormData(formElement);
+                let content = tinymce.get('edit_description').getContent();
+                formData.set('description', content);
+                let formAction = formElement.getAttribute('action');
 
-            editProductBtn.innerHTML = html;
-            editProductBtn.disabled = true;
-
-            const edit_product_image = document.getElementById('edit_product_image');
-
-            var imageFile = edit_product_image.files[0];
-
-            if (!imageFile) {
-                editProductBtn.innerHTML = resetbtn;
-                editProductBtn.disabled = false;
-
-                $("#uploadErrorSpan").html('Please Select an image!');
-            } else {
-
-                if (imageFile.size > 5 * 1024 * 1024) {
-                    editProductBtn.innerHTML = resetbtn;
-                    editProductBtn.disabled = false;
-                    $("#uploadErrorSpan").html('Image shoul be less than 5MB');
-                } else {
-                    //fetch will call
-                    const editProductForm = document.getElementById("editProductForm");
-                    const formData = new FormData(editProductForm);
-
-                    const url = "{{ url('admin/editProduct') }}";
-                    const csrfToken = getCsrfToken();
-
-                    const requestOptions = {
-                        method: 'POST',
-                        headers: {
-
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                        body: formData,
-                    };
+                const csrfToken = getCsrfToken();
 
 
-                    fetch(url, requestOptions)
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json(); // Parse the response as JSON if needed
+                const edit_product_image = document.getElementById('edit_product_image');
+                var imageFile = edit_product_image.files[0];
+
+                if (!imageFile) {
+                    fetch(formAction, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
                         })
-                        .then((data) => {
-                            editProductBtn.innerHTML = resetbtn;
+                        .then((response) => response.json())
+                        .then(data => {
+
                             console.log(data);
+                            if (data.errors) {
+                                var error = data.errors;
+                                for (const fieldName in error) {
+                                    if (error.hasOwnProperty(fieldName)) {
+                                        const errorMessages = error[fieldName];
+                                        errorMessages.forEach(errorMessage => {
+                                            toastr.error(errorMessage);
+                                        });
+                                    }
+                                }
+                            }
+
                             if (data.code == 200) {
                                 toastr.success(data.msg, 'Success', {
                                     onHidden: function() {
-
-                                        editProductBtn.disabled = false;
-                                        location.reload();
-                                    }
+                                        window.location.reload();
+                                    },
                                 });
-
                             }
-                        }).catch((error) => {
-                            editProductBtn.innerHTML = resetbtn;
-                            editProductBtn.disabled = false;
-                            console.error('There was a problem with the fetch operation:', error);
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
                         });
+                } else {
+                    if (imageFile.size > 5 * 1024 * 1024) {
+                        $("#uploadErrorSpan").html('Image shoul be less than 5MB');
+                    } else {
+
+                        fetch(formAction, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken,
+                                },
+                            })
+                            .then((response) => response.json())
+                            .then(data => {
+
+                                console.log(data);
+                                if (data.errors) {
+                                    var error = data.errors;
+                                    for (const fieldName in error) {
+                                        if (error.hasOwnProperty(fieldName)) {
+                                            const errorMessages = error[fieldName];
+                                            errorMessages.forEach(errorMessage => {
+                                                toastr.error(errorMessage);
+                                            });
+                                        }
+                                    }
+                                }
+
+                                if (data.code == 200) {
+                                    toastr.success(data.msg, 'Success', {
+                                        onHidden: function() {
+                                            window.location.reload();
+                                        },
+                                    });
+                                }
 
 
-
+                            })
+                            .catch(error => {
+                                console.error('Fetch error:', error);
+                            });
+                    }
                 }
+
+
+
             }
+        }
 
 
 
-            // const serializedArray = [];
-            // formData.forEach((value, key) => {
-            //     serializedArray.push({ name: key, value: value });
-            // });
-
-            //     console.log(serializedArray);
+    });
 
 
 
-        });
 
-    }
+
+    // const editProductBtn = document.getElementById('editProductBtn');
+
+
+    // if (editProductBtn) {
+
+    //     editProductBtn.addEventListener('click', function() {
+
+    //         var html = '<i class="fa fa-spinner fa-spin" ></i>';
+    //         var resetbtn = "Save changes";
+
+    //         editProductBtn.innerHTML = html;
+    //         editProductBtn.disabled = true;
+
+    //         const edit_product_image = document.getElementById('edit_product_image');
+
+    //         var imageFile = edit_product_image.files[0];
+
+    //         if (!imageFile) {
+    //             editProductBtn.innerHTML = resetbtn;
+    //             editProductBtn.disabled = false;
+
+    //             $("#uploadErrorSpan").html('Please Select an image!');
+    //         } else {
+
+    //             if (imageFile.size > 5 * 1024 * 1024) {
+    //                 editProductBtn.innerHTML = resetbtn;
+    //                 editProductBtn.disabled = false;
+    //                 $("#uploadErrorSpan").html('Image shoul be less than 5MB');
+    //             } else {
+    //                 //fetch will call
+    //                 const editProductForm = document.getElementById("editProductForm");
+    //                 const formData = new FormData(editProductForm);
+
+    //                 const url = "{{ url('admin/editProduct') }}";
+    //                 const csrfToken = getCsrfToken();
+
+    //                 const requestOptions = {
+    //                     method: 'POST',
+    //                     headers: {
+
+    //                         'X-CSRF-TOKEN': csrfToken,
+    //                     },
+    //                     body: formData,
+    //                 };
+
+
+    //                 fetch(url, requestOptions)
+    //                     .then((response) => {
+    //                         if (!response.ok) {
+    //                             throw new Error('Network response was not ok');
+    //                         }
+    //                         return response.json(); // Parse the response as JSON if needed
+    //                     })
+    //                     .then((data) => {
+    //                         editProductBtn.innerHTML = resetbtn;
+    //                         console.log(data);
+    //                         if (data.code == 200) {
+    //                             toastr.success(data.msg, 'Success', {
+    //                                 onHidden: function() {
+
+    //                                     editProductBtn.disabled = false;
+    //                                     location.reload();
+    //                                 }
+    //                             });
+
+    //                         }
+    //                     }).catch((error) => {
+    //                         editProductBtn.innerHTML = resetbtn;
+    //                         editProductBtn.disabled = false;
+    //                         console.error('There was a problem with the fetch operation:', error);
+    //                     });
+
+
+
+    //             }
+    //         }
+
+
+
+
+
+
+    // });
+
+    //}
 
 
 
@@ -2125,6 +3831,56 @@ fetch(url, {
 
     }
 
+    function deleteUser(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/userDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        toastr.success('User status changed successfully', 'Oops', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
 
 
     function deleteProduct(id) {
@@ -2135,7 +3891,7 @@ fetch(url, {
             showCancelButton: true,
             confirmButtonColor: '#004a8c',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Yes'
         }).then((result) => {
             if (result.isConfirmed) {
                 const csrfToken = getCsrfToken();
@@ -2160,7 +3916,7 @@ fetch(url, {
                     .then(data => {
 
 
-                        toastr.error('Product deleted successfully', 'Oops', {
+                        toastr.success('Product status changed successfully', 'Oops', {
                             onHidden: function() {
                                 location.reload();
                             }
@@ -2177,10 +3933,522 @@ fetch(url, {
             }
         });
 
+    }
+
+
+    function delete_product(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes Delete It'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/product_delete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        toastr.success('Product deleted successfully', 'Oops', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
 
 
 
-        // alert('Delete button clicked for ID: ' + id);
+            }
+        });
+
+    }
+
+
+
+
+
+    function deleteMenu(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/menuDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        toastr.success('Menu status changed successfully', 'Success', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
+    //delete slider
+
+    function deleteSlider(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/sliderDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        if (data.errors) {
+
+                            toastr.error(data.errors);
+
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success('Slider status changed successfully', 'Success', {
+                                onHidden: function() {
+                                    location.reload();
+                                }
+                            });
+                        }
+
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
+
+    //delete banner
+
+    function deleteBanner(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/bannerDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        toastr.success('Banner status changed successfully', 'Success', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
+
+    function deletecategory(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/categoryDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        toastr.success('Category status changed successfully', 'Success', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
+    function deleteSubcategory(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/subcategoryDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        toastr.success('Subcategory status changed successfully', 'Success', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
+
+    $(document).ready(() => {
+
+        $("#addMenuForm").submit((event) => {
+            event.preventDefault();
+            //alert("working");
+            const csrfToken = getCsrfToken();
+            const formAction = event.target.getAttribute('action');
+
+            // Serialize the form data
+            // const formData = new FormData(event.target);
+            const formData = $(event.target).serializeArray();
+
+
+            // Make the Fetch API call
+            fetch(formAction, {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Handle the response from the server
+                    console.log(data);
+
+                    if (data.errors) {
+                        var error = data.errors;
+                        for (const fieldName in error) {
+                            if (error.hasOwnProperty(fieldName)) {
+                                const errorMessages = error[fieldName];
+                                errorMessages.forEach(errorMessage => {
+                                    toastr.error(errorMessage);
+                                });
+                            }
+                        }
+                    }
+
+
+                    if (data.code == 200) {
+                        toastr.success(data.msg, 'Success', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+
+                });
+        });
+
+    });
+
+
+
+
+    $(document).ready(() => {
+
+        $("#editMenuForm").submit((event) => {
+            event.preventDefault();
+            //alert("working");
+            const csrfToken = getCsrfToken();
+            const formAction = event.target.getAttribute('action');
+
+            // Serialize the form data
+            // const formData = new FormData(event.target);
+            const formData = $(event.target).serializeArray();
+
+
+            // Make the Fetch API call
+            fetch(formAction, {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Handle the response from the server
+                    console.log(data);
+
+                    if (data.errors) {
+                        var error = data.errors;
+                        for (const fieldName in error) {
+                            if (error.hasOwnProperty(fieldName)) {
+                                const errorMessages = error[fieldName];
+                                errorMessages.forEach(errorMessage => {
+                                    toastr.error(errorMessage);
+                                });
+                            }
+                        }
+                    }
+
+                    if (data.code == 200) {
+                        toastr.success(data.msg, 'Success', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+
+                });
+        });
+
+    });
+
+
+
+
+
+
+
+
+    // $(document).on("click","#editMenuBtn",()=>{
+    //     var formData=$("#editMenuForm").serializeArray();
+    //     const csrfToken = getCsrfToken();
+    //     const url = $("#editMenuForm").attr('action');
+    //     fetch(url, {
+    //         method: 'POST', 
+    //         body: JSON.stringify(formData), 
+    //         headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'X-CSRF-TOKEN': csrfToken,
+    //             },
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+
+    //         console.log(data);
+
+    //         if(data.code==200){
+    //             toastr.success(data.msg, 'Success', {
+    //                         onHidden: function() {
+    //                             location.reload();
+    //                         }
+    //                     });
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //     });
+
+    // });
+
+    function editMenu(id) {
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/showMenu') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+
+                if (data) {
+                    var generatedURL = "{{ url('/admin/edit-menu') }}/" + data.url;
+                    console.log(generatedURL);
+                    window.location.href = generatedURL;
+
+                }
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
     }
 </script>
 

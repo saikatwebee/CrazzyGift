@@ -12,6 +12,8 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Mail\OrderPlacedEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\deliveredEmail;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -261,22 +263,31 @@ if(count($product_arr) > 0){
             //call Forward Shipment Manifest API for shipment creation
             if ($data->status == "captured") {
                 $order_data = Order::where(['id' => $insertedId])->first();
+                $user=DB::table('users')->where('id',$user_id)->first();
+                $order_id = $order_data->order_id;
+                $user_email = $user->email;
+                $user_name = $user->name; 
+                $user_phone = $user->phone;
 
                 $this->shipment_manifest($res->id, $billingAddress, $shipingAddress);
                 //delete all records from cart
-               $this->eachCartDelete();
+                $this->eachCartDelete();
 
                //MAIL SEND
-               $user=DB::table('users')->where('id',$user_id)->first();
-               $user_email = $user->email;
-               $user_name = $user->name; 
-              
-               Mail::to($user_email)->send(new OrderPlacedEmail($order_data,$user_name));
+                Mail::to($user_email)->send(new OrderPlacedEmail($order_data,$user_name));
+
+               //sms for order confirmed
+                $recipientMobileNumber = "91" .$user_phone;
+                $authKey = '406334AgH6x4iTnFh16527aef9P1'; 
+                $senderId = "CRZGFT"; 
+                $msg = "Your Order ". $order_id ." with CrazzyGIFT.com is confirmed. Our Design Team will reach you if need be. Thank you for choosing CrazzyGIFT.com HA Creations"; 
+                $message = urlencode($msg);
+                $dlt_id="1707169710088043581";
+                $this->sendOrderMsg($recipientMobileNumber,$authKey,$senderId,$message,$dlt_id);
 
             }
 
             
-
              return view('paymentStatusView', compact('title', 'data', 'order', 'order_date','order_time'));
             
 }
@@ -536,7 +547,7 @@ else{
                 $subtotal = $subtotal + ((int)$product->price * (int)$product->quantity);
             }
 
-
+        $invoice['invoice_no'] = $order->invoice;
         $invoice['userDetails'] = $order->user;
         $invoice['products'] = $products;
         $invoice['amount_captured'] = $order->amount;
@@ -550,9 +561,14 @@ else{
     } 
 
     public function orderStatusUpdate(){
-        $orders = Order::where(['order_status'=> 1])->orderBy('id', 'desc')->get();
+        $orders = DB::table('orders')
+        ->select('orders.*', 'users.name as user_name','users.phone as phone','users.email as email') 
+        ->join('users', 'orders.user_id', '=', 'users.id')
+        ->whereNotIn('orders.order_status', [0, 5])
+        ->where('orders.created_at', '>=', now()->subHours(24))
+        ->orderBy('orders.id', 'desc')
+        ->get();
 
-     //   $trackingData = [];
         if ($orders) {
             if (count($orders) > 0) {
                 foreach ($orders as $order) {
@@ -577,52 +593,94 @@ else{
 
                     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
                     if ($httpCode === 200) {
-                        $order->track_shipping = simplexml_load_string($response);
-
-                    }
-
+                        $trackShipping = simplexml_load_string($response);
+                        if(count($trackShipping->object) > 0){
+                             $order->track_shipping = $trackShipping;
+                        }
+                        else{
+                         $order->track_shipping = null;
+                         }
+ 
+                     }
                     curl_close($curl);
                 }
-            }
-        }
 
-        foreach ($orders as $order){
-            if ($order->track_shipping) {
 
-                $id = $order->id;
-                $reason_code_number = $order->track_shipping->object->field[14];
-
-                if($reason_code_number == 003){
-                    //order shipped update order_status as 2
-                    Order::where('id', $id)->update(['order_status' => 2]);
-
-                }
-                if($reason_code_number == 005){
-                    //order reached hub update order_status as 3
-                    Order::where('id', $id)->update(['order_status' => 3]);
-
-                }
-
-                if($reason_code_number == 006){
-                    //order out for delivery update order_status as 4
-                    Order::where('id', $id)->update(['order_status' => 4]);
-
-                }
-
-                if($reason_code_number == 999){
-                    //order deliverd update order_status as 5
-                    Order::where('id', $id)->update(['order_status' => 5]);
-
-                }
-
-                 
-            }
-        }
-
-        echo "<pre>";
-        var_dump($orders);
-        die;
+                foreach ($orders as $order){
+                    if ($order->track_shipping) {
         
+                        $id = $order->id;
+                        $reason_code_number = $order->track_shipping->object->field[14];
+                        $order_id = $order->order_id;
+                        $awb=$order->awb;
+                        $user_mail = $order->email;
+                        $recipientMobileNumber = "91" .$order->phone;
+                        $authKey = '406334AgH6x4iTnFh16527aef9P1'; 
+                        $senderId = "CRZGFT"; 
+                       
+        
+                        if($reason_code_number == 003){
+                            //order shipped update order_status as 2
+                            Order::where('id', $id)->update(['order_status' => 2]);
+        
+                        }
+                        if($reason_code_number == 005){
+                            //order reached hub update order_status as 3
+                            Order::where('id', $id)->update(['order_status' => 3]);
+        
+                        }
+        
+                        if($reason_code_number == 006){
+                            //order out for delivery update order_status as 4
+                            Order::where('id', $id)->update(['order_status' => 4]);
+        
+                            //sms for order out for delivery
+                            $msg = "Your Order ID ". $order_id ." with CrazzyGIFT.com has been dispatched with AWB ".$awb." Please login to track updates. HA Creations"; 
+                            $message = urlencode($msg);
+                            $dlt_id="1707169710107480504";
+                            $this->sendOrderMsg($recipientMobileNumber,$authKey,$senderId,$message,$dlt_id);
+
+                        }
+        
+                        if($reason_code_number == 999){
+        
+                            //invoice number generation and update for each order.
+                            $delivery_date = $order->track_shipping->object->field[21]; //delivery_date
+                            $timestamp = strtotime($delivery_date);
+                            $invoiceNumber = 'INV-' .$timestamp;
+        
+                            //order deliverd update order_status as 5
+                            Order::where('id', $id)->update(['order_status' => 5,'invoice'=>$invoiceNumber]);
+                            
+                            //email sent for order delivered 
+                            Mail::to($user_mail)->send(new deliveredEmail($order));
+        
+                            //sms for order delivered
+                            $msg = "Your Order ". $order_id ." with CrazzyGIFT.com has been delivered successfully. Thank You for choosing CrazzyGIFT.com for your gifting needs. HA Creations"; 
+                            $message = urlencode($msg);
+                            $dlt_id="1707169710188002677";
+                            $this->sendOrderMsg($recipientMobileNumber,$authKey,$senderId,$message,$dlt_id);
+
+                    }
+                }
+        
+            }
+
+            }
+        
+        }
+
+    }
+
+    public function sendOrderMsg($recipientMobileNumber,$authKey,$senderId,$message,$dlt_id){
+
+        $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
+        
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $api_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            curl_close($ch);
 
     }
 

@@ -9,22 +9,25 @@
     @endphp
 
 <section class="loginRegister container">
+    <div class="timer-container mb-3">
+        <div class="timer">
+            You will be redirected within <span id="countdown">5</span> seconds
+        </div>
+    </div>
     <div class="card">
         <div class="card-header">
 
             <div class="payment_heading">
-                    @if($data->status=="captured")
-            <h3 class="card-title" style="color: #4caf50 !important;">
-                <i class="fa-solid fa-circle-check"></i> Order placed successfully 
-            </h3>
-            @else
-            <h3 class="card-title" style="color: #fb483a !important;">
-                <i class="fa-solid fa-xmark"></i> Payment Failure
-            </h3>
-            @endif
-             <div class="timer">
-                        You will be redirected within <span id="countdown">10</span> seconds
-             </div>
+                @if($data->status=="captured")
+                    <h3 class="card-title" style="color: #4caf50 !important;">
+                        <i class="fa-solid fa-circle-check"></i> Order placed successfully 
+                    </h3>
+                @else
+                    <h3 class="card-title" style="color: #fb483a !important;">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Payment Failure
+                    </h3>
+                @endif
+            
             </div>
 
             
@@ -111,7 +114,7 @@ function startTimer(duration, display) {
 // Start the timer when the page loads
 document.addEventListener("DOMContentLoaded", function () {
     const countdownDisplay = document.getElementById("countdown");
-    const countdownDuration = 10; // 10 seconds
+    const countdownDuration = 5; // 10 seconds
 
     startTimer(countdownDuration, countdownDisplay);
 });

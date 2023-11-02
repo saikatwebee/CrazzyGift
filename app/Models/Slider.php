@@ -11,4 +11,5 @@ class Slider extends Model
 
     protected $table = 'sliders';
     protected $fillable = ['type','products','status','created_at', 'updated_at'];
+    public $timestamps = true;
 }

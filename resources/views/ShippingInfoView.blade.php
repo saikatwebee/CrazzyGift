@@ -21,7 +21,7 @@
 
                 <div class="shippingInfo">
                     <div class="titleShipping">
-                        <h3>Billing Information</h3>
+                        <h3>Billing Information <small>(Enter this Only Once)</small></h3>
                     </div>
 
                     <form action="{{ url('/editBillingAddress') }}" method="post" id="editBillingForm">
@@ -31,7 +31,7 @@
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control shippingInput" id="name_billing" name="name"
                                 placeholder="Your Full Name" value="{{ $billingAddress ? $billingAddress->name : '' }}"
-                                oninput="getInput(event);removeValidation(event);">
+                                oninput="getInput(event);removeValidation(event);makeUncheck(event);">
                         </div>
 
 
@@ -41,22 +41,22 @@
                             <input type="text" class="form-control shippingInput my-3" id="address1_billing"
                                 placeholder="Address Lane 1"
                                 value="{{ $billingAddress ? $billingAddress->street_address1 : '' }}" name="street_address1"
-                                oninput="getInput(event);removeValidation(event);">
+                                oninput="getInput(event);removeValidation(event);makeUncheck(event);">
 
                             <input type="text" class="form-control shippingInput my-3" id="address2_billing"
                                 placeholder="Address Lane 2"
                                 value="{{ $billingAddress ? $billingAddress->street_address2 : '' }}" name="street_address2"
-                                oninput="getInput(event);removeValidation(event);">
+                                oninput="getInput(event);removeValidation(event);makeUncheck(event);">
 
                             <input type="text" class="form-control shippingInput my-3" id="address3_billing"
                                 placeholder="Address Lane 3"
                                 value="{{ $billingAddress ? $billingAddress->street_address3 : '' }}" name="street_address3"
-                                oninput="getInput(event);removeValidation(event);">
+                                oninput="getInput(event);removeValidation(event);makeUncheck(event);">
 
                             <label for="state" class="form-label">State</label>
 
                             <select class="form-select" id="state_billing" name="state"
-                                oninput="getInput(event);removeValidation(event);">
+                                oninput="getInput(event);removeValidation(event);makeUncheck(event);">
 
                                 <option value="" disabled selected>Select a state</option>
                                 <option value="Andhra Pradesh">Andhra Pradesh</option>
@@ -97,7 +97,7 @@
                                     <label for="city" class="form-label">City</label>
                                     <input type="text" class="form-control shippingInput" id="city_billing"
                                         placeholder="Enter City" value="{{ $billingAddress ? $billingAddress->city : '' }}"
-                                        name="city" oninput="getInput(event);removeValidation(event);">
+                                        name="city" oninput="getInput(event);removeValidation(event);makeUncheck(event);">
                                 </div>
                             </div>
 
@@ -107,7 +107,7 @@
                                     <input type="number" class="form-control shippingInput" id="pincode_billing"
                                         placeholder="Enter ZIP Code"
                                         value="{{ $billingAddress ? $billingAddress->postal_code : '' }}"
-                                        name="postal_code" oninput="getInput(event);removeValidation(event);">
+                                        name="postal_code" oninput="getInput(event);removeValidation(event);makeUncheck(event);">
 
                                     <span id="postal_error1" class="text-danger hideSpan">Service Unavailable in Your Area!</span>
                                 </div>
@@ -119,13 +119,13 @@
                                     <input type="number" class="form-control shippingInput" id="phone_billing"
                                         placeholder="Enter Phone Number"
                                         value="{{ $billingAddress ? $billingAddress->phone : '' }}" name="phone"
-                                        oninput="getInput(event);removeValidation(event);">
+                                        oninput="getInput(event);removeValidation(event);makeUncheck(event);    ">
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="my-3">
-                                    <label for="alternate_phone_billing" class="form-label">Alternate Phone Number</label>
+                                    <label for="alternate_phone_billing" class="form-label">Alternate Phone Number (Optional)</label>
                                     <input type="number" class="form-control shippingInput" id="alternate_phone_billing"
                                         placeholder="Enter Alternate Phone Number"
                                         value="{{ $billingAddress ? $billingAddress->alternate_phone : '' }}"
@@ -135,7 +135,7 @@
 
                             <div class="col-lg-6">
                                 <div class="my-3">
-                                    <label for="company_name" class="form-label">Company Name</label>
+                                    <label for="company_name" class="form-label">Company Name (Optional)</label>
                                     <input type="text" class="form-control shippingInput" id="comany_name"
                                         placeholder="Enter Company Name" value="{{ $billingAddress ? $billingAddress->company_name : '' }}"
                                         name="company_name" oninput="getInput(event);removeValidation(event);">
@@ -144,11 +144,11 @@
 
                             <div class="col-lg-6">
                                 <div class="my-3">
-                                    <label for="gst" class="form-label">GST Number</label>
+                                    <label for="gst" class="form-label">GST Number (Optional)</label>
                                     <input type="text" class="form-control shippingInput" id="gst"
                                         placeholder="Enter GST"
                                         value="{{ $billingAddress ? $billingAddress->gst : '' }}"
-                                        name="gst" oninput="getInput(event);removeValidation(event);">
+                                        name="gst" oninput="getInput(event);removeValidation(event);makeUncheck(event);">
                                 </div>
                             </div>
 
@@ -270,7 +270,7 @@
                                         <div class="col-lg-6">
                                             <div class="my-3">
                                                 <label for="alternate_phone_shipping" class="form-label">Alternative Phone
-                                                    Number</label>
+                                                    Number (Optional)</label>
                                                 <input type="number" class="form-control shippingInput"
                                                     id="alternate_phone_shipping"
                                                     placeholder="Enter Alternate Phone Number" name="alternate_phone"
@@ -440,6 +440,7 @@
                                                 <input type="number" class="form-control shippingInput"
                                                     id="postal_code_ship" placeholder="Enter ZIP Code" name="postal_code"
                                                     >
+                                                    <span id="postal_error3" class="text-danger hideSpan" >Service Unavailable in Your Area!</span>
 
                                             </div>
                                         </div>
@@ -455,7 +456,7 @@
                                         <div class="col-lg-6">
                                             <div class="my-3">
                                                 <label for="alternate_phone_shipping" class="form-label">Alternative Phone
-                                                    Number</label>
+                                                    Number (Optional)</label>
                                                 <input type="number" class="form-control shippingInput"
                                                     id="alternate_phone_ship" placeholder="Enter Alternate Phone Number"
                                                     name="alternate_phone" >
@@ -481,7 +482,7 @@
                         <button class="btnShippingInfo">Save</button>
                     </div> --}}
 
-                    <div class="buttonSummary" style="text-align: center;">
+                    <div class="buttonSummary mb-3" style="text-align: center;">
 
                         @php $productPrice= 0; @endphp
                         @foreach ($carts as $cart)
@@ -605,7 +606,7 @@
     <script type="text/javascript">
        
          
-         const postalCodeShipping = document.getElementById('postal_code_shipping');
+const postalCodeShipping = document.getElementById('postal_code_shipping');
 
 postalCodeShipping.addEventListener('keypress', () => {
     handlePostalCodeEvent();
@@ -632,17 +633,30 @@ function handlePostalCodeEvent() {
 
 
 
- const PincodeBilling = document.getElementById('pincode_billing');
+const PincodeBilling = document.getElementById('pincode_billing');
+
+const postalCodeShip = document.getElementById('postal_code_ship');
+
 
 PincodeBilling.addEventListener('keypress', () => {
-    handlePincodeEvent();
+    handlePincodeEvent1();
 });
 
 PincodeBilling.addEventListener('keyup', () => {
-    handlePincodeEvent();
+    handlePincodeEvent1();
 });
 
-function handlePincodeEvent() {
+
+
+postalCodeShip.addEventListener('keypress', () => {
+    handlePincodeEvent3();
+});
+
+postalCodeShip.addEventListener('keyup', () => {
+    handlePincodeEvent3();
+});
+
+function handlePincodeEvent1() {
     if (PincodeBilling.classList.contains('inputError')) {
         PincodeBilling.classList.remove('inputError');
     }
@@ -653,6 +667,23 @@ function handlePincodeEvent() {
             postalError1.classList.add('hideSpan');
         } else {
             postalError1.classList.add('hideSpan');
+        }
+    
+}
+
+
+
+function handlePincodeEvent3() {
+    if (postalCodeShip.classList.contains('inputError')) {
+        postalCodeShip.classList.remove('inputError');
+    }
+        const postalError3 = document.getElementById('postal_error3');
+
+        if (postalError3.classList.contains('showSpan')) {
+            postalError3.classList.remove('showSpan');
+            postalError3.classList.add('hideSpan');
+        } else {
+            postalError3.classList.add('hideSpan');
         }
     
 }
@@ -988,6 +1019,31 @@ function handlePincodeEvent() {
             }
         }
 
+        function makeUncheck(event){
+            var checkbox = document.getElementById("flexSwitchCheckDefault");
+            if (checkbox.checked) {
+                const url = "{{url('/uncheckSameAsBilling')}}";
+                fetch(url, {
+                            method: 'GET',
+                            }).then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            checkbox.checked = false;
+                           
+                          
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+                   
+                }
+            }
+
         function remove_validation(event) {
             if (event.target.classList.contains("inputError")) {
                 event.target.classList.remove("inputError");
@@ -1012,7 +1068,7 @@ function handlePincodeEvent() {
             var validationStatus = ShippingValidation();
 
            saveButton2.style.backgroundColor="#004a8cab";
-           saveButton2.disabled="true";
+           saveButton2.style.pointerEvents = "none";
            saveButton2.innerHTML="<i class='fa fa-spinner fa-spin'></i>";
            
 
@@ -1029,7 +1085,8 @@ function handlePincodeEvent() {
 
                 console.log(serializedArray);
 
-                 const url = 'http://127.0.0.1:8000/addShipping';
+                
+                 const url = "{{url('/addShipping')}}";
                 const csrfToken = getCsrfToken();
 
                 const requestOptions = {
@@ -1081,7 +1138,7 @@ function handlePincodeEvent() {
 
                                             $("#postal_code_shipping").addClass('inputError');
                                             
-                                            saveButton2.disabled="false";
+                                            saveButton2.style.pointerEvents = "auto";
                                             
 
                                            
@@ -1099,7 +1156,7 @@ function handlePincodeEvent() {
             }
             else{
                 saveButton2.innerHTML="Save";
-                saveButton2.disabled="false";
+                saveButton2.style.pointerEvents = "auto";
                 saveButton2.style.backgroundColor="#004a8c";
             }
 
@@ -1109,9 +1166,13 @@ function handlePincodeEvent() {
      
 
          const saveButton4 = document.getElementById('save-button4');
-        saveButton4.addEventListener('click', function() {
+
+                saveButton4.addEventListener('click', function() {
             var validationStatus = editShippingValidation();
-            console.log(validationStatus);
+
+            saveButton4.style.backgroundColor="#004a8cab";
+            saveButton4.style.pointerEvents = "none";
+            saveButton4.innerHTML="<i class='fa fa-spinner fa-spin'></i>";
 
             if (validationStatus) {
                 const editShippingForm = document.getElementById("editShippingForm");
@@ -1125,8 +1186,8 @@ function handlePincodeEvent() {
                     console.log(serializedArray);
 
 
+                    const url = "{{url('/editShippingAddress')}}";
                    
-                    const url = 'http://127.0.0.1:8000/editShippingAddress';
                     const csrfToken = getCsrfToken();
                    
                         
@@ -1149,19 +1210,45 @@ function handlePincodeEvent() {
                                 })
                                 .then((data) => {
    
-                                        console.log(data);
+                                    saveButton4.innerHTML="Save";
+                                    saveButton4.style.backgroundColor="#004a8c";
+                                    
+
                                         if(data.code==200){
                                             toastr.success(data.msg,'Success',{
                                                 onHidden: function() {
                                                      location.reload();
+                                                     
                                                 }
                                             });
                                          
                                         }
+                                        else{
+                                            
+                                            if($("#postal_error3").hasClass('hideSpan')){
+                                                $("#postal_error3").removeClass('hideSpan');
+                                                $("#postal_error3").addClass('showSpan');
+                                            }
+                                            else{
+                                                $("#postal_error3").addClass('showSpan');
+                                            }
+                                            $("#postal_code_ship").addClass('inputError');
+                                            
+                                            saveButton4.style.pointerEvents = "auto";
+                                           
+                                        }
+
+
                                 }).catch((error) => {
     
                                     console.error('There was a problem with the fetch operation:', error);
                                 });
+                               
+                        }
+                        else{
+                            saveButton4.style.backgroundColor="#004a8c";
+                            saveButton4.style.pointerEvents = "auto";
+                            saveButton4.innerHTML="Save";
                         }
 
         });
@@ -1190,8 +1277,8 @@ function handlePincodeEvent() {
             // const csrfToken = $("[name='_token']").val();
             const csrfToken = getCsrfToken();
 
-
-            fetch('http://127.0.0.1:8000/updateBillingOnInput', {
+            const url = "{{url('/updateBillingOnInput')}}";
+            fetch(url, {
                     method: 'POST',
                     body: JSON.stringify(dataObj),
                     headers: {
@@ -1249,9 +1336,8 @@ function handlePincodeEvent() {
                 var validationStatus = BillingValidation();
                 if (validationStatus) {
                     //success
-
-                   
-
+                    var loader = document.querySelector(".loader-container");
+                   loader.style.display = "flex";
 
                     var formAction = event.target.getAttribute('data-id');
 
@@ -1275,16 +1361,15 @@ function handlePincodeEvent() {
                             console.log(data);
                               
                             if (data.code == 200) {
-                                toastr.success(data.msg,'Success',{
-                                     onHidden: function() {
-                                         window.location.reload();
-                                     }
-                                });
+                                loader.style.display = "none";
+                                toastr.success(data.msg,'Success');
+                                checkbox.checked = true;
                                
                             } else {
                                 var pincode_billing = document.getElementById('pincode_billing');
                                 pincode_billing.classList.add('inputError');
 
+                                loader.style.display = "none";
                                 //toastr.error(data.msg);
 
                                   if($("#postal_error1").hasClass('hideSpan')){
@@ -1312,11 +1397,14 @@ function handlePincodeEvent() {
                             console.error('Fetch error:', error);
                         });
                 } 
+                else{
+                    checkbox.checked = false;
+                }
 
             }
             else{
-                
-                          fetch("http://127.0.0.1:8000/uncheckSameAsBilling", {
+                const url = "{{url('/uncheckSameAsBilling')}}";
+                          fetch(url, {
                             method: 'GET',
                             }).then(response => {
                             if (!response.ok) {

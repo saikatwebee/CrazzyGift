@@ -21168,7 +21168,7 @@
           }
         }
         if (name === 'color') {
-          if (dom.toHex(value).toLowerCase() === '#000000') {
+          if (dom.toHex(value).toLowerCase() === '#555555') {
             return;
           }
         }

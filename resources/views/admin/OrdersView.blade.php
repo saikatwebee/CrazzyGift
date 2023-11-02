@@ -33,9 +33,11 @@
                           <th>Action</th>
                           <th>ID</th>
                           <th>User Name</th>
+                          <th>Phone</th>
+
                           <th>Amount</th>
                           <th>order Status</th>
-                          <th>transaction ID</th>
+                          {{-- <th>transaction ID</th> --}}
                           <th>Placed On</th>
                           
                         </tr>

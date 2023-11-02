@@ -66,20 +66,42 @@ class ProductController extends Controller
     public function search(Request $request)
     {
 
-        $searchQuery = $request->input('query');
+        $searchQuery = $request->input('searchQuery');
         $title = 'Products-Search|CrazzyGift';
         $heading = $searchQuery;
         $recordsPerPage = 12;
+        $query = '';
 
-
-        $results = DB::table('products')
+        $result = DB::table('products')
             ->leftJoin('main_categories', 'products.main_category', '=', 'main_categories.id')
             ->leftJoin('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
             ->where('products.title', 'LIKE', '%' . $heading . '%')
             ->orWhere('main_categories.name', 'LIKE', '%' . $heading . '%')
             ->orWhere('sub_categories.name', 'LIKE', '%' . $heading . '%');
 
-        $allProducts = $results->get();
+            if ($request->has('query')) {
+
+
+                $query = $request->query('query');
+    
+                if ($query === 'price_high_to_low') {
+                    $result->orderBy('products.price', 'desc');
+                } elseif ($query === 'price_low_to_high') {
+                    $result->orderBy('products.price', 'asc');
+                } elseif ($query === 'latest_product') {
+                    $result->orderBy('products.created_at', 'desc');
+                }
+               
+    
+            }
+            else{
+                $result->orderBy('products.created_at', 'desc');
+            }
+
+
+
+
+        $allProducts = $result->get();
         $totalRecords = count($allProducts);
         $currentPage = $request->input('page', 1);
         $offset = ($currentPage - 1) * $recordsPerPage;
@@ -94,7 +116,9 @@ class ProductController extends Controller
 
         // die;
 
-        return view('SearchView', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage'));
+        // var_dump($query);die;
+
+        return view('SearchView', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage','query','searchQuery'));
     }
 
 
@@ -111,7 +135,8 @@ class ProductController extends Controller
         $result = DB::table('products')
             ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
             ->select('products.*', 'sub_categories.name as subcategory')
-            ->where('sub_categories.name', 'LIKE', '%' . $heading . '%');
+            ->where('sub_categories.name', 'LIKE', '%Crystal%')
+            ->orWhere('products.title', 'LIKE', '%Crystal%');
 
         if ($request->has('query')) {
 
@@ -157,7 +182,8 @@ class ProductController extends Controller
         $result = DB::table('products')
             ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
             ->select('products.*', 'sub_categories.name as subcategory')
-            ->where('sub_categories.name', 'LIKE', '%' . $heading . '%');
+            ->where('sub_categories.name', 'LIKE', '%Wooden%')
+            ->orWhere('products.title', 'LIKE', '%Wooden%');
 
 
         if ($request->has('query')) {
@@ -199,7 +225,8 @@ class ProductController extends Controller
         $result = DB::table('products')
             ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
             ->select('products.*', 'sub_categories.name as subcategory')
-            ->where('sub_categories.name', 'LIKE', '%' . $heading . '%');
+            ->where('sub_categories.name', 'LIKE', '%Frames%')
+            ->orWhere('products.title', 'LIKE', '%Frames%');
 
         if ($request->has('query')) {
 
@@ -227,31 +254,135 @@ class ProductController extends Controller
         return view('Product-photo-frames', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query'));
     }
 
-    public function product_price_low()
+    public function product_price_low(Request $request)
     {
         //0 to 500
-        $products = Product::whereBetween('price', [0, 500])->paginate(12);
-        $title = '0 to 500|CrazzyGift';
+        //$products = Product::whereBetween('price', [0, 500])->paginate(12);
+         $title = '0 to 500|CrazzyGift';
         $heading = "0 to 500";
-        return view('Product-low-price', compact('title', 'products', 'heading'));
+        $recordsPerPage = 12;
+        $query = '';
+
+       $result = DB::table('products')
+        ->whereBetween('price', [0, 500]);
+
+        if ($request->has('query')) {
+
+            $query = $request->query('query');
+
+            if ($query === 'price_high_to_low') {
+                $result->orderBy('products.price', 'desc');
+            } elseif ($query === 'price_low_to_high') {
+                $result->orderBy('products.price', 'asc');
+            } elseif ($query === 'latest_product') {
+                $result->orderBy('products.created_at', 'desc');
+            }
+
+        }
+        else{
+            $result->orderBy('products.created_at', 'desc');
+        }
+
+        $allProducts = $result->get();
+        $totalRecords = count($allProducts);
+        $currentPage = $request->input('page', 1);
+        $offset = ($currentPage - 1) * $recordsPerPage;
+        $products = $allProducts->forPage($currentPage, $recordsPerPage);
+
+        // var_dump($products);
+        // die;
+
+
+       
+        return view('Product-low-price', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query'));
+       
     }
 
-    public function product_price_medium()
+    public function product_price_medium(Request $request)
     {
         //1001 to 2000
-        $products = Product::whereBetween('price', [1001, 2000])->paginate(12);
+       // $products = Product::whereBetween('price', [1001, 2000])->paginate(12);
         $title = '1001 to 2000|CrazzyGift';
         $heading = "1001 to 2000";
-        return view('Product-medium-price', compact('title', 'products', 'heading'));
+
+        $recordsPerPage = 12;
+        $query = '';
+
+       $result = DB::table('products')
+        ->whereBetween('price', [1001, 2000]);
+
+        if ($request->has('query')) {
+
+            $query = $request->query('query');
+
+            if ($query === 'price_high_to_low') {
+                $result->orderBy('products.price', 'desc');
+            } elseif ($query === 'price_low_to_high') {
+                $result->orderBy('products.price', 'asc');
+            } elseif ($query === 'latest_product') {
+                $result->orderBy('products.created_at', 'desc');
+            }
+
+        }
+        else{
+            $result->orderBy('products.created_at', 'desc');
+        }
+
+        $allProducts = $result->get();
+        $totalRecords = count($allProducts);
+        $currentPage = $request->input('page', 1);
+        $offset = ($currentPage - 1) * $recordsPerPage;
+        $products = $allProducts->forPage($currentPage, $recordsPerPage);
+
+
+       
+        return view('Product-medium-price', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query'));
+
+
+
+
+      
     }
 
-    public function product_price_high()
+    public function product_price_high(Request $request)
     {
         //2000 and above
-        $products = Product::where('price', '>=', 2000)->paginate(12);
+       // $products = Product::where('price', '>=', 2000)->paginate(12);
         $title = '2000 and Above|CrazzyGift';
         $heading = "2000 and Above";
-        return view('Product-high-price', compact('title', 'products', 'heading'));
+        $recordsPerPage = 12;
+        $query = '';
+
+       $result = DB::table('products')
+            ->where('price', '>=', 2000);
+
+        if ($request->has('query')) {
+
+            $query = $request->query('query');
+
+            if ($query === 'price_high_to_low') {
+                $result->orderBy('products.price', 'desc');
+            } elseif ($query === 'price_low_to_high') {
+                $result->orderBy('products.price', 'asc');
+            } elseif ($query === 'latest_product') {
+                $result->orderBy('products.created_at', 'desc');
+            }
+
+        }
+        else{
+            $result->orderBy('products.created_at', 'desc');
+        }
+
+        $allProducts = $result->get();
+        $totalRecords = count($allProducts);
+        $currentPage = $request->input('page', 1);
+        $offset = ($currentPage - 1) * $recordsPerPage;
+        $products = $allProducts->forPage($currentPage, $recordsPerPage);
+
+
+       
+        return view('Product-high-price', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query'));
+       
     }
 
 
@@ -265,7 +396,8 @@ class ProductController extends Controller
         $result = DB::table('products')
             ->join('main_categories', 'products.main_category', '=', 'main_categories.id')
             ->select('products.*', 'main_categories.name as maincategory')
-            ->whereIn('main_categories.name', ['Anniversary', 'Birthday', 'Valentines Day']);
+            ->where('main_categories.name', 'LIKE', '%Occasion%');
+           
 
         if ($request->has('query')) {
 
@@ -305,9 +437,10 @@ class ProductController extends Controller
         $query = '';
 
         $result = DB::table('products')
-            ->join('main_categories', 'products.main_category', '=', 'main_categories.id')
-            ->select('products.*', 'main_categories.name as maincategory')
-            ->where('main_categories.name', 'LIKE', '%' . $heading . '%');
+            ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
+            ->select('products.*', 'sub_categories.name as subcategory')
+            ->where('sub_categories.name', 'LIKE', '%Anniversary%');
+           
 
         if ($request->has('query')) {
 
@@ -349,9 +482,9 @@ class ProductController extends Controller
 
 
         $result = DB::table('products')
-            ->join('main_categories', 'products.main_category', '=', 'main_categories.id')
-            ->select('products.*', 'main_categories.name as maincategory')
-            ->where('main_categories.name', 'LIKE', '%' . $heading . '%');
+        ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
+        ->select('products.*', 'sub_categories.name as subcategory')
+        ->where('sub_categories.name', 'LIKE', '%Birthday%');
 
         if ($request->has('query')) {
 
@@ -392,9 +525,9 @@ class ProductController extends Controller
 
 
         $result = DB::table('products')
-            ->join('main_categories', 'products.main_category', '=', 'main_categories.id')
-            ->select('products.*', 'main_categories.name as maincategory')
-            ->where('main_categories.name', 'LIKE', '%' . $heading . '%');
+        ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
+        ->select('products.*', 'sub_categories.name as subcategory')
+        ->where('sub_categories.name', 'LIKE', '%Valentines%');
 
 
         if ($request->has('query')) {
@@ -431,11 +564,12 @@ class ProductController extends Controller
 
 
 
-    public function details($id)
+    public function details($slug)
     {
-        $product = Product::find($id);
+        //$product = Product::find($lug);
+        $product = Product::where('slug',$slug)->first();
         $similarProducts = Product::where('main_category', $product->main_category)
-            ->where('id', '!=', $id)
+            ->where('slug', '!=', $slug)
             ->take(4)
             ->get();
         $title = 'Product Details|CrazzyGift';
@@ -677,7 +811,8 @@ else{
 
                 if ($validator->fails()) {
                     return response()->json(['info' => $validator->errors()->toJson(), 'message' => 'Oops Invalid data request!',], 400);
-                } else {
+                } 
+                else {
                     //DB::enableQueryLog();
 
                     if (Cart::where(['product_id' => $product->id, 'user_id' => auth()->user()->id])->exists()) {
@@ -803,9 +938,18 @@ else{
     public function customUpload(Request $request)
     {
 
-        $request->validate([
-            'custom_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        
+        $rules = [
+            'custom_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        } 
+
+
 
         if ($request->hasFile('custom_image')) {
 
@@ -857,7 +1001,7 @@ else{
 
 
                 }
-                return response()->json(['msg' => "Cart Image uploaded successfully", 'custom_image' => $image_name, 'uid' => $request->input('id')], 200);
+                return response()->json(['code'=>200,'msg' => "Cart Image uploaded successfully", 'custom_image' => $image_name, 'uid' => $request->input('id')], 200);
             }
 
 

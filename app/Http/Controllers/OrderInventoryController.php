@@ -149,7 +149,13 @@ class OrderInventoryController extends Controller
                     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
                     if ($httpCode === 200) {
-                        $order->track_shipping = simplexml_load_string($response);
+                        $trackShipping = simplexml_load_string($response);
+                       if(count($trackShipping->object) > 0){
+                            $order->track_shipping = $trackShipping;
+                       }
+                       else{
+                        $order->track_shipping = null;
+                        }
 
                     }
 

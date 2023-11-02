@@ -20,16 +20,19 @@
             </div>
             <div class="sortOption d-flex">
                 <select id="sort-select" class="sort-select">
-                    <option value="sort by">Sort by</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="{{ url('/search?searchQuery').'='.$searchQuery }} ">Sort by</option>
+                    <option value="{{ url('/search?searchQuery').'='.$searchQuery.'&query=price_high_to_low'}}"
+                        {{ $query == 'price_high_to_low' ? 'selected' : '' }}> High to Low</option>
+                    <option value="{{ url('/search?searchQuery').'='.$searchQuery.'&query=price_low_to_high'}}"
+                        {{ $query == 'price_low_to_high' ? 'selected' : '' }}>Price Low to High</option>
+                    <option value="{{ url('/search?searchQuery').'='.$searchQuery.'&query=latest_product'}}"
+                        {{ $query == 'latest_product' ? 'selected' : '' }}>Latest Collection</option>
                 </select>
 
-                <div class="filterBtn mx-3">
+                {{-- <div class="filterBtn mx-3">
                     <img src="{{ asset('images/icons/filter.png') }}" alt="filter">
 
-                </div>
+                </div> --}}
             </div>
             <div class="popup-overlay">
                 <div class="popup-container">
@@ -50,17 +53,17 @@
             @foreach ($products as $product)
                 <div class="col-lg-3 my-3">
                     <div>
-                        <div class="slide-image" data-id="{{ url('') . '/productDetails/' . $product->id }}"
+                        <div class="slide-image" data-id="{{ url('') . '/productDetails/' . $product->slug }}"
                             onclick="redirectToCart(event)">
                             <img src="{{($product->product_image) ? asset('/products').'/'.$product->product_image : asset('/products/dummyProduct.jpg') }}" alt="Slide 1" class="slide"
-                                data-id="{{ url('') . '/productDetails/' . $product->id }}" onclick="redirectToCart(event)">
-                            <a href="{{ url('') . '/productDetails/' . $product->id }}" class="overlay2">
+                                data-id="{{ url('') . '/productDetails/' . $product->slug }}" onclick="redirectToCart(event)">
+                            <a href="{{ url('') . '/productDetails/' . $product->slug }}" class="overlay2">
                                 <button>Quick View</button>
                             </a>
                         </div>
                         <div class="slide-caption">
                             <h2>{{ $product->title }}</h2>
-                            <p>{{ $product->price }}</p>
+                            <p><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->price }}</p>
                         </div>
                     </div>
                 </div>
@@ -97,6 +100,13 @@
                 console.log(redirectUrl);
                 window.location.href = redirectUrl;
             }
+            var selectElement = document.getElementById("sort-select");
+
+selectElement.addEventListener("change", function() {
+    // Get the selected option's value
+    var selectedValue = selectElement.value;
+    window.location.href = selectedValue;
+});
         </script>
     </section>
 

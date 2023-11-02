@@ -192,40 +192,87 @@
             <div class="row my-3">
 
                 @foreach ($orders as $order)
-                    @php
-                        $products = $order->product_details;
-                        
-                        $product_title = $order->title;
-                        $amount = $order->amount;
-                        $order_id = $order->order_id;
-                        $order_status = $order->order_status;
-                        $awb = $order->awb_number;
+                @php
+                $products = $order->product_details;
 
-                        $dateObj = new DateTime($order->created_at);
-                        $formattedDate = $dateObj->format('jS M Y');
-                        $orderDate = $formattedDate;
-                        $totalAmount = str_replace(".00", "", $order->amount);
+                $product_title = $order->title;
+                $amount = $order->amount;
+                $order_id = $order->order_id;
+                $order_status = $order->order_status;
+                $awb = $order->awb_number;
+
+                $dateObj = new DateTime($order->created_at);
+                $orderDate = $dateObj->format('jS M Y');
+
+                $totalAmount = str_replace('.00', '', $order->amount);
+
+                if ($order->track_shipping) {
+                   
+
+                    $scan_stages = $order->track_shipping->object->field[36]->object;
+
+                    $orderId_tracking = $order->track_shipping->object->field[1]; //orderid
+
+                    $status = $order->track_shipping->object->field[10]; //status
+
+                    $reason_code_number = $order->track_shipping->object->field[14]; //reason_code_number
+
+                    $last_update_datetime = $order->track_shipping->object->field[20]; // last_update_datetime
+
+                    $delivery_date = $order->track_shipping->object->field[21]; //delivery_date
+                    if ($delivery_date != '') {
+                        $dateObj2 = new DateTime($delivery_date);
+                        $deliveryDate = $dateObj2->format('jS M Y h:i A');
+                    }
+
+                    $expected_date = $order->track_shipping->object->field[18]; //expected_date
+
+                    if ($expected_date != '') {
+                        $dateObj3 = new DateTime($expected_date);
+                        $expectedDate = $dateObj3->format('jS M Y');
+                    }
+              
+               
+            }
+            @endphp
 
 
-                        
-                    @endphp
+
 
                     
                         <div class="col-lg-12 my-3">
                             <div class="shippingInfo">
                                 <div class="orderSummaryCard">
+                                    @if($order->order_status == 0)
+                                    <div class="ribbon-box">
+                                        <div class="ribbon ribbon-top-right ribbon-cancelled"><span>Order Cancelled</span></div>
+                                    </div>
+                                    @endif
 
+                                    @if($order->track_shipping)
+                                    @if(($order->order_status == 1 || $order->order_status == 2 || $order->order_status == 3 || $order->order_status == 4) && $order->order_status != 5)
+                                    <div class="ribbon-box">
+                                        <div class="ribbon ribbon-top-right ribbon-processing"><span>Order Processing</span></div>
+                                    </div>
+                                    @endif
+
+                                    @if($order->order_status == 5 &&  $reason_code_number == 999)
+                                    <div class="ribbon-box">
+                                        <div class="ribbon ribbon-top-right ribbon-delivered"><span>Order Delivered</span></div>
+                                    </div>
+                                    @endif
+                                    @endif
+                                    
                                     <div class="row">
                                         <div class="col-lg-3">
                                              <div class="row">
 
                                                
-                                                    @foreach (json_decode($products) as $product)
-                                                      <div class="col-md-6 col-sm-12">
-                                                        <a href=""><img  class="imgCartPro" src="{{ $product->product_image }}"
-                                                                alt="cart_1"></a>
-                                                                </div>
-                                                    @endforeach
+                                                @foreach (json_decode($products) as $product)
+                                                <div class="product">
+                                                    <img src="{{ asset('/products') . '/' . $product->product_image }}" alt="cart_1">
+                                                </div>
+                                            @endforeach
                                                 
                                             </div>
                                             <!-- <div class="row">
@@ -251,40 +298,35 @@
                                                                 Order Placed on {{$orderDate}}</p>
 
 
-                                                  <p class="mt-3" style="font-size: 13px;" id="deliveredMsg">
-                                                                    Expected Delivery on 12 May 2023</p>
+                                                                @if ($order->track_shipping)
+                                                   
+                                                                @if ($reason_code_number == 999 && $order->order_status == 5)
+                                                                    @if ($delivery_date != '')
+                                                                        <p class="mt-3" style="font-size: 12px;"
+                                                                            id="deliveredMsg">
+                                                                            Order Delivered on {{ $deliveryDate }}</p>
+                                                                    @endif
+                                                                @else
+                                                                    @if ($expected_date != '')
+                                                                        <p class="mt-3" style="font-size: 12px;"
+                                                                            id="deliveredMsg">
+                                                                            <?= 'Expected Delivery on ' . $expectedDate ?> </p>
+                                                                    @endif
+                                                                @endif
+                                                               
+                                                            @endif
 
                                                     </div>
 
                                             </div>
                                         </div>
                                         
-
+                                        @if($order->order_status != 0)
                                         <div class="col-lg-6" id="dFlex">
 
-                                            <div class="w-100">
+                                            <div class="w-100" style="margin-top:12vh;">
                                                 @if ($order->track_shipping)
-                                                    @php
-                                                        
-                                                        $scan_stages = $order->track_shipping->object->field[36]->object;
-                                                        
-                                                        $orderId_tracking = $order->track_shipping->object->field[1]; //orderid
-                                                        
-                                                        $status = $order->track_shipping->object->field[10]; //status
-                                                        
-                                                        $reason_code_number = $order->track_shipping->object->field[14]; //reason_code_number
-
-                                                        $last_update_datetime = $order->track_shipping->object->field[20]; // last_update_datetime  
-
-                                                        $delivery_date = $order->track_shipping->object->field[21]; //delivery_date
-
-                                                        $expected_date = $order->track_shipping->object->field[18]; //expected_date
-
-
-                                                       
-
-                                                    @endphp
-
+                                                   
                                                     <div class="orderTrack">
                                                         <div class="orderTrackBar"></div>
                                                         <ul class="orderTrackPoints">
@@ -292,37 +334,94 @@
                                                             <li class="tracking-item active" data-status-text="Order Placed"
                                                                 data-date="{{$order->created_at}}">Order
                                                                 Placed<br><br><br><br>
-                                                            <!-- <small>{{$order->created_at}}</small> -->
+                                                           
                                                             </li>
 
-                                                            <li class="tracking-item {{($reason_code_number == 1260 || $reason_code_number == 11 || $reason_code_number == 400 || $reason_code_number == 127 || $reason_code_number == 5 || $reason_code_number == 6 || $reason_code_number == 999) ? 'active' : ''}}" data-status-text="Order Shipped"
+                                                            <li class="tracking-item {{ $reason_code_number == 003 || $reason_code_number == 005 || $reason_code_number == 006 || $reason_code_number == 999 ? 'active' : '' }}"
                                                                 data-date="May 6, 2023">Order Shipped
                                                                 <br><br><br><br>
-                                                                {{-- <small>{{($reason_code_number == 1260 || $reason_code_number == 11 || $reason_code_number == 400) ? $last_update_datetime : ''}}</small> --}}
+                                                                
                                                             </li>
-                                                            <li class="tracking-item {{($reason_code_number == 127 || $reason_code_number == 5 || $reason_code_number == 6 || $reason_code_number == 999) ? 'active' : ''}}" data-status-text="Reached Hub"
-                                                                data-date="May 8, 2023">Reached Hub
+                                                            <li class="tracking-item {{ $reason_code_number == 005 || $reason_code_number == 006 || $reason_code_number == 999 ? 'active' : '' }}" data-status-text="Reached Hub"
+                                                                >Reached Hub
                                                                 <br><br><br><br>
-                                                                {{-- <small>{{($reason_code_number == 127 || $reason_code_number == 5 ) ? $last_update_datetime : ''}}</small></li> --}}
-                                                            <li class="tracking-item {{($reason_code_number == 6 || $reason_code_number == 999) ? 'active' : ''}}" data-status-text="Out for Delivery"
-                                                                data-date="May 10, 2023">Out for
-                                                                Delivery<br><br><br><br>
-                                                                {{-- <small>May 10, 2023</small> --}}
+                                                              
+                                                            <li class="tracking-item {{ $reason_code_number == 006 || $reason_code_number == 999 ? 'active' : '' }}"
+                                                               >Out for Delivery<br><br><br><br>
+                                                               
                                                             </li>
-                                                            <li class="tracking-item {{($reason_code_number == 999 ) ? 'active' : ''}}" data-status-text="Delivered"
-                                                                data-date="May 12, 2023">Order
+                                                            <li class="tracking-item {{ ($reason_code_number == 999 && $order->order_status == 5) ? 'active' : '' }}" data-status-text="Delivered"
+                                                                >Order
                                                                 Delivered<br><br><br><br>
-                                                                <small>{{($reason_code_number == 999) ? $last_update_datetime : ''}}</small>
+                                                               
                                                             </li>
                                                         </ul>
                                                     </div>
+                                                    @else
+                                                    <div class="orderTrack">
+                                                        <div class="orderTrackBar"></div>
+                                                        <ul class="orderTrackPoints">
+
+                                                            <li class="tracking-item active" data-status-text="Order Placed static"
+                                                                data-date="{{ $order->created_at }}">Order
+                                                                Placed<br><br><br><br>
+
+                                                            </li>
+
+                                                            <li class="tracking-item "
+                                                                data-status-text="Order Shipped static" >
+                                                                Order Shipped
+                                                                <br><br><br><br>
+
+                                                            </li>
+                                                            <li class="tracking-item "
+                                                                data-status-text="Reached Hub static" >
+                                                                Reached Hub
+                                                                <br><br><br><br>
+
+                                                            <li class="tracking-item"
+                                                                data-status-text="Out for Delivery static">
+                                                               Delivery<br><br><br><br>
+
+                                                            </li>
+                                                            <li class="tracking-item"
+                                                                data-status-text="Delivered static">Order
+                                                                Delivered<br><br><br><br>
+
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    
                                                 @endif
 
 
                                             </div>
 
                                         </div> {{-- col-lg-7 end --}}
+                                        @endif
 
+
+                                        @if($order->order_status != 0)
+                                         @if ($order->track_shipping)
+                                       
+                                            @if($reason_code_number == 001 || $reason_code_number == 1220 || $reason_code_number == 1340)
+                                                <div class="w-100 mb-2" style="text-align:right;"><button class="btn btn-outline-danger" style="border-radius:20px;" onclick="cancelOrder({{$order->id}})">Cancel Order</button></div>
+                                            @endif
+
+                                            @if($reason_code_number == 999 && $order->order_status == 5)
+                                            <div class="w-100 mb-2" style="text-align:right;"><button class="btn btn-outline-success" style="border-radius:20px;" onclick="downloadInvoice({{$order->id}})">Download Invoice</button></div>
+                                            @endif
+
+                                            @else
+
+                                            <script>
+                                                toastr.warning("Kindly Reattempt the Shipment for OrderId : {{ $order->order_id }}");
+                                            </script>
+                                            <div class="w-100 mb-2" style="text-align:right;"><button class="btn btn-outline-success" style="border-radius:20px;" onclick="reattemptShipment({{$order->id}})">Reattempt Shipment</button></div>
+                                            
+                                            @endif
+                                        @endif
+                                       
 
                                     </div> {{-- child row end --}}
 

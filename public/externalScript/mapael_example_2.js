@@ -23,7 +23,7 @@ $(function() {
                     fill: "#505444"
                 }
                 , attrsHover: {
-                    fill: "#000"
+                    fill: "#555555"
                 }
             }
         }
@@ -40,7 +40,7 @@ $(function() {
                     fill: "#505444"
                 }
                 , attrsHover: {
-                    fill: "#000"
+                    fill: "#555555"
                 }
             }
         }

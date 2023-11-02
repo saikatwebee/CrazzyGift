@@ -6,7 +6,7 @@
         </a>
         <div class="search-container">
             <form action="{{ route('search') }}" method="GET">
-                <input type="text" placeholder="Search for gifts" name="query">
+                <input type="text" placeholder="Search for gifts" name="searchQuery">
                 <button type="submit"><i class="fa fa-search"></i><span>Search</span></button>
             </form>
         </div>
@@ -64,36 +64,47 @@
     <div class="btHeader">
         <div class="borderRadius">
 
-            @php $topLevelMenuCount = $menus->where('parent_id', null)->count(); @endphp
+            @php
+            $parentCount = count($menus->where('status', 1)->where('parent_id', null));
+            $currentParentIndex = 0;
+            @endphp
             @foreach ($menus as $key => $menu)
+
+            @if($menu->status==1)
                 @if ($menu->parent_id === null)
                     @if (count($menu->children) > 0)
                         <div class="dropdown">
-                            <a href="{{ $menu->url }}" style="text-decoration: none;"
+                            <a href="{{ url('/').'/'.$menu->url}}" style="text-decoration: none;"
                                 class="btHeader-item hover-item">
-                                <i class="{{ $menu->icon }} "></i>
+                                {!! $menu->icon !!}
                                 <span>{{ $menu->name }} <i class="fa-solid fa-angle-down"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 @foreach ($menu->children as $child)
-                                    <li><a href="{{ $child->url }}">{{ $child->name }}</a></li>
+                                    @if($child->status==1)
+                                         <li><a href="{{ url('/').'/'.$child->url}}">{!! $child->icon !!} {{ $child->name }}</a></li>
+                                    @endif
                                 @endforeach
                             </ul>
                         </div>
                     @else
                         <div class="menu-item">
-                            <a href="{{ $menu->url }}" style="text-decoration: none;" class="btHeader-item">
-                                <i class="{{ $menu->icon }}"></i>
+                            <a href="{{ url('/').'/'.$menu->url}}" style="text-decoration: none;" class="btHeader-item">
+                                {!! $menu->icon !!}
                                 <span>{{ $menu->name }}</span>
                             </a>
                         </div>
                     @endif
-
-
-                    @if ($key < $topLevelMenuCount - 1)
+                    @if ($currentParentIndex < $parentCount - 1)
                         <div class="header-divider"></div>
                     @endif
+        
+                    @php
+                        $currentParentIndex++;
+                    @endphp
                 @endif
+            @endif
+
             @endforeach
 
         </div>
@@ -103,8 +114,12 @@
     <div class="mobileBtHeader">
         <div class="row">
 
-            @php $topLevelMenuCount = $menus->where('parent_id', null)->count(); @endphp
+            {{-- @php
+            $parentCount2 = count($menus->where('status', 1)->where('parent_id', null));
+            $currentParentIndex2 = 0;
+            @endphp --}}
             @foreach ($menus as $key => $menu)
+            @if($menu->status==1)
                 @if ($menu->parent_id === null)
                     @if (count($menu->children) > 0)
                         <div class="col-lg-6" id="col-6">
@@ -112,13 +127,13 @@
 
                                 <div class="dropdown">
                                     <a href="javascript:void(0)" style="text-decoration: none;" class="btHeader-item">
-                                        <i class="{{ $menu->icon }}"></i>
+                                        {!! $menu->icon !!}
                                         <span>{{ $menu->name }} <i class="fa-solid fa-angle-down"></i></span>
 
                                     </a>
                                     <ul class="dropdown-menu">
                                         @foreach ($menu->children as $child)
-                                            <li><a href="{{ $child->url }}">{{ $child->name }}</a></li>
+                                            <li><a href="{{ url('/').$child->url}}">{!! $child->icon !!} {{ $child->name }}</a></li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -126,17 +141,22 @@
                         </div>
                     @else
                         <div class="col-lg-6" id="col-6">
-                            <a href="{{ $menu->url }}" style="text-decoration: none;" class="btHeader-item">
-                                <i class="{{ $menu->icon }}"></i>
+                            <a href="{{ url('/').$menu->url}}" style="text-decoration: none;" class="btHeader-item">
+                                {!! $menu->icon !!}
                                 <span>{{ $menu->name }}</span>
                             </a>
                         </div>
                     @endif
-
-                    {{-- @if ($key < $topLevelMenuCount - 1)
-                        <div class="header-divider"></div>
-                    @endif --}}
+                    {{-- <div class="header-divider"></div> --}}
+                    {{-- @if ($currentParentIndex2 < $parentCount2 - 1)
+                    <div class="header-divider"></div>
                 @endif
+    
+                @php
+                    $currentParentIndex2++;
+                @endphp --}}
+                @endif
+            @endif
             @endforeach
 
         </div>

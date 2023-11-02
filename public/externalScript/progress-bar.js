@@ -4,7 +4,7 @@
 
   if ($('#circleProgress1').length) {
     var bar = new ProgressBar.Circle(circleProgress1, {
-      color: '#000',
+      color: '#555555',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -43,7 +43,7 @@
 
   if ($('#circleProgress2').length) {
     var bar = new ProgressBar.Circle(circleProgress2, {
-      color: '#000',
+      color: '#555555',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -82,7 +82,7 @@
 
   if ($('#circleProgress3').length) {
     var bar = new ProgressBar.Circle(circleProgress3, {
-      color: '#000',
+      color: '#555555',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -121,7 +121,7 @@
 
   if ($('#circleProgress4').length) {
     var bar = new ProgressBar.Circle(circleProgress4, {
-      color: '#000',
+      color: '#555555',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -160,7 +160,7 @@
 
   if ($('#circleProgress5').length) {
     var bar = new ProgressBar.Circle(circleProgress5, {
-      color: '#000',
+      color: '#555555',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -199,7 +199,7 @@
 
   if ($('#circleProgress6').length) {
     var bar = new ProgressBar.Circle(circleProgress6, {
-      color: '#000',
+      color: '#555555',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,

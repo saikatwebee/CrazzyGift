@@ -24,7 +24,7 @@ class OrderController extends Controller
         $title = 'My Orders|CrazzyGift';
         $user_id = auth()->user()->id;
        
-        $orders = Order::where(['user_id' => $user_id,'order_status'=> 1])->get();
+        $orders = Order::where(['user_id' => $user_id])->orderBy('id','desc')->get();
 
         $trackingData = [];
         if ($orders) {
@@ -51,7 +51,13 @@ class OrderController extends Controller
 
                     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
                     if ($httpCode === 200) {
-                        $order->track_shipping = simplexml_load_string($response);
+                       $trackShipping = simplexml_load_string($response);
+                       if(count($trackShipping->object) > 0){
+                            $order->track_shipping = $trackShipping;
+                       }
+                       else{
+                        $order->track_shipping = null;
+                        }
 
                     }
 
@@ -60,7 +66,7 @@ class OrderController extends Controller
             }
         }
 
-
+          
        return view('AllordersView', compact('title', 'orders'));
     }
 
@@ -185,17 +191,66 @@ class OrderController extends Controller
             }
 
 
-       
-                $id = $data['id'];
+                  //serviceability check
+            $pincode = $data['postal_code'];
+            $username = "HACREATIONSLLP914909";
+            $password = "UlewRODjHc";
+            $url2 = "https://api.ecomexpress.in/apiv3/pincode/";
+            $curl = curl_init();
 
-                if ($id  != "") {
-                //update addresss
-                Address::where(['id' => $id])->update($data);
+            curl_setopt_array(
+                $curl,
+                array(
+                    CURLOPT_URL => $url2,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array(
+                        'username' => $username,
+                        'password' => $password,
+                        'pincode' => $pincode
+                        // 'destination_pincode' => $destination_pincode
+                    ),
+                ),
+            );
 
-                return response()->json(['code'=>200,'msg'=>'Shipping Address updated Successfully'],200);
+            $response = curl_exec($curl);
+
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            if ($httpCode === 200) {
+                $res = json_decode($response);
+                if ($res) {
+                    if (count($res) > 0) {
+                        foreach ($res as $row) {
+                            if ($row->active) {
+                                //update
+                                    $id = $data['id'];
+                                    if ($id  != "") {
+                                        Address::where(['id' => $id])->update($data);
+                                        return response()->json(['code'=>200,'msg'=>'Shipping Address updated Successfully'],200);
+                                    }
+                            }
+                            else{
+                                return response()->json(['code'=>210,'msg'=>'Service Unavailable in Your Area!' ],200); 
+                            }
+                        }
+                    }
+                    else{
+                        return response()->json(['code'=>210,'msg'=>'Service Unavailable in Your Area!' ],200);
+                    }
+                }
+                else{
+                    return response()->json(['code'=>210,'msg'=>'Service Unavailable in Your Area!' ],200);
+                }
             }
-
-
+            else{
+                //curl error try again
+                return response()->json(['code'=>210,'msg'=>'Oops! something went wrong,Try Again' ],200);
+            }
 
         } 
         catch (Exception $e) {

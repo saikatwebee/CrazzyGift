@@ -528,7 +528,7 @@
           var fontSize = 3.125;
           ctx.font = "600 " + fontSize + "em sans-serif";
           ctx.textBaseline = "middle";
-          ctx.fillStyle = "#000";
+          ctx.fillStyle = "#555555";
       
           var text = "76",
               textX = Math.round((width - ctx.measureText(text).width) / 2),

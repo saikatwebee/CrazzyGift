@@ -11553,7 +11553,7 @@
       {
         type: choiceItem,
         text: 'Black',
-        value: '#000000'
+        value: '#555555'
       },
       {
         type: choiceItem,
@@ -11689,7 +11689,7 @@
             editor.execCommand('mceApplyTextcolor', format, color);
             onChoice(color);
           });
-        }, '#000000');
+        }, '#555555');
       } else if (value === 'remove') {
         onChoice('');
         editor.execCommand('mceRemoveTextcolor', format);

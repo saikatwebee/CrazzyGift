@@ -116,7 +116,7 @@
       font: {
         lineHeight: 15,
         style: "normal",
-        color: "#000"
+        color: "#555555"
       },
       shadowSize: 0,
       ticks: [
@@ -141,7 +141,7 @@
       font: {
         lineHeight: 15,
         style: "normal",
-        color: "#000",
+        color: "#555555",
       },
       shadowSize: 0
     },
