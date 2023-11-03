@@ -211,10 +211,10 @@ class UserController extends Controller
                 $res = $this->transferCartFromGoogle($user_id);
 
                 if($res){
-                    return redirect('/shippingCart');
+                    return redirect()->route('shippingcart');
                 }
                 else{
-                    return redirect('/');
+                    return redirect()->route('home');
                 }
 
 
@@ -246,10 +246,10 @@ class UserController extends Controller
                     $user_id = auth()->user()->id;
                     $res = $this->transferCartFromGoogle($user_id);
                     if($res){
-                        return redirect('/shippingCart');
+                        return redirect()->route('shippingcart');
                     }
                     else{
-                        return redirect('/');
+                        return redirect()->route('home');
                     }
                   
 
@@ -613,14 +613,16 @@ class UserController extends Controller
                             User::where('id',auth()->user()->id)->update($data);
 
                             //return response()->json(['msg'=>'Your phone number has been verified successfully.','code'=>200],200);
-                            return redirect('/')->with('success', 'Your phone number has been verified successfully.');
+                            return redirect()->route('home')->with('success', 'Your phone number has been verified successfully.');
 
 
                     }
         }
         else{
              //return response()->json(['msg'=>'Invalid OTP!','code'=>210],200);
-            return redirect('/Myprofile')->with('error', 'Invalid OTP!');
+            // return redirect('/Myprofile')->with('error', 'Invalid OTP!');
+            return redirect()->route('profile')->with('error', 'Invalid OTP!');
+
 
         }
 

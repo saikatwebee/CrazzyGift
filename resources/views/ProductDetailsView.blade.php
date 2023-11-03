@@ -93,7 +93,7 @@
                             <div class="cart-btns">
                                 <a href="javascript:void(0)" id="add_cart"><button id="add_cart_btn"><i class="fa-solid fa-cart-shopping" style="margin-right: 6px;"></i>Add to cart</button></a>
                             
-                                <a href="{{url('/products/all')}}" id="continue_cart"><button type="button" id="continue_cart_btn" class="mt-3">Continue Shopping<i class="fa-solid fa-arrow-right-long" style="margin-left: 6px;"></i></button></a>
+                                <a href="{{url('/products-all')}}" id="continue_cart"><button type="button" id="continue_cart_btn" class="mt-3">Continue Shopping<i class="fa-solid fa-arrow-right-long" style="margin-left: 6px;"></i></button></a>
                             </div>
                            
                         </form>

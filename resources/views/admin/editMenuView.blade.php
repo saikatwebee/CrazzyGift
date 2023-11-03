@@ -655,7 +655,7 @@
                     if (data.code == 200) {
                         toastr.success(data.msg, 'Success', {
                             onHidden: function() {
-                                window.location.href="{{'/admin/menu-management'}}";
+                                window.location.href="{{url('/admin/menu-management')}}";
                             }
                         });
                     }

@@ -461,9 +461,9 @@
                         name: key,
                         value: value
                     });
-                });
+                }); 
 
-                fetch('/sentMail', {
+                fetch("{{ url('/sentMail') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

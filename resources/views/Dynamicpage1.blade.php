@@ -63,7 +63,7 @@
                     <div class="pagination">
                         @if ($currentPage > 1)
                             <a href="{{ url('/') . '/' . $url . '?page=' . ($currentPage - 1) . ($query != '' ? '&query=' . $query : '') }}"
-                                class="btn btn-info btn-sm text-white">
+                                class="btn btn-primary btn-sm text-white">
                                 <i class="fa-solid fa-arrow-left" style="color: #ffffff;"></i> Previous
                             </a>
                         @endif
@@ -75,7 +75,7 @@
 
                         @if ($currentPage < ceil($totalRecords / $recordsPerPage))
                             <a href="{{ url('/') . '/' . $url . '?page=' . ($currentPage + 1) . ($query != '' ? '&query=' . $query : '') }}"
-                                class="btn btn-info btn-sm text-white">
+                                class="btn btn-primary btn-sm text-white">
                                 Next <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i>
                             </a>
                         @endif

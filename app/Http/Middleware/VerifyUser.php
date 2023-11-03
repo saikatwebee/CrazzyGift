@@ -10,7 +10,7 @@ class VerifyUser
     public function handle(Request $request, Closure $next)
     {
         if (auth()->check() && auth()->user()->is_verified === 0) {
-            return redirect('/Myprofile');
+            return redirect()->route('profile');
         }
 
         return $next($request);

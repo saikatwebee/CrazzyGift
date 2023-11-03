@@ -93,7 +93,7 @@ class OrderController extends Controller
 
         if (count($carts) == 0) {
 
-            return redirect('/products/all');
+            return redirect()->route('products-all');
 
         } else {
             
@@ -119,7 +119,7 @@ class OrderController extends Controller
         }
     }
     else{
-        return redirect('/shippingCart');
+        return redirect()->route('shippingcart');
     }
     
 

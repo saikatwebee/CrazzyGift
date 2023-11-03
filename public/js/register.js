@@ -118,7 +118,7 @@ $("#getcodeForm").on("submit", (event) => {
                                 "pointer-events": "auto",
                                 background: "#004a8c",
                             });
-                            window.location.href ="/register";
+                            window.location.href = window.baseUrl +"/register";
                         },
                     });
                 }
@@ -223,7 +223,7 @@ $("#getcode-form").on("submit", (event) => {
                                     background: "#004a8c",
                                 })
                                 .html(resetbtn);
-                            window.location.href ="/register";
+                            window.location.href =window.baseUrl +"/register";
                         },
                     });
                 }
@@ -361,7 +361,7 @@ $("#getcode_form").on("submit", (event) => {
                                     background: "#004a8c",
                                 })
                                 .html(resetbtn);
-                            window.location.href ="/login";
+                            window.location.href =window.baseUrl +"/login";
                         },
                     });
                 }
@@ -440,7 +440,7 @@ function resendOtp(event) {
             phone: phone,
         };
         const csrfToken = getCsrfToken();
-        fetch("/resendOtp", {
+        fetch(window.baseUrl +"/resendOtp", {
             method: "POST",
             body: JSON.stringify(form_datas),
             headers: {
@@ -504,7 +504,7 @@ function cartAuthenticate() {
             form_data.push(form_obj);
         });
 
-        fetch("/transferCart", {
+        fetch(window.baseUrl +"/transferCart", {
             method: "POST",
             body: JSON.stringify(form_data),
             headers: {
@@ -527,7 +527,7 @@ function cartAuthenticate() {
 }
 
 $(document).ready(function () {
-    fetch("/checkGoogle")
+    fetch(window.baseUrl +"/checkGoogle")
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -602,7 +602,7 @@ $(document).ready(function () {
                                     background: "#004a8c",
                                 });
 
-                                window.location.href = "/shippingCart";
+                                window.location.href = window.baseUrl +"/shippingCart";
                             },
                         });
                     } else {
@@ -615,7 +615,7 @@ $(document).ready(function () {
                                     background: "#004a8c",
                                 });
 
-                                window.location.href = "/";
+                                window.location.href = window.baseUrl +"/home";
                             },
                         });
                     }
@@ -643,7 +643,7 @@ $(document).ready(function () {
 //     localStorage.removeItem('cartData');
 // });
 function forceLogout() {
-    let redirectedUrl = "/logout";
+    let redirectedUrl = window.baseUrl +"/logout";
     Swal.fire({
         title: "Are you sure?",
         text: "Do you want to Logout?",

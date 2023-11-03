@@ -230,7 +230,7 @@
                         <div class="buttonSummary">
                             <button class="summaryCheckout checkoutBtn my-2">Checkout</button>
                             <br>
-                            <a href="{{ url('/') }}"><button class="summaryShopping my-2">Continue
+                            <a href="{{ url('/products-all') }}"><button class="summaryShopping my-2">Continue
                                     Shopping</button></a>
                         </div>
                     </div>
@@ -274,7 +274,7 @@
                         <div class="buttonSummary">
                             <button class="summaryCheckout checkoutBtn my-2">Checkout</button>
                             <br>
-                            <a href="{{ url('/') }}"><button class="summaryShopping my-2">Continue
+                            <a href="{{ url('/products-all') }}"><button class="summaryShopping my-2">Continue
                                     Shopping</button></a>
                         </div>
                     </div>

@@ -50,14 +50,14 @@ Route::get('/shippingInformation', [OrderController::class, "shippingInfo"])->na
 Route::get('/checkGoogle', [UserController::class, "checkGoogle"])->name('checkGoogle')->withoutMiddleware(['auth', 'verifyUser']);
 Route::get('/demo', [UserController::class, "demo"])->name('demo')->withoutMiddleware('auth');
 
- //Route::get('/', [UserController::class, "index"])->name('home')->withoutMiddleware('auth');
+ Route::get('/', [UserController::class, "index"])->name('home')->withoutMiddleware('auth');
+ Route::get('/{products-all}', [ProductController::class, "index"])->name('products-all')->withoutMiddleware('auth');
+
    // Route::get('/about-us', [UserController::class, "aboutUs"])->name('about-us')->withoutMiddleware('auth');
    // Route::get('/contact-us', [UserController::class, "contactUs"])->name('contact-us')->withoutMiddleware('auth');
    // Route::get('/corporate-gifts', [UserController::class, "corporateGifts"])->name('corporate-gifts')->withoutMiddleware('auth');
     
-//Route::get('/products/all', [ProductController::class, "index"])->name('products')->withoutMiddleware('auth');
-
-//Route::get('/products/3d-crystal', [ProductController::class, "product_3d_crystal"])->name('product-3d-crystal')->withoutMiddleware('auth');
+    //Route::get('/products/3d-crystal', [ProductController::class, "product_3d_crystal"])->name('product-3d-crystal')->withoutMiddleware('auth');
 
     //Route::get('/products/wooden-engraved', [ProductController::class, "wooden_engraved"])->name('wooden-engraved')->withoutMiddleware('auth');
 
