@@ -32,8 +32,7 @@
 
 
                 <div class="col-lg-12 grid-margin stretch-card justify-content-end">
-                    <button class="btn btn-sm btn-primary" onclick="window.location.href='/admin/add-menu';">Add New
-                        Menu</button>
+                    <button class="btn btn-sm btn-primary" onclick="window.location.href='{{url('/admin/add-menu')}}';">Add New Menu</button>
                 </div>
 
 

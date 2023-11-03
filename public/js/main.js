@@ -272,7 +272,9 @@ $(document).on("click", "#add_cart", (e) => {
 
 
 
-                $("#add_cart_btn").html(resetbtn).prop('type', 'button').attr('onclick', 'window.location.href="/shippingCart";').css({'pointer-events': 'auto', 'background': '#004a8c'});
+                // $("#add_cart_btn").html(resetbtn).prop('type', 'button').attr('onclick', 'window.location.href="/shippingCart";').css({'pointer-events': 'auto', 'background': '#004a8c'});
+                $("#add_cart_btn").html(resetbtn).prop('type', 'button').attr('onclick', `window.location.href = window.baseUrl + '/shippingCart';`).css({'pointer-events': 'auto', 'background': '#004a8c'});
+
 
                 
                 if (result.code == 200) {
@@ -355,15 +357,6 @@ $(document).ready(() => {
             var totalPriceIndividual = cart.price * cart.quantity;
             totalPrice = totalPrice + totalPriceIndividual;
 
-
-            if(cart.product_image){
-                imgUrl ="/products/"+cart.product_image;
-            }
-            else{
-                imgUrl ="/products/dummyProduct.jpg";
-            }
-
-
             var productTitle = cart.title;
             if (productTitle.length > 15) {
                 truncatedTitle = productTitle.substring(0, 15) + '...';
@@ -374,22 +367,22 @@ $(document).ready(() => {
 
             if (cart.hasOwnProperty('custom_image') && !cart.hasOwnProperty('custom_text')) {
                 //if only image has been uploaded
-                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + imgUrl + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '" >+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="showimageBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_image + '" ><div class="iconshowUpload showimageBTN_div" id="'+cart.id+'" data-id="' + cart.custom_image + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up showimageBTN_i" id="'+cart.id+'" data-id="' + cart.custom_image + '" ></i> </div><span id="showimageBTN_span" id="'+cart.id+'" data-id="' + cart.custom_image + '" >Show Image</span><i class="fa-solid fa-square-xmark" data-id="' + cart.id + '" title="Change Image" data-bs-toggle="tooltip" data-bs-placement="top" ></i></button><button class="textBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload textBTN_div" style="margin-right: 8px;" data-id="' + cart.id + '"><i class="fa-solid fa-envelope-open-text textBTN_i" data-id="' + cart.id + '"></i></div><span id="textBTN_span" data-id="' + cart.id + '">Add Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
+                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + window.imgUrl +"products/"+cart.product_image + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '" >+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="showimageBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_image + '" ><div class="iconshowUpload showimageBTN_div" id="'+cart.id+'" data-id="' + cart.custom_image + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up showimageBTN_i" id="'+cart.id+'" data-id="' + cart.custom_image + '" ></i> </div><span id="showimageBTN_span" id="'+cart.id+'" data-id="' + cart.custom_image + '" >Show Image</span><i class="fa-solid fa-square-xmark" data-id="' + cart.id + '" title="Change Image" data-bs-toggle="tooltip" data-bs-placement="top" ></i></button><button class="textBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload textBTN_div" style="margin-right: 8px;" data-id="' + cart.id + '"><i class="fa-solid fa-envelope-open-text textBTN_i" data-id="' + cart.id + '"></i></div><span id="textBTN_span" data-id="' + cart.id + '">Add Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
             }
             if (cart.hasOwnProperty('custom_text') && !cart.hasOwnProperty('custom_image')) {
                 //if only text has been uploaded
-                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + imgUrl + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '" >+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="uploadBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload uploadBTN_div" data-id="' + cart.id + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up uploadBTN_i" data-id="' + cart.id + '"></i> </div><span id="uploadBTN_span" data-id="' + cart.id + '">Upload Image</span></button><button class="showtextBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_text + '"><div class="iconshowUpload showtextBTN_div" id="'+cart.id+'" style="margin-right: 8px;" data-id="' + cart.custom_text + '"><i class="fa-solid fa-envelope-open-text showtextBTN_i" id="'+cart.id+'" data-id="' + cart.custom_text + '"></i></div><span class="showtextBTN_span"  id="'+cart.id+'" data-id="' + cart.custom_text + '">Show Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
+                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + window.imgUrl +"products/"+cart.product_image + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '" >+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="uploadBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload uploadBTN_div" data-id="' + cart.id + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up uploadBTN_i" data-id="' + cart.id + '"></i> </div><span id="uploadBTN_span" data-id="' + cart.id + '">Upload Image</span></button><button class="showtextBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_text + '"><div class="iconshowUpload showtextBTN_div" id="'+cart.id+'" style="margin-right: 8px;" data-id="' + cart.custom_text + '"><i class="fa-solid fa-envelope-open-text showtextBTN_i" id="'+cart.id+'" data-id="' + cart.custom_text + '"></i></div><span class="showtextBTN_span"  id="'+cart.id+'" data-id="' + cart.custom_text + '">Show Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
             }
             if (!cart.hasOwnProperty('custom_text') && !cart.hasOwnProperty('custom_image')) {
                 //if both are not exist
-                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + imgUrl + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '">+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="uploadBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload uploadBTN_div" data-id="' + cart.id + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up uploadBTN_i" data-id="' + cart.id + '"></i> </div><span id="uploadBTN_span" data-id="' + cart.id + '">Upload Image</span></button><button class="textBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload textBTN_div" style="margin-right: 8px;" data-id="' + cart.id + '"><i class="fa-solid fa-envelope-open-text textBTN_i" data-id="' + cart.id + '"></i></div><span id="textBTN_span" data-id="' + cart.id + '">Add Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
+                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + window.imgUrl +"products/"+cart.product_image + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '">+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="uploadBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload uploadBTN_div" data-id="' + cart.id + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up uploadBTN_i" data-id="' + cart.id + '"></i> </div><span id="uploadBTN_span" data-id="' + cart.id + '">Upload Image</span></button><button class="textBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload textBTN_div" style="margin-right: 8px;" data-id="' + cart.id + '"><i class="fa-solid fa-envelope-open-text textBTN_i" data-id="' + cart.id + '"></i></div><span id="textBTN_span" data-id="' + cart.id + '">Add Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
             }
             if (cart.hasOwnProperty('custom_text') && cart.hasOwnProperty('custom_image')) {
                 //if both are  exist
-                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + imgUrl + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '">+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="showimageBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_image + '" ><div class="iconshowUpload showimageBTN_div" id="'+cart.id+'" data-id="' + cart.custom_image + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up showimageBTN_i" id="'+cart.id+'" data-id="' + cart.custom_image + '" ></i> </div><span id="showimageBTN_span" id="'+cart.id+'" data-id="' + cart.custom_image + '" >Show Image</span><i class="fa-solid fa-square-xmark" data-id="' + cart.id + '" title="Change Image" data-bs-toggle="tooltip" data-bs-placement="top" ></i></button><button class="showtextBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_text + '"><div class="iconshowUpload showtextBTN_div" id="'+cart.id+'" style="margin-right: 8px;" data-id="' + cart.custom_text + '"><i class="fa-solid fa-envelope-open-text showtextBTN_i" id="'+cart.id+'" data-id="' + cart.custom_text + '"></i></div><span class="showtextBTN_span" id="'+cart.id+'" data-id="' + cart.custom_text + '" >Show Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
+                html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + window.imgUrl +"products/"+cart.product_image + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1" data-id="' + cart.id + '">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '" data-id="' + cart.id + '" price="' + cart.price + '"><button class="quantity-btn1 quantity-increase1" data-id="' + cart.id + '">+</button></div></div></div></div><div class="col-lg-3"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-4"><div class="totalPriceAM"><p>Total</p><h6><strong id="totalPriceAM_' + cart.id + '"><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="showimageBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_image + '" ><div class="iconshowUpload showimageBTN_div" id="'+cart.id+'" data-id="' + cart.custom_image + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up showimageBTN_i" id="'+cart.id+'" data-id="' + cart.custom_image + '" ></i> </div><span id="showimageBTN_span" id="'+cart.id+'" data-id="' + cart.custom_image + '" >Show Image</span><i class="fa-solid fa-square-xmark" data-id="' + cart.id + '" title="Change Image" data-bs-toggle="tooltip" data-bs-placement="top" ></i></button><button class="showtextBTN d-flex my-2" id="'+cart.id+'" data-id="' + cart.custom_text + '"><div class="iconshowUpload showtextBTN_div" id="'+cart.id+'" style="margin-right: 8px;" data-id="' + cart.custom_text + '"><i class="fa-solid fa-envelope-open-text showtextBTN_i" id="'+cart.id+'" data-id="' + cart.custom_text + '"></i></div><span class="showtextBTN_span" id="'+cart.id+'" data-id="' + cart.custom_text + '" >Show Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
             }
 
-            // html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + imgUrl + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '"><button class="quantity-btn1 quantity-increase1">+</button></div></div></div></div><div class="col-lg-4"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-3"><div class="totalPriceAM"><p>Total</p><h6><strong><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="uploadBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload uploadBTN_div" data-id="' + cart.id + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up uploadBTN_i" data-id="' + cart.id + '"></i> </div><span id="uploadBTN_span" data-id="' + cart.id + '">Image</span></button><button class="textBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload textBTN_div" style="margin-right: 8px;" data-id="' + cart.id + '"><i class="fa-solid fa-envelope-open-text textBTN_i" data-id="' + cart.id + '"></i></div><span id="textBTN_span" data-id="' + cart.id + '">Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
+            // html1 += '<div class="orderSummaryCard"><div class="row"><div class="col-lg-5"><div class="row"><div class="col-lg-6"><div class="imgCartPro"><img src="' + window.imgUrl +"products/"+cart.product_image + '" alt="cart_1"></div></div><div class="col-lg-6"><div class="nameAndPrice1"><p>' + cart.title + '</p><h3><i class="fa-solid fa-indian-rupee-sign"></i> ' + cart.price + '</h3></div><div class="quantity-selector1"><div class="quantityBtn1"><b>Quantity</b></div><button class="quantity-btn1 quantity-decrease1">-</button><input type="text" class="quantity-input1"value="' + cart.quantity + '"><button class="quantity-btn1 quantity-increase1">+</button></div></div></div></div><div class="col-lg-4"><div class="titleDel"><p>Delivery time</p><h6> Metros - 2 to 3 days, Tier 2 cities - 3 to 5 days, Others - 4 to 6 days</h6></div></div><div class="col-lg-3"><div class="totalPriceAM"><p>Total</p><h6><strong><i class="fa-solid fa-indian-rupee-sign"></i> ' + totalPriceIndividual + '</strong></h6><div class="uploadAndDelBtn mt-4" ><button class="uploadBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload uploadBTN_div" data-id="' + cart.id + '" style="margin-right: 8px;" ><i class="fa-solid fa-cloud-arrow-up uploadBTN_i" data-id="' + cart.id + '"></i> </div><span id="uploadBTN_span" data-id="' + cart.id + '">Image</span></button><button class="textBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload textBTN_div" style="margin-right: 8px;" data-id="' + cart.id + '"><i class="fa-solid fa-envelope-open-text textBTN_i" data-id="' + cart.id + '"></i></div><span id="textBTN_span" data-id="' + cart.id + '">Message</span></button><button type="button" class="deleteBTN d-flex my-2" data-id="' + cart.id + '"><div class="iconUpload" style="margin-right: 8px;"><i class="fa-solid fa-trash-can"></i></div><span>Delete</span></button></div></div></div></div></div>';
 
 
             html2 += '<div class="itemName"><p data-bs-toggle="tooltip" data-bs-placement="top" title="' + productTitle + '">' + truncatedTitle + '</p></div>';
@@ -441,7 +434,7 @@ $(document).ready(() => {
                                 id: uid,
                             };
 
-                            fetch("/normalCartImgDelete", {
+                            fetch(window.baseUrl +"/normalCartImgDelete", {
                                     method: 'POST',
                                     body: JSON.stringify(form_datas),
                                     headers: {
@@ -492,7 +485,7 @@ $(document).ready(() => {
                                                 custom_image: guestcrtImg,
                                             };
 
-                                            fetch("/guestCartImgDelete", {
+                                            fetch(window.baseUrl +"/guestCartImgDelete", {
                                                     method: 'POST',
                                                     body: JSON.stringify(form_datas),
                                                     headers: {
@@ -555,7 +548,7 @@ $(document).ready(() => {
         console.log(data_id);
         console.log(cart_id);
 
-        var imageUrl = "/cart/" + data_id;
+        var imageUrl = window.imgUrl +"cart/" + data_id;
 
         // Open the image in a new tab
         window.open(imageUrl, '_blank');
@@ -596,7 +589,7 @@ $(document).ready(function () {
 
 
 
-                    fetch('/checkUser', {
+                    fetch(window.baseUrl + '/checkUser', {
                             method: 'GET',
                         })
                         .then(response => {
@@ -613,7 +606,7 @@ $(document).ready(function () {
                                     id: dataId,
                                 };
 
-                                fetch("/deleteCart", {
+                                fetch(window.baseUrl +"/deleteCart", {
                                         method: 'POST',
                                         body: JSON.stringify(form_datas),
                                         headers: {
@@ -660,7 +653,7 @@ $(document).ready(function () {
                                             custom_image: guestcrtImg,
                                         };
 
-                                        fetch("/guestCartImgDelete", {
+                                        fetch(window.baseUrl +"/guestCartImgDelete", {
                                                 method: 'POST',
                                                 body: JSON.stringify(form_datas),
                                                 headers: {
@@ -755,7 +748,7 @@ $(document).ready(() => {
 
 
 function cartCount(){
-    fetch('/checkUser', {
+    fetch(window.baseUrl + '/checkUser', {
             method: 'GET',
         })
         .then(response => {
@@ -798,7 +791,7 @@ $(document).on("click", ".checkoutBtn", () => {
 
 
 
-    fetch('/checkUser', {
+    fetch(window.baseUrl + '/checkUser', {
             method: 'GET',
         })
         .then(response => {
@@ -812,7 +805,7 @@ $(document).on("click", ".checkoutBtn", () => {
             if (result.code == 200) {
                 //logged in user
 
-                fetch('/cartValidation', {
+                fetch(window.baseUrl +'/cartValidation', {
                                 method: 'GET',
                         }).then(res => {
                                 if (!res.ok) {
@@ -822,7 +815,7 @@ $(document).on("click", ".checkoutBtn", () => {
                     }).then(res => {
                         console.log(res);
                         if(res.code==200){
-                            window.location.href = '/shippingInformation';
+                            window.location.href = window.baseUrl +'/shippingInformation';
                         }
                         else{
                             toastr.error(res.msg);
@@ -845,7 +838,7 @@ $(document).on("click", ".checkoutBtn", () => {
                 if (hasBothCustomData) {
                   
                     
-                    window.location.href = '/signin';
+                    window.location.href = window.baseUrl +'/signin';
                 } else {
                   
                     console.log("Please make sure each item has both 'custom-text' and 'custom-image' present.");
@@ -1220,7 +1213,7 @@ function quantityUpdate(quantity, dataId, price) {
                 };
                 const csrfToken = getCsrfToken();
 
-                fetch("/cartUpdateNormal", {
+                fetch(window.baseUrl +"/cartUpdateNormal", {
                         method: 'POST',
                         body: JSON.stringify(form_datas),
                         headers: {
@@ -1338,7 +1331,7 @@ function quantityUpdate(quantity, dataId, price) {
 
 function getUserStatus() {
     return new Promise((resolve, reject) => {
-        fetch('/checkUser', {
+        fetch(window.baseUrl + '/checkUser', {
                 method: 'GET',
             })
             .then(response => {
@@ -1492,7 +1485,7 @@ $(document).ready(function () {
                 };
                 const csrfToken = getCsrfToken();
 
-                fetch("/getShippingAddress", {
+                fetch(window.baseUrl +"/getShippingAddress", {
                         method: 'POST',
                         body: JSON.stringify(form_datas),
                         headers: {
@@ -1604,7 +1597,7 @@ $(document).ready(function () {
 
                     const csrfToken = getCsrfToken();
 
-                    fetch('/selectShipping', {
+                    fetch(window.baseUrl +'/selectShipping', {
                             method: 'POST',
                             body: JSON.stringify(obj),
                             headers: {
@@ -1671,7 +1664,7 @@ $(document).ready(function () {
 
                         const csrfToken = getCsrfToken();
 
-                        fetch('/deleteShipping', {
+                        fetch(window.baseUrl +'/deleteShipping', {
                                 method: 'POST',
                                 body: JSON.stringify(obj),
                                 headers: {

@@ -292,7 +292,7 @@ if(count($product_arr) > 0){
             
 }
 else{
-    return redirect('/shippingInformation');
+    return redirect()->route('shippinginfo');
 }
  
 

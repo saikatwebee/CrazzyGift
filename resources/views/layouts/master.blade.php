@@ -56,6 +56,12 @@
 
 </body>
 
+<script>
+    window.baseUrl = "{{ url('/') }}";
+    window.imgUrl = "{{ asset('/') }}";
+</script>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
@@ -432,7 +438,7 @@
         var loader = document.querySelector(".loader-container");
         setTimeout(() => {
             loader.style.display = "none";
-        }, 2000);
+        }, 1000);
 
     });
 
@@ -1022,7 +1028,7 @@
 
     function getUserStatus() {
         return new Promise((resolve, reject) => {
-            fetch('/checkUser', {
+            fetch("{{ url('/checkUser') }}", {
                     method: 'GET',
                 })
                 .then(response => {
@@ -1110,7 +1116,7 @@
                                                         sresponse_str)
                                                     .razorpay_payment_id;
                                                 let redirecturl =
-                                                    "/payment/status/" +
+                                                window.baseUrl +"/payment/status/" +
                                                     payment_id + "/" + amount;
                                                 window.location.href = redirecturl;
                                             }
@@ -1129,7 +1135,7 @@
                                                     .metadata
                                                     .payment_id;
                                                 let redirecturl =
-                                                    "/payment/status/" +
+                                                window.baseUrl +"/payment/status/" +
                                                     payment_id + "/" + amount;
                                                 window.location.href = redirecturl;
                                             });
@@ -1197,7 +1203,7 @@
 
     function checkShippingCount() {
 
-        return fetch('/checkShipping', {
+        return fetch("{{ url('/checkShipping') }}", {
                 method: 'GET',
             })
             .then(response => {
@@ -1236,7 +1242,7 @@
                 location: pincode,
             };
 
-            fetch("/serviceAjax", {
+            fetch("{{ url('/serviceAjax') }}", {
                     method: 'POST',
                     body: JSON.stringify(form_datas),
                     headers: {

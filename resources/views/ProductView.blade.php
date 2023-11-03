@@ -70,18 +70,18 @@
             @if ($totalRecords > $recordsPerPage)
             <div class="pagination ">
                 @if ($currentPage > 1)
-                    <a href="{{ ($query!="") ? route('products', ['page' => $currentPage -1, 'query' =>  $query]) : route('products', ['page' => $currentPage - 1]) }}"
+                    <a href="{{ ($query!="") ? route('products-all', ['page' => $currentPage -1, 'query' =>  $query]) : route('products-all', ['page' => $currentPage - 1]) }}"
                         class="btn btn-info btn-sm text-white "><i class="fa-solid fa-arrow-left"
                             style="color: #ffffff;"></i> Previous</a>
                 @endif
 
                 @for ($page = 1; $page <= ceil($totalRecords / $recordsPerPage); $page++)
-                    <a href="{{ ($query!="") ? route('products', ['page' => $page, 'query' =>  $query]) : route('products', ['page' => $page]) }}"
+                    <a href="{{ ($query!="") ? route('products-all', ['page' => $page, 'query' =>  $query]) : route('products-all', ['page' => $page]) }}"
                         class="{{ $page == $currentPage ? 'active' : '' }}">{{ $page }}</a>
                 @endfor
 
                 @if ($currentPage < ceil($totalRecords / $recordsPerPage))
-                    <a href="{{ ($query!="") ? route('products', ['page' => $currentPage + 1, 'query' =>  $query]) : route('products', ['page' => $currentPage + 1]) }}"
+                    <a href="{{ ($query!="") ? route('products-all', ['page' => $currentPage + 1, 'query' =>  $query]) : route('products-all', ['page' => $currentPage + 1]) }}"
                         class="btn btn-info btn-sm text-white ">Next <i class="fa-solid fa-arrow-right"
                             style="color: #ffffff;"></i></a>
                 @endif
