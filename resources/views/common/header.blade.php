@@ -29,27 +29,27 @@
                 <span class="cart-count"></span>
             </a>
         </div>
-        <div class="toggle">
+        <div class="toggle" >
             <input type="checkbox" id="toggle-btn">
             <label for="toggle-btn" class="toggle-label"><i class="fa-solid fa-bars"></i></label>
-            <nav>
+            <nav class="modifiedNav">
                 <button id="close-btn"><i class="fa-solid fa-xmark"></i></button>
                 <ul>
-                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li><a href="{{ url('/') }}"><i class="fa-solid fa-house-chimney-window"></i> Home</a></li>
                     @if (!auth()->check())
                         <li><a href="{{ url('/signin') }}">Sign In / Register</a></li>
                         <li><a href="{{ url('/login') }}">Log In</a></li>
                     @endif
 
 
-                    <li><a href="{{ url('/products/all') }}">Products</a></li>
+                    <li><a href="{{ url('/products/all') }}"><i class="fa-solid fa-gift"></i> Products</a></li>
 
-                    <li><a href="{{ url('/shippingCart') }}">Cart Page</a></li>
+                    <li><a href="{{ url('/shippingCart') }}"><i class="fa-solid fa-cart-shopping"></i> Cart Page</a></li>
 
                     @if (auth()->check())
-                        <li><a href="{{ url('/myorder') }}">My Order</a></li>
-                        <li><a href="{{ url('/Myprofile') }}">My Account</a></li>
-                        <li> <a href="javascript:void(0)" onclick="forceLogout()">Logout</a></li>
+                        <li><a href="{{ url('/myorder') }}"><i class="fa-solid fa-bag-shopping"></i> My Order</a></li>
+                        <li><a href="{{ url('/Myprofile') }}"><i class="fa-solid fa-user-shield"></i> My Account</a></li>
+                        <li> <a href="javascript:void(0)" onclick="forceLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
                     @endif
                 </ul>
             </nav>
@@ -133,7 +133,7 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         @foreach ($menu->children as $child)
-                                            <li><a href="{{ url('/').$child->url}}">{!! $child->icon !!} {{ $child->name }}</a></li>
+                                            <li><a href="{{ url('/').'/'.$child->url}}">{!! $child->icon !!} {{ $child->name }}</a></li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -141,10 +141,10 @@
                         </div>
                     @else
                         <div class="col-lg-6" id="col-6">
-                            <a href="{{ url('/').$menu->url}}" style="text-decoration: none;" class="btHeader-item">
+                            <a href="{{ url('/').'/'.$menu->url}}" style="text-decoration: none;" class="btHeader-item">
                                 {!! $menu->icon !!}
                                 <span>{{ $menu->name }}</span>
-                            </a>
+                            </a> 
                         </div>
                     @endif
                     {{-- <div class="header-divider"></div> --}}

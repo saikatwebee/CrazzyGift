@@ -45,8 +45,6 @@
         #edit_create_url:hover {
             cursor: pointer;
         }
-
-        
     </style>
     <div class="main-panel">
 
@@ -55,7 +53,9 @@
                 <h3>{{ $title }}</h3>
             </div>
             <div class="text-right mb-3">
-                <button class="btn btn-sm btn-primary" onclick="window.location.href='{{url('/admin/menu-management')}}';"><i class="fa-solid fa-backward"></i> Back</button>
+                <button class="btn btn-sm btn-primary"
+                    onclick="window.location.href='{{ url('/admin/menu-management') }}';"><i class="fa-solid fa-backward"></i>
+                    Back</button>
             </div>
             <div class="row">
 
@@ -92,7 +92,7 @@
                                     <label for="edit_menu_icon">Icon</label>
                                     <input type="text" name="icon" id="edit_menu_icon" placeholder="Enter Menu Icon"
                                         class="form-control" value="{{ $result->icon }}">
-                                        <span class="text-primary" id="edit_search_icon"><i
+                                    <span class="text-primary" id="edit_search_icon"><i
                                             class="fa-solid fa-magnifying-glass"></i> Search Icons</span>
                                 </div>
 
@@ -126,27 +126,27 @@
                                 <div class="form-group">
                                     <label>Template :</label>
 
-                                    @if(!$is_home)
-                                    <input type="radio" class="radioInput" name="fetch_all" value="4"
-                                        onchange="getSelectedOption(this)"  />
-                                    <label class="text-primary radioLabel">Home</label>
+                                    @if (!$is_home)
+                                        <input type="radio" class="radioInput" name="fetch_all" value="4"
+                                            onchange="getSelectedOption(this)" />
+                                        <label class="text-primary radioLabel">Home</label>
                                     @endif
                                     <input type="radio" class="radioInput" name="fetch_all" value="0"
-                                        onchange="getSelectedOption(this)"  />
+                                        onchange="getSelectedOption(this)" />
                                     <label class="text-warning radioLabel">Static</label>
 
                                     <input type="radio" class="radioInput" name="fetch_all" value="1"
-                                        onchange="getSelectedOption(this)"  />
+                                        onchange="getSelectedOption(this)" />
                                     <label class="text-success radioLabel">Dynamic</label>
 
 
                                     <input type="radio" class="radioInput" name="fetch_all" value="2"
-                                        onchange="getSelectedOption(this)"  />
+                                        onchange="getSelectedOption(this)" />
                                     <label class="text-danger radioLabel">Show all Products</label>
 
 
                                     <input type="radio" class="radioInput" name="fetch_all" value="3"
-                                        onchange="getSelectedOption(this)"  />
+                                        onchange="getSelectedOption(this)" />
                                     <label class="text-info radioLabel">Show Product with Price Range</label>
 
 
@@ -214,11 +214,47 @@
 
                                 <div class="form-group deactive" id="rangeDiv">
                                     <label for="">Select Price-range for Product</label>
-                                    <input type="range" id="priceRange" min="0" max="3000" step="1"
-                                        class="form-control">
-                                    <p id="priceValue"></p>
 
-                                    <input type="hidden" name="price_range" id="price_range">
+
+
+                                    @php
+
+                                        if ($page->product_price_range) {
+                                            if ($page->product_price_range == '[0,500]') {
+                                                $array = json_decode($page->product_price_range);
+                                                $maxValue = max($array);
+                                                //$maxAsString = strval($maxValue);
+                                                echo '<input type="range" id="priceRange" min="0" max="5000" step="1" class="form-control" value="' . $maxValue . '">';
+                                                echo '<p id="priceValue">0 to 500</p>';
+
+                                            } elseif ($page->product_price_range == '[501,1000]') {
+                                                $array = json_decode($page->product_price_range);
+                                                $maxValue = max($array);
+                                                //$maxAsString = strval($maxValue);
+                                                echo '<input type="range" id="priceRange" min="0" max="5000" step="1" class="form-control" value="' . $maxValue . '">';
+                                                echo '<p id="priceValue">501 to 1000</p>';
+                                            } elseif ($page->product_price_range == '[1001,2000]') {
+                                                $array = json_decode($page->product_price_range);
+                                                $maxValue = max($array);
+                                                //$maxAsString = strval($maxValue);
+                                                echo '<input type="range" id="priceRange" min="0" max="5000" step="1" class="form-control" value="' . $maxValue . '">';
+                                                echo '<p id="priceValue">1001 to 2000</p>';
+                                            } else {
+                                                // $str =$page->product_price_range;
+                                                // preg_match_all('!\d+!', $str, $matches);
+                                                // $numbers = implode('', $matches[0]);
+                                                echo '<input type="range" id="priceRange" min="0" max="5000" step="1" class="form-control" value="5000">';
+                                                echo '<p id="priceValue">2000 and above</p>';
+                                            }
+                                        } else {
+                                            echo '<input type="range" id="priceRange" min="0" max="5000" step="1" class="form-control">';
+                                            echo '<p id="priceValue"></p>';
+                                        }
+                                    @endphp
+
+
+                                    <input type="hidden" name="price_range" id="price_range"
+                                        value="{{ $page->product_price_range ? $page->product_price_range : '' }}">
 
                                 </div>
 
@@ -250,7 +286,7 @@
 
     </div>
 
-   
+
 
 
     <script>
@@ -267,7 +303,7 @@
                 price_range.value = "[0,500]";
 
             } else if (selectedValue >= 501 && selectedValue <= 1000) {
-                priceValue.textContent = `1001 to ${selectedValue}`;
+                priceValue.textContent = `501 to ${selectedValue}`;
                 price_range.value = "[501,1000]";
 
             } else if (selectedValue >= 1001 && selectedValue <= 2000) {
@@ -283,12 +319,12 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             let edit_search_icon = document.getElementById('edit_search_icon');
-           
+
             edit_search_icon.onclick = function() {
-                
+
                 window.open("https://fontawesome.com/icons", "_blank");
 
-               
+
             }
         });
 
@@ -601,7 +637,12 @@
             let sub_category = document.getElementById('edit_sub_category').value;
 
             var fetch_all_name = document.querySelector('input[name="fetch_all"]:checked');
-            var fetch_all = fetch_all_name.value;
+
+            if (fetch_all_name) {
+                var fetch_all = fetch_all_name.value;
+            } else {
+                var fetch_all = null;
+            }
 
             const price_range = document.getElementById("price_range").value;
 
@@ -655,7 +696,7 @@
                     if (data.code == 200) {
                         toastr.success(data.msg, 'Success', {
                             onHidden: function() {
-                                window.location.href="{{url('/admin/menu-management')}}";
+                                window.location.href = "{{ url('/admin/menu-management') }}";
                             }
                         });
                     }

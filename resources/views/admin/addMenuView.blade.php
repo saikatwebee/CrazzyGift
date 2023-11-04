@@ -202,7 +202,7 @@
 
                                 <div class="form-group deactive" id="rangeDiv">
                                     <label for="">Select Price-range for Product</label>
-                                    <input type="range" id="priceRange" min="0" max="3000" step="1"
+                                    <input type="range" id="priceRange" min="0" max="5000" step="1"
                                         class="form-control">
                                     <p id="priceValue"></p>
 
@@ -265,7 +265,7 @@
                 price_range.value = "[0,500]";
 
             } else if (selectedValue >= 501 && selectedValue <= 1000) {
-                priceValue.textContent = `1001 to ${selectedValue}`;
+                priceValue.textContent = `501 to ${selectedValue}`;
                 price_range.value = "[501,1000]";
 
             } else if (selectedValue >= 1001 && selectedValue <= 2000) {
@@ -488,7 +488,13 @@
             let sub_category = document.getElementById('add_sub_category').value;
 
             var fetch_all_name = document.querySelector('input[name="fetch_all"]:checked');
-            var fetch_all = fetch_all_name.value;
+            if(fetch_all_name){
+                var fetch_all = fetch_all_name.value;
+            }
+            else{
+                var fetch_all = null;
+            }
+            
 
             const price_range = document.getElementById("price_range").value;
 
