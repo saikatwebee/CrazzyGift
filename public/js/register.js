@@ -8,7 +8,7 @@ toastr.options = {
     onclick: null,
     showDuration: "2000",
     hideDuration: "1000",
-    timeOut: "2000",
+    timeOut: "1000",
     extendedTimeOut: "1000",
     showEasing: "swing",
     hideEasing: "linear",

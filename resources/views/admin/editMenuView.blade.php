@@ -601,7 +601,13 @@
             let sub_category = document.getElementById('edit_sub_category').value;
 
             var fetch_all_name = document.querySelector('input[name="fetch_all"]:checked');
-            var fetch_all = fetch_all_name.value;
+           
+            if(fetch_all_name){
+                var fetch_all = fetch_all_name.value;
+            }
+            else{
+                var fetch_all = null;
+            }
 
             const price_range = document.getElementById("price_range").value;
 
