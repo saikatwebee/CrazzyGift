@@ -62,7 +62,7 @@ class AdminController extends Controller
             $admin = Auth::guard('admin')->user();
             $token = $admin->createToken('AdminAccessToken')->accessToken;
 
-            return redirect()->route('adminDashboard');
+            return redirect()->route('adminDashboard')->with('success', 'Login Successful');
 
         } else {
 

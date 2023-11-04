@@ -105,33 +105,33 @@
 
                 <div class="col-lg-6" id="col-12">
 
-                    <div class="imgOccasion mb-4" data-id="/occasions/birthday" onclick="staticRedirect(event)">
-                        <img src="{{ asset('images/oc1.png') }}" alt="Occasions" data-id="/occasions/birthday" onclick="staticRedirect(event)">
-                        <div class="btnImgOccasion" data-id="/occasions/birthday" onclick="staticRedirect(event)">Birthdays</div>
+                    <div class="imgOccasion mb-4" data-id="/ocassion-birthday" onclick="staticRedirect(event)">
+                        <img src="{{ asset('images/oc1.png') }}" alt="Occasions" data-id="/ocassion-birthday" onclick="staticRedirect(event)">
+                        <div class="btnImgOccasion" data-id="/ocassion-birthday" onclick="staticRedirect(event)">Birthdays</div>
                     </div>
 
-                    <div class="imgOccasion" data-id="/products/3d-crystal" onclick="staticRedirect(event)">
-                        <img src="{{ asset('images/oc2.png') }}" alt="Occasions" data-id="/products/3d-crystal" onclick="staticRedirect(event)">
-                        <div class="btnImgOccasion" data-id="/products/3d-crystal" onclick="staticRedirect(event)">3D Photo Crystals</div>
+                    <div class="imgOccasion" data-id="/product-3d-crystal" onclick="staticRedirect(event)">
+                        <img src="{{ asset('images/oc2.png') }}" alt="Occasions" data-id="/product-3d-crystal" onclick="staticRedirect(event)">
+                        <div class="btnImgOccasion" data-id="/product-3d-crystal" onclick="staticRedirect(event)">3D Photo Crystals</div>
                     </div>
 
                 </div>
 
                 <div class="col-lg-6" id="col-12">
 
-                    <div class="imgOccasion mb-4" data-id="/occasions/anniversary" onclick="staticRedirect(event)">
-                        <img src="{{ asset('images/oc3.png') }}" alt="Occasions" data-id="/occasions/anniversary" onclick="staticRedirect(event)">
-                        <div class="btnImgOccasion" data-id="/occasions/anniversary" onclick="staticRedirect(event)">Anniversary</div>
+                    <div class="imgOccasion mb-4" data-id="/ocassion-anniversary" onclick="staticRedirect(event)">
+                        <img src="{{ asset('images/oc3.png') }}" alt="Occasions" data-id="/ocassion-anniversary" onclick="staticRedirect(event)">
+                        <div class="btnImgOccasion" data-id="/ocassion-anniversary" onclick="staticRedirect(event)">Anniversary</div>
                     </div>
 
-                    <div class="imgOccasion mb-4 circular" data-id="/products/photo-frames" onclick="staticRedirect(event)">
-                        <img src="{{ asset('images/oc4.png') }}" alt="Occasions" data-id="/products/photo-frames" onclick="staticRedirect(event)">
-                        <div class="btnImgOccasion" data-id="/products/photo-frames" onclick="staticRedirect(event)">Photo Frames</div>
+                    <div class="imgOccasion mb-4 circular" data-id="/product-photo-frames" onclick="staticRedirect(event)">
+                        <img src="{{ asset('images/oc4.png') }}" alt="Occasions" data-id="/product-photo-frames" onclick="staticRedirect(event)">
+                        <div class="btnImgOccasion" data-id="/product-photo-frames" onclick="staticRedirect(event)">Photo Frames</div>
                     </div>
 
-                    <div class="imgOccasion circular" data-id="/products/wooden-engraved" onclick="staticRedirect(event)">
-                        <img src="{{ asset('images/oc5.png') }}" alt="Occasions" data-id="/products/wooden-engraved" onclick="staticRedirect(event)">
-                        <div class="btnImgOccasion" data-id="/products/wooden-engraved" onclick="staticRedirect(event)">Wooden Engraved</div>
+                    <div class="imgOccasion circular" data-id="/product-wooden-engraved" onclick="staticRedirect(event)">
+                        <img src="{{ asset('images/oc5.png') }}" alt="Occasions" data-id="/product-wooden-engraved" onclick="staticRedirect(event)">
+                        <div class="btnImgOccasion" data-id="/product-wooden-engraved" onclick="staticRedirect(event)">Wooden Engraved</div>
                     </div>
 
                 </div>

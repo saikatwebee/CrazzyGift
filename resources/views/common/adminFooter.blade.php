@@ -68,7 +68,7 @@ function getCsrfToken() {
         var loader = document.querySelector(".loader-container");
         setTimeout(() => {
             loader.style.display = "none";
-        }, 2000);
+        }, 1000);
 
     });
 

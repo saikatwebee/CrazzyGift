@@ -1043,13 +1043,13 @@
 
     @if (session('success'))
         <script>
-            toastr.success("{{ session('success') }}");
+            toastr.success("{{ session('success') }}",'Success');
         </script>
     @endif
 
     @if (session('error'))
         <script>
-            toastr.error("{{ session('error') }}");
+            toastr.error("{{ session('error') }}",'Oops');
         </script>
     @endif
 

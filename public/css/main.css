@@ -31,7 +31,9 @@ header {
      color: #004a8c !important;
      font-weight: 600 !important;
 }
-
+.modifiedNav{
+    background: #363738e3;
+}
 #resend p{
     color: #004a8c;
     font-size: 16px;
@@ -384,17 +386,28 @@ nav li {
 }
 
 nav a {
-    display: block;
+    /* display: block;
     padding: 10px 20px;
     border-radius: 20px;
     text-decoration: none;
     color: #555555;
-    background: #f3f3f3;
+    background: #f3f3f3; */
+
+    display: block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #fff;
+    background: transparent;
+    border: 1px solid #7c7272;  
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
 nav a:hover {
     background-color: #004a8c;
     color: #fff;
+    transform: scale(1.1); /* Example transform effect */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Example box-shadow effect */
 }
 
 /* bottom header */
