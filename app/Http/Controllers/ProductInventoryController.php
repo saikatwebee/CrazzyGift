@@ -45,8 +45,9 @@ class ProductInventoryController extends Controller
     public function Addproducts(){
         $title = 'Products|CrazzyGift';
         $heading = "Add New Product";
-       $categories =  MainCategory::where('status',1)->orderBy('id','desc')->get();
-       return view('admin.AddProductView', compact('title','heading','categories'));
+        $categories =  MainCategory::where('status',1)->orderBy('id','desc')->get();
+        $subcategories = SubCategory::where('status',1)->orderBy('id','desc')->get();
+       return view('admin.AddProductView', compact('title','heading','categories','subcategories'));
     }
 
     public function getDependent(Request $request){
@@ -205,10 +206,15 @@ class ProductInventoryController extends Controller
         'product_length' => 'required|numeric',
         'product_breadth' => 'required|numeric',
         'price' => 'required|numeric',
+        'actual_price' => 'required|numeric',
         'status' => 'required',
         'description' => 'required',
-        'product_image' => 'required|image|max:5000', // Max 5MB
+        'product_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+        
+
     ];
+
+
 
    
     $validator = Validator::make($request->all(), $rules);
@@ -243,6 +249,10 @@ class ProductInventoryController extends Controller
         if ($image->move($uploadPath, $imageName)) {
             // File has been successfully uploaded
 
+            $tag_arr = $request->input('tags');
+            $tags = $string = implode(", ", $tag_arr);
+            
+
          $data =   [
         'title' => $request->input('title'),
         'code' => $request->input('code'),
@@ -257,11 +267,13 @@ class ProductInventoryController extends Controller
         'product_length' => $request->input('product_length'),
         'product_breadth' => $request->input('product_breadth'),
         'price' => $request->input('price'),
+        'actual_price' => $request->input('actual_price'),
         'status' => $request->input('status'),
         'description' => $request->input('description'),
         'product_image' => $imageName,
         'slug'=>Str::slug($request->input('title')),
-        'created_at'=>date('Y-m-d H:i:s')
+        'created_at'=>date('Y-m-d H:i:s'),
+        'tags'=> $tags
     ];
 
     
@@ -311,9 +323,11 @@ class ProductInventoryController extends Controller
                 'product_height' => 'required|string',
                 'product_length' => 'required|string',
                 'product_breadth' => 'required|string',
-                'price' => 'required|string',
+                'price' => 'required|numeric',
+                // 'actual_price' => 'required|numeric',
                 'status' => 'required',
-                'slug' => 'required'
+                'slug' => 'required',
+                
                
                 
             ];
@@ -344,8 +358,19 @@ class ProductInventoryController extends Controller
                  $data['product_breadth']=$request->input('product_breadth');
 
                 $data['price']=$request->input('price');
+                $data['actual_price']=$request->input('actual_price');
                 $data['status']=$request->input('status');
                 $data['slug']=$request->input('slug');
+
+                $tag_arr = $request->input('tags');
+                // var_dump($tag_arr);
+                // die;
+                if($tag_arr!=null){
+                    $tags = $string = implode(", ", $tag_arr);
+                    $data['tags']=$tags;
+                }
+                
+
                 $data['updated_at']=date('Y-m-d H:i:s');
 
 

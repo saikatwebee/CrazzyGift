@@ -67,7 +67,7 @@
                                 <div class="form-group">
                                     <label for="add_menu_name">Menu Name</label>
                                     <input type="text" name="name" id="add_menu_name" required
-                                        placeholder="Enter Menu Name" class="form-control">
+                                        placeholder="Enter Menu Name" class="form-control" oninput="updatePageTitle(this.value)">
                                 </div>
                                 <div class="form-group">
                                     <label for="add_menu_url">URL</label>
@@ -106,7 +106,7 @@
                                     <label>Page Title</label>
 
                                     <input type="text" class="form-control" name="title" id="add_page_title" required
-                                        placeholder="Enter Page Title" />
+                                         disabled/>
 
 
 
@@ -239,6 +239,14 @@
     </div>
 
     <script>
+
+function updatePageTitle(value) {
+       
+        var pageTitleInput = document.getElementById('add_page_title');
+
+        pageTitleInput.value = value;
+    }
+        
         document.addEventListener("DOMContentLoaded", function() {
             let add_search_icon = document.getElementById('add_search_icon');
 

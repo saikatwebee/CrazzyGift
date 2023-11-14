@@ -118,6 +118,7 @@
                           <th>ID</th>
                           <th>User Name</th>
                           <th>Phone</th>
+                          <th>Products</th>
                           <th>Amount</th>
                           <th>order Status</th>
                           {{-- <th>transaction ID</th> --}}

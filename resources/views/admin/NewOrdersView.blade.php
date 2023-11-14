@@ -34,8 +34,9 @@
                           <th>ID</th>
                           <th>User Name</th>
                           <th>Phone</th>
+                          <th>Products</th>
                           <th>Amount</th>
-                          <th>order_status</th>
+                          <th>order Status</th>
                           {{-- <th>transaction_id</th> --}}
                           <th>Placed On</th>
                           
