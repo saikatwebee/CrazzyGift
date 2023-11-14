@@ -938,7 +938,7 @@
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false"
                             aria-controls="error">
-                            <i class="icon-ban menu-icon"></i>
+                            <i class="fa-solid fa-gear menu-icon"></i>
                             <span class="menu-title">Settings</span>
                             <i class="menu-arrow"></i>
                         </a>
@@ -1043,20 +1043,22 @@
 
     @if (session('success'))
         <script>
-            toastr.success("{{ session('success') }}",'Success');
+            toastr.success("{{ session('success') }}", 'Success');
         </script>
     @endif
 
     @if (session('error'))
         <script>
-            toastr.error("{{ session('error') }}",'Oops');
+            toastr.error("{{ session('error') }}", 'Oops');
         </script>
     @endif
 
 
 </body>
 
-
+<script>
+    const baseUrl = "{{ asset('testimonials') }}";
+</script>
 
 <script>
     $(function() {
@@ -1288,6 +1290,139 @@
     });
 
 
+
+    //occasion image datatable
+
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getOccasionImages') }}";
+        const tableId = "imageTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+    <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editImage(${row.id})"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteImage(${row.id})"></i>
+    
+`;
+                                } else {
+                                    return `
+    <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editImage(${row.id})"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteImage(${row.id})"></i>
+    
+`;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'target'
+                    },
+                    {
+                        data: 'image',
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                const imageUrl = `{{ asset('occasions/${data}') }}`;
+                                return `<img src="${imageUrl}"  style="border-radius:5px; width:100px;height:auto;" />`;
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'type',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<p class="text-danger">Large</p>';
+                                } else if (data == 2) {
+                                    return '<p class="text-primary">Small</p>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'NA';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'button',
+                        render: function(data) {
+                            if (data !== "" && data !== null) {
+                                return data;
+                            } else {
+                                return 'NA';
+                            }
+                        }
+                    },
+
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+
+                                if (data === null || data === '1970-01-01') {
+                                    return 'NA';
+                                }
+
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+
     //slider datatable
 
 
@@ -1360,6 +1495,120 @@
                             }
                             return data;
                         }
+                    },
+
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+
+                                if (data === null || data === '1970-01-01') {
+                                    return 'NA';
+                                }
+
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    });
+
+
+    //Testimonial datatable
+
+
+
+    $(document).ready(function() {
+
+
+        const url = "{{ url('admin/getAllTestimonials') }}";
+        const tableId = "sliderTestimonialTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+            <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editTestimonialSlider(${row.id})"></i>
+            <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteTestimonialSlider(${row.id})"></i>
+            
+        `;
+                                } else {
+                                    return `
+            <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editTestimonialSlider(${row.id})"></i>
+            <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteTestimonialSlider(${row.id})"></i>
+            
+        `;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'designation'
+                    },
+
+                    {
+                        data: 'image',
+                        render: function(data, type, row) {
+                            if (type === 'display' && data) {
+                                const testimonial_image =
+                                `<img src="${baseUrl}/${data}" alt="Testimonial Image" style="border-radius: 5px; width: 60px; height: auto;" />`;
+                                return testimonial_image;
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'description'
                     },
 
                     {
@@ -1718,6 +1967,27 @@
                         }
                     },
 
+                    {
+                        "data": 'tags',
+                        "render": function(data, type, row) {
+                            if (data === null || data === '') {
+                                return 'NA';
+                            } else {
+                                var tagsArray = data.split(', '); // Split the string into an array
+                                var buttons = '';
+
+                                tagsArray.forEach(function(tag) {
+                                    buttons +=
+                                        '<button class="btn btn-primary tag-button p-2">' +
+                                        tag + '</button> ';
+                                });
+
+                                return buttons;
+                            }
+                        }
+                    },
+
+
                     // {
                     //     data: 'description',
                     //     render: function(data, type, row) {
@@ -1733,6 +2003,16 @@
                     // },
                     {
                         data: 'price'
+                    },
+                    {
+                        data: 'actual_price',
+                        render: function(data) {
+                            if (data !== "" && data !== null) {
+                                return data;
+                            } else {
+                                return 'NA';
+                            }
+                        }
                     },
 
                     // {
@@ -1896,6 +2176,17 @@
                     {
                         data: 'price'
                     },
+                    {
+                        data: 'actual_price',
+                        render: function(data) {
+                            if (data !== "" && data !== null) {
+                                return data;
+                            } else {
+                                return 'NA';
+                            }
+                        }
+                    },
+
 
                     // {
                     //     data: 'status',
@@ -2012,6 +2303,18 @@
                     },
                     {
                         data: 'user.phone'
+                    },
+
+                    {
+                        "data": "products",
+                        "render": function(data, type, row) {
+                            if (type === 'display' && data.length > 20) {
+                                return '<span data-toggle="tooltip" title="' + data + '">' + data
+                                    .substr(0, 20) + '...</span>';
+                            } else {
+                                return data;
+                            }
+                        }
                     },
 
                     {
@@ -2272,6 +2575,17 @@
                     },
                     {
                         data: 'user.phone'
+                    },
+                    {
+                        "data": "products",
+                        "render": function(data, type, row) {
+                            if (type === 'display' && data.length > 20) {
+                                return '<span data-toggle="tooltip" title="' + data + '">' + data
+                                    .substr(0, 20) + '...</span>';
+                            } else {
+                                return data;
+                            }
+                        }
                     },
                     {
                         data: 'amount'
@@ -2699,6 +3013,17 @@
                         data: 'user.phone'
                     },
                     {
+                        "data": "products",
+                        "render": function(data, type, row) {
+                            if (type === 'display' && data.length > 20) {
+                                return '<span data-toggle="tooltip" title="' + data + '">' + data
+                                    .substr(0, 20) + '...</span>';
+                            } else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
                         data: 'amount'
                     },
 
@@ -2858,6 +3183,17 @@
                         data: 'user.phone'
                     },
                     {
+                        "data": "products",
+                        "render": function(data, type, row) {
+                            if (type === 'display' && data.length > 20) {
+                                return '<span data-toggle="tooltip" title="' + data + '">' + data
+                                    .substr(0, 20) + '...</span>';
+                            } else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
                         data: 'amount'
                     },
 
@@ -2988,6 +3324,17 @@
                         data: 'user.phone'
                     },
                     {
+                        "data": "products",
+                        "render": function(data, type, row) {
+                            if (type === 'display' && data.length > 20) {
+                                return '<span data-toggle="tooltip" title="' + data + '">' + data
+                                    .substr(0, 20) + '...</span>';
+                            } else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
                         data: 'amount'
                     },
 
@@ -3110,6 +3457,17 @@
                     },
                     {
                         data: 'user.phone'
+                    },
+                    {
+                        "data": "products",
+                        "render": function(data, type, row) {
+                            if (type === 'display' && data.length > 20) {
+                                return '<span data-toggle="tooltip" title="' + data + '">' + data
+                                    .substr(0, 20) + '...</span>';
+                            } else {
+                                return data;
+                            }
+                        }
                     },
                     {
                         data: 'amount'
@@ -3342,6 +3700,60 @@
             });
     }
 
+
+    function editImage(id) {
+        $("#iid").val(id);
+        $("#EditimageModal").modal('show');
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getImage') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#edit_target_occasion").val(data.target);
+                $("#edit_button_occasion").val(data.button);
+                // const Bannerurl = "{{ asset('/banners') }}/" + data.image;
+                // $("#edit_banner_img").attr('src', Bannerurl);
+
+                var selectElement = document.getElementById("edit_image_type");
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    if (selectElement.options[i].value == data.type) {
+                        selectElement.options[i].selected = true;
+                        break;
+                    }
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    }
+
+
+
+
+
     function editSlider(id) {
         $("#sid").val(id);
         $("#EditSliderModal").modal('show');
@@ -3384,8 +3796,8 @@
                 var productStr = data.products;
 
                 var products = productStr.split(',');
-                console.log(productStr);
 
+                console.log(products);
                 $('#edit_products').selectpicker('val', products);
 
 
@@ -3399,6 +3811,56 @@
 
 
     }
+
+
+    function editTestimonialSlider(id) {
+        $("#sid").val(id);
+        $("#EditTestimonialSliderModal").modal('show');
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getTestimonialSlider') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#tid").val(data.id);
+
+                $("#edit_testimonial_name").val(data.name);
+                //$("#edit_testimonial_description").val(data.description);
+                $("#edit_testimonial_designation").val(data.designation);
+
+                tinymce.get('edit_testimonial_description').setContent(data.description);
+
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
+
+    }
+
+
 
 
     function viewOrder(event) {
@@ -3549,7 +4011,6 @@
 
                 $("#eid").val(data.id);
 
-                
                 tinymce.get('edit_description').setContent(data.description);
                 $("#edit_weight").val(data.weight);
                 $("#edit_height").val(data.height);
@@ -3558,9 +4019,29 @@
                 $("#edit_breadth").val(data.breadth);
                 $("#edit_price").val(data.price);
 
+                console.log("Actual price" + data.actual_price);
+
+                    if(data.actual_price!="" && data.actual_price!=null){
+                        $("#edit_actual_price").val(data.actual_price);
+
+                    }
+                
                 $("#edit_product_height").val(data.product_height);
                 $("#edit_product_breadth").val(data.product_breadth);
                 $("#edit_product_length").val(data.product_length);
+
+                var tagstr = data.tags;
+                console.log(tagstr);
+
+                if (tagstr && tagstr !== "") {
+                    // Trim any whitespace and then split the string by commas
+                    var tags = tagstr.split(',').map(tag => tag.trim());
+
+                    $('#edit_tags').selectpicker('val', tags);
+                } else {
+                    $('#edit_tags').selectpicker('val', []);
+                }
+
 
 
             })
@@ -4099,6 +4580,62 @@
         });
     }
 
+    //delete testimonial slider
+
+    function deleteTestimonialSlider(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/TestimonialDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        if (data.errors) {
+
+                            toastr.error(data.errors);
+
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success('Tastimonial status changed successfully', 'Success', {
+                                onHidden: function() {
+                                    location.reload();
+                                }
+                            });
+                        }
+
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
 
     //delete banner
 
@@ -4153,6 +4690,59 @@
         });
     }
 
+    //Delete Occasion Image
+    function deleteImage(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/imageDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        toastr.success('Occasion Image status changed successfully', 'Success', {
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
+    //Delete Category
 
     function deletecategory(id) {
         Swal.fire({

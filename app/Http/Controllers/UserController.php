@@ -11,6 +11,8 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Address;
 use App\Models\Banner;
+use App\Models\Testimonial;
+use App\Models\Occasionimage;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -31,6 +33,10 @@ class UserController extends Controller
     {
         $title = 'Home|CrazzyGift';
         $banners = Banner::where('status',1)->orderBy('id','desc')->get();
+        $testimonials = Testimonial::where('status',1)->orderBy('id','desc')->get();
+        $occasionimages_large = Occasionimage::where(['status'=>1,'type'=>1])->orderBy('id','desc')->get();
+        $occasionimages_small = Occasionimage::where(['status'=>1,'type'=>2])->orderBy('id','desc')->get();
+       
         $featured_collection = DB::table('sliders')->where(['type'=>1,'status'=>1])->orderBy('id', 'desc')->first();
         $best_selling = DB::table('sliders')->where(['type'=>2,'status'=>1])->orderBy('id', 'desc')->first();
 
@@ -47,6 +53,7 @@ class UserController extends Controller
            $data1['product_image']=$featured_products->product_image;
            $data1['title']=$featured_products->title;
            $data1['price']=$featured_products->price;
+           $data1['actual_price'] = $featured_products->actual_price;
            $data1['slug']=$featured_products->slug;
 
            $res1[]=$data1;
@@ -59,12 +66,13 @@ class UserController extends Controller
           $data2['product_image']=$best_products->product_image;
           $data2['title']=$best_products->title;
           $data2['price']=$best_products->price;
+          $data2['actual_price'] = $best_products->actual_price;
           $data2['slug']=$best_products->slug;
            $res2[]=$data2;
         }
 
    
-        return view('DashboardView', compact('title','banners','res1','res2'));
+        return view('DashboardView', compact('title','banners','res1','res2','testimonials','occasionimages_large','occasionimages_small'));
     }
 
     public function aboutUs(){
@@ -110,8 +118,10 @@ class UserController extends Controller
 
     public function register()
     {
+
+        //dd("helloworld");
         $title = 'Register|CrazzyGift';
-        return view('RegisterView', compact('title'));
+        return view('common.CustomerRegistration', compact('title'));
     }
 
 
@@ -214,7 +224,7 @@ class UserController extends Controller
                     return redirect()->route('shippingcart');
                 }
                 else{
-                    return redirect()->route('home');
+                    return redirect('/');
                 }
 
 
@@ -249,7 +259,7 @@ class UserController extends Controller
                         return redirect()->route('shippingcart');
                     }
                     else{
-                        return redirect()->route('home');
+                        return redirect('/');
                     }
                   
 
@@ -613,7 +623,7 @@ class UserController extends Controller
                             User::where('id',auth()->user()->id)->update($data);
 
                             //return response()->json(['msg'=>'Your phone number has been verified successfully.','code'=>200],200);
-                            return redirect()->route('home')->with('success', 'Your phone number has been verified successfully.');
+                            return redirect('/')->with('success', 'Your phone number has been verified successfully.');
 
 
                     }
@@ -650,7 +660,7 @@ class UserController extends Controller
     public function profileUpload(Request $request)
     {
         $request->validate([
-            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
             // Adjust validation rules as needed.
         ]);
 
@@ -690,6 +700,26 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         try {
+
+
+            $rules = [
+                'name' => 'required',
+                'phone' => 'required|unique:users',
+                'email' => 'required',
+            ];
+    
+    
+    
+            $validator = Validator::make($request->all(), $rules);
+    
+    
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+    
+
+
+
             $id = auth()->user()->id;
             $data['name'] = trim($request->input('name'));
             $data['phone'] = trim($request->input('phone'));

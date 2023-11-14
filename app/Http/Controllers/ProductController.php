@@ -75,7 +75,8 @@ class ProductController extends Controller
         $result = DB::table('products')
             ->leftJoin('main_categories', 'products.main_category', '=', 'main_categories.id')
             ->leftJoin('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
-            ->where('products.title', 'LIKE', '%' . $heading . '%')
+            // ->where('products.title', 'LIKE', '%' . $heading . '%')
+            ->where('tags', 'LIKE', '%'.$heading.'%')
             ->orWhere('main_categories.name', 'LIKE', '%' . $heading . '%')
             ->orWhere('sub_categories.name', 'LIKE', '%' . $heading . '%');
 

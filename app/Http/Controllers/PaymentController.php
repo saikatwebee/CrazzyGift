@@ -177,6 +177,8 @@ class PaymentController extends Controller
                 $row['product_code'] = $product->code;
                 $row['L3_category'] = $L3_category;
                 $row['description'] = $product->description;
+                $row['title'] = $product->title;
+                $row['sku'] = $product->sku;
                 $row['product_image'] = $product->product_image;
                 $row['product_type'] = $product->product_type;
                 $row['weight'] = $product->weight;

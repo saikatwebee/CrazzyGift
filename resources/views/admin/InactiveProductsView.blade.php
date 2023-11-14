@@ -40,7 +40,8 @@
                           <th>Category</th>
                           <th>Subcategory</th>
                           {{-- <th>Description</th> --}}
-                          <th>Price</th>
+                          <th>Offer Price</th>
+                          <th>Actual Price</th>
                           {{-- <th>Status</th> --}}
                           <th>Created On</th>
                          

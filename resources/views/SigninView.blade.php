@@ -107,7 +107,7 @@
                             <p>Don't have an Account?</p>
                         </div>
                         <div class="login-form my-3">
-                            <a href="{{ url('/register') }}" style="text-decoration: none;"
+                            <a href="{{ route('register') }}" style="text-decoration: none;"
                                 class="loginButton mt-4">Register</a>
                         </div>
                         <div class="login-form my-3 mt-5">

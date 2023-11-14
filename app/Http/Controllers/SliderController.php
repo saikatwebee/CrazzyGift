@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banner;
+use App\Models\Occasionimage;
 use App\Models\Slider;
+
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Menu;
+use App\Models\Testimonial;
 use App\Models\Page;
 use App\Models\MainCategory;
 use App\Models\SubCategory;
@@ -23,10 +26,8 @@ class SliderController extends Controller
         $title = 'Sliders Mangement | CrazzyGift';
         $heading = "Sliders";
 
-        $products = Product::latest()->get();
+        $products = Product::latest()->where('status', 1)->get();
         $allBanners = DB::table('banners')->get();
-
-
 
         return view('admin.SliderView', compact('title', 'heading', 'products'));
     }
@@ -104,6 +105,15 @@ class SliderController extends Controller
         return response()->json($banners);
     }
 
+     public function getOccasionImages()
+    {
+        $images = Occasionimage::orderBy('id', 'desc')->get();
+        return response()->json($images);
+    }
+
+
+    
+
     public function getAllCategories()
     {
         $categories = MainCategory::orderBy('id', 'desc')->get();
@@ -126,12 +136,30 @@ class SliderController extends Controller
         return response()->json($banner);
     }
 
+    public function getImage(Request $request)
+    {
+        $id = $request->input('id');
+        $image = Occasionimage::where('id', $id)->first();
+        return response()->json($image);
+    }
+
+    
+
     public function getSlider(Request $request)
     {
         $id = $request->input('id');
         $slider = Slider::where('id', $id)->first();
         return response()->json($slider);
     }
+
+    public function getTestimonialSlider(Request $request)
+    {
+        $id = $request->input('id');
+        $slider = Testimonial::where('id', $id)->first();
+        return response()->json($slider);
+    }
+
+    
 
 
     public function getAllSliders()
@@ -160,6 +188,12 @@ class SliderController extends Controller
 
 
         return response()->json($result);
+    }
+
+    public function getAllTestimonials()
+    {
+        $sliders = Testimonial::orderBy('id', 'desc')->get();
+        return response()->json($sliders);
     }
 
 
@@ -192,6 +226,38 @@ class SliderController extends Controller
             $res = $banner->save();
             if ($res) {
                 return response()->json(['code' => 200, 'msg' => 'Banner status changed successfully'], 200);
+            }
+        }
+    }
+
+    public function imageDelete(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+
+            $image = Occasionimage::find($id);
+            $image->status = ($image->status == 1) ? 2 : 1;
+            $image->updated_at = date('Y-m-d H:i:s');
+            $res = $image->save();
+            if ($res) {
+                return response()->json(['code' => 200, 'msg' => 'Occasion Image status changed successfully'], 200);
+            }
+        }
+    }
+
+      public function TestimonialDelete(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+
+            $testimonial = Testimonial::find($id);
+            $testimonial->status = ($testimonial->status == 1) ? 2 : 1;
+            $testimonial->updated_at = date('Y-m-d H:i:s');
+            $res = $testimonial->save();
+            if ($res) {
+                return response()->json(['code' => 200, 'msg' => 'Testimonial status changed successfully'], 200);
             }
         }
     }
@@ -253,8 +319,8 @@ class SliderController extends Controller
 
 
         $rules = [
-            'image' => 'required',
-            'target' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+            'target' => 'required',
 
         ];
 
@@ -289,6 +355,108 @@ class SliderController extends Controller
             return response()->json(['msg' => "Banner Added Successfully", 'code' => 200], 200);
         }
     }
+
+
+    public function addOccasionImage(Request $request)
+    {
+
+
+        $rules = [
+            'add_image_occasion' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+            'add_target_occasion' => 'required',
+            'image_type' => 'required',
+            'add_button_occasion' => 'required',
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
+        if ($request->hasFile('add_image_occasion')) {
+
+            $image = $request->file('add_image_occasion');
+            $target = $request->input('add_target_occasion');
+            $add_button_occasion = $request->input('add_button_occasion');
+            $type = $request->input('image_type');
+
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $uploadPath = public_path('occasions');
+
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+
+            if ($image->move($uploadPath, $image_name)) {
+                $occasionData['image'] = $image_name;
+                $occasionData['button'] = $add_button_occasion;
+                $occasionData['target'] = $target;
+                $occasionData['type'] =  $type;
+                $occasionData['created_at'] = date('Y-m-d H:i:s');
+            }
+
+            DB::table('occasionimages')->insert($occasionData);
+            return response()->json(['msg' => "occasionImage Added Successfully", 'code' => 200], 200);
+        }
+    }
+
+
+    public function addTestimonialSlider(Request $request)
+    {
+
+
+        $rules = [
+            'testimonial_name' => 'required|string',
+            'testimonial_designation' =>'required',
+            'testimonial_description' =>'required',
+            'testimonial_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+
+        ];
+
+       
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
+        if ($request->hasFile('testimonial_image')) {
+
+            $testimonial_image = $request->file('testimonial_image');
+            
+            $testimonial_image_name = time() . '.' . $testimonial_image->getClientOriginalExtension();
+            $uploadPath = public_path('testimonials');
+
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+
+            if ($testimonial_image->move($uploadPath, $testimonial_image_name)) {
+                $testimonialData['name'] = $request->input('testimonial_name');
+                $testimonialData['designation'] = $request->input('testimonial_designation');
+                $testimonialData['description'] = $request->input('testimonial_description');
+                $testimonialData['image'] = $testimonial_image_name;
+                $testimonialData['status'] = 1;
+                $testimonialData['created_at'] = date('Y-m-d H:i:s');
+            }
+
+            DB::table('testimonials')->insert($testimonialData);
+          return response()->json(['msg' => "Testimonial Added Successfully", 'code' => 200], 200);
+        }
+    }
+
+
+
 
     public function updateBanner(Request $request)
     {
@@ -343,6 +511,135 @@ class SliderController extends Controller
         $bannerData['updated_at'] = date('Y-m-d H:i:s');
         DB::table('banners')->where('id', $bid)->update($bannerData);
         return response()->json(['msg' => "Banner updated successfully", 'code' => 200], 200);
+    }
+
+
+    public function updateOccasionImage(Request $request)
+    {
+        $rules = [
+             'edit_image_type' => 'required',
+            'edit_target_occasion' => 'required|string',
+            'edit_button_occasion'  => 'required',
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $target = $request->input('edit_target_occasion');
+        $type = $request->input('edit_image_type');
+        $edit_button_occasion =$request->input('edit_button_occasion');  
+        $iid = $request->input('iid');
+
+        if ($request->hasFile('edit_image_occasion')) {
+
+            $image = $request->file('edit_image_occasion');
+
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $uploadPath = public_path('occasions');
+
+
+
+            $existing_occasion = Occasionimage::where('id', $iid)->first();
+            $existing_occasion_img = $existing_occasion->image;
+
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            if ($existing_occasion_img) {
+                // Check if the image already exists and delete it
+                $existingImagePath = $uploadPath . '/' . $existing_occasion_img;
+                if (file_exists($existingImagePath)) {
+                    unlink($existingImagePath);
+                }
+            }
+
+
+            if ($image->move($uploadPath, $image_name)) {
+                $occasionData['image'] = $image_name;
+            }
+        }
+
+        $occasionData['target'] = $target;
+        $occasionData['type'] = $type;
+        $occasionData['button'] = $edit_button_occasion;
+        
+        $occasionData['updated_at'] = date('Y-m-d H:i:s');
+        DB::table('occasionimages')->where('id', $iid)->update($occasionData);
+        return response()->json(['msg' => "Occasion Image updated successfully", 'code' => 200], 200);
+    }
+
+    
+
+    public function updateTestimonialSlider(Request $request)
+    {
+        $rules = [
+            // 'image' => 'required',
+            'edit_testimonial_name' => 'required|string',
+            'edit_testimonial_designation' => 'required|string',
+            'edit_testimonial_description' => 'required|string',
+           // 'edit_testimonial_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+
+        ];
+
+        // echo "<pre>";
+        // var_dump($request->all());
+        // die;
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        
+        $tid = $request->input('tid');
+
+        if ($request->hasFile('edit_testimonial_image')) {
+
+            $image = $request->file('edit_testimonial_image');
+
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $uploadPath = public_path('testimonials');
+
+
+
+            $existing_testimonial = Testimonial::where('id', $tid)->first();
+            $existing_testimonial_image = $existing_testimonial->image;
+
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            if ($existing_testimonial_image) {
+                // Check if the image already exists and delete it
+                $existingImagePath = $uploadPath . '/' . $existing_testimonial_image;
+                if (file_exists($existingImagePath)) {
+                    unlink($existingImagePath);
+                }
+            }
+
+
+            if ($image->move($uploadPath, $image_name)) {
+                $testimonialData['image'] = $image_name;
+            }
+        }
+
+        $testimonialData['name'] = $request->input('edit_testimonial_name');
+        $testimonialData['designation'] = $request->input('edit_testimonial_designation');
+        $testimonialData['description'] = $request->input('edit_testimonial_description');
+
+        $testimonialData['updated_at'] = date('Y-m-d H:i:s');
+        DB::table('testimonials')->where('id', $tid)->update($testimonialData);
+        return response()->json(['msg' => "Testimonial details updated successfully", 'code' => 200], 200);
     }
 
     public function addSlider(Request $request)
@@ -582,7 +879,7 @@ class SliderController extends Controller
 
     public function showPageByMenuUrl(Request $request, $url)
     {
-        $menu = Menu::where('url', $url)->with('page')->first();
+        $menu = Menu::where('url', $url)->with('page.mainCategory', 'page.subCategory')->first();
 
 
 
@@ -599,6 +896,9 @@ class SliderController extends Controller
 
                     $title = 'Home|CrazzyGift';
                     $banners = Banner::where('status', 1)->orderBy('id', 'desc')->get();
+                     $testimonials = Testimonial::where('status',1)->orderBy('id','desc')->get();
+                     $occasionimages_large = Occasionimage::where(['status'=>1,'type'=>1])->orderBy('id','desc')->get();
+                        $occasionimages_small = Occasionimage::where(['status'=>1,'type'=>2])->orderBy('id','desc')->get();
                     $featured_collection = DB::table('sliders')->where(['type' => 1, 'status' => 1])->orderBy('id', 'desc')->first();
                     $best_selling = DB::table('sliders')->where(['type' => 2, 'status' => 1])->orderBy('id', 'desc')->first();
 
@@ -615,6 +915,7 @@ class SliderController extends Controller
                         $data1['product_image'] = $featured_products->product_image;
                         $data1['title'] = $featured_products->title;
                         $data1['price'] = $featured_products->price;
+                        $data1['actual_price'] = $featured_products->actual_price;
                         $data1['slug'] = $featured_products->slug;
 
                         $res1[] = $data1;
@@ -627,12 +928,13 @@ class SliderController extends Controller
                         $data2['product_image'] = $best_products->product_image;
                         $data2['title'] = $best_products->title;
                         $data2['price'] = $best_products->price;
+                         $data2['actual_price'] = $best_products->actual_price;
                         $data2['slug'] = $best_products->slug;
                         $res2[] = $data2;
                     }
 
 
-                    return view('DashboardView', compact('title', 'banners', 'res1', 'res2'));
+                    return view('DashboardView', compact('title', 'banners', 'res1', 'res2','testimonials','occasionimages_large','occasionimages_small'));
                 } else if ($page->status == 0) {
                     //static Content
                     return view('Dynamicpage2', ['page' => $page]);
@@ -644,10 +946,10 @@ class SliderController extends Controller
                         $recordsPerPage = 12;
                         $query = '';
 
+                        $mainCategory = $menu->page->mainCategory->name;
 
-
-                        $result = DB::table('products')->where(['main_category' => $main_category,'status'=>1]);
-
+                        $result = DB::table('products')->where(['main_category' => $main_category,'status'=>1])->orWhere('tags', 'LIKE', '%'.$mainCategory.'%');
+                       
                         if ($request->has('query')) {
 
 
@@ -682,8 +984,16 @@ class SliderController extends Controller
                         $query = '';
 
 
+                        //$mainCategory = $menu->page->mainCategory->name;
+                        $subCategory = $menu->page->subCategory->name;
+                       
+                        // DB::enableQueryLog();
+                        $result = DB::table('products')->where(['main_category' => $main_category, 'sub_category' => $sub_category,'status'=>1])->orWhere('tags', 'LIKE', '%'.$subCategory.'%');
+                        // $queryLog = DB::getQueryLog();
 
-                        $result = DB::table('products')->where(['main_category' => $main_category, 'sub_category' => $sub_category,'status'=>1]);
+                       
+
+                      
 
                         if ($request->has('query')) {
 
@@ -712,6 +1022,7 @@ class SliderController extends Controller
 
                         return view('Dynamicpage1', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query', 'url'));
                     }
+
                 } else if ($page->status == 2) {
                     //fetch all products
 

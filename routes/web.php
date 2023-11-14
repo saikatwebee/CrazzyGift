@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verifyUser'])->group(function () {
 
         Route::get('/login', [UserController::class, "login"])->name('login')->withoutMiddleware(['auth', 'verifyUser']);
         Route::get('/signin', [UserController::class, "signin"])->name('signin')->withoutMiddleware(['auth', 'verifyUser']);
-        Route::get('/register', [UserController::class, "register"])->name('register')->withoutMiddleware(['auth', 'verifyUser']);
+        Route::get('/register', [UserController::class , "register"])->name('register')->withoutMiddleware(['auth', 'verifyUser']);
 
         Route::get('/auth/redirect', [UserController::class, "redirectToGoogle"])->withoutMiddleware(['auth', 'verifyUser']);
         Route::get('/auth/callback', [UserController::class, "handleGoogleCallback"])->withoutMiddleware(['auth', 'verifyUser']);
@@ -142,12 +142,12 @@ Route::get('/demo', [UserController::class, "demo"])->name('demo')->withoutMiddl
 Route::middleware(['auth', 'verifyUser'])->group(function () {
 
     $urls = Menu::distinct()->pluck('url')->toArray();
-    
+   
     foreach ($urls as $url) {
        
         Route::get("/{".$url."}", [SliderController::class, 'showPageByMenuUrl'])
             ->name($url)
-            ->withoutMiddleware(['auth', 'verifyUser']);
+            ->withoutMiddleware('auth');
         
     }
 });
@@ -240,16 +240,36 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
 
      Route::post('/addBanner', [SliderController::class, 'addBanner'])->name('addBanner');
      Route::post('/addSlider', [SliderController::class, 'addSlider'])->name('addSlider');
+     Route::post('/addTestimonialSlider', [SliderController::class, 'addTestimonialSlider'])->name('addTestimonialSlider');
+     Route::post('/addOccasionImage', [SliderController::class, 'addOccasionImage'])->name('addOccasionImage');
+     
+     
      Route::post('/updateBanner', [SliderController::class, 'updateBanner'])->name('updateBanner'); 
+     Route::post('/updateOccasionImage', [SliderController::class, 'updateOccasionImage'])->name('updateOccasionImage'); 
+    
      Route::get('/getAllBanners', [SliderController::class, 'getAllBanners'])->name('getAllBanners');
+     Route::get('/getOccasionImages', [SliderController::class, 'getOccasionImages'])->name('getOccasionImages');
+     
      Route::post('/getBanner', [SliderController::class, 'getBanner'])->name('getBanner');
+     Route::post('/getImage', [SliderController::class, 'getImage'])->name('getImage');
+     
      Route::post('/getSlider', [SliderController::class, 'getSlider'])->name('getSlider');
+     Route::post('/getTestimonialSlider', [SliderController::class, 'getTestimonialSlider'])->name('getTestimonialSlider');
+     
      Route::post('/updateSlider', [SliderController::class, 'updateSlider'])->name('updateSlider');
+     Route::post('/updateTestimonialSlider', [SliderController::class, 'updateTestimonialSlider'])->name('updateTestimonialSlider');
+     
      Route::post('/bannerDelete', [SliderController::class, 'bannerDelete'])->name('bannerDelete');
-     Route::post('/sliderDelete', [SliderController::class, 'sliderDelete'])->name('sliderDelete'); 
+     Route::post('/imageDelete', [SliderController::class, 'imageDelete'])->name('imageDelete');
+    
+     Route::post('/sliderDelete', [SliderController::class, 'sliderDelete'])->name('sliderDelete');
+     Route::post('/TestimonialDelete', [SliderController::class, 'TestimonialDelete'])->name('TestimonialDelete'); 
+     
      
 
      Route::get('/getAllSliders', [SliderController::class, 'getAllSliders'])->name('getAllSliders');
+     Route::get('/getAllTestimonials', [SliderController::class, 'getAllTestimonials'])->name('getAllTestimonials');
+     
 
 
      Route::get('/category-management', [SliderController::class, 'categoryManagement'])->name('categoryManagement');
@@ -281,7 +301,7 @@ Route::middleware(['guest:admin'])->prefix('admin')->group(function () {
 
     Route::get('/login', [AdminController::class, "login"])->name('adminLogin');
     Route::post('/loginSubmit', [AdminController::class, "loginSubmit"])->name('loginSubmit');
-    Route::get('/register', [AdminController::class, "register"])->name('adminRegister');
+    Route::get('/register-admin', [AdminController::class, "register"])->name('adminRegister');
     Route::post('/registerSubmit', [AdminController::class, "registerSubmit"])->name('registerSubmit');
 
 });
