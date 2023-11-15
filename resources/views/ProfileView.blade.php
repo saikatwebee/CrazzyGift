@@ -260,14 +260,16 @@
                                                             $order->order_status != 5)
                                                         <div class="ribbon-box">
                                                             <div class="ribbon ribbon-top-right ribbon-processing">
-                                                                <span>Order Processing</span></div>
+                                                                <span>Order Processing</span>
+                                                            </div>
                                                         </div>
                                                     @endif
 
                                                     @if ($order->order_status == 5 && $reason_code_number == 999)
                                                         <div class="ribbon-box">
                                                             <div class="ribbon ribbon-top-right ribbon-delivered">
-                                                                <span>Order Delivered</span></div>
+                                                                <span>Order Delivered</span>
+                                                            </div>
                                                         </div>
                                                     @endif
                                                 @endif
@@ -286,10 +288,10 @@
 
                                                         </div>
                                                         <!-- <div class="row">
-                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                </div> -->
+                                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                </div> -->
 
                                                     </div>
 
@@ -533,8 +535,11 @@
                                                                 Delete</span>
                                                             <span class="p-2 m-1 editAddress"
                                                                 style="color: #004A8C;font-size:14px;font-weight:600;"
-                                                                data-id="{{ $address->id }}"><i
-                                                                    class="fa-solid fa-file-pen"></i>
+                                                                data-id="{{ $address->id }}"
+                                                                onclick="editAddress(event)"><i
+                                                                    class="fa-solid fa-file-pen"
+                                                                    data-id="{{ $address->id }}"
+                                                                    onclick="editAddress(event)"></i>
                                                                 Edit</span>
 
                                                         </div>
@@ -585,8 +590,11 @@
                                                                 Delete</span>
                                                             <span class="p-2 m-1 editAddress"
                                                                 style="color: #004A8C;font-size:14px;font-weight:600;"
-                                                                data-id="{{ $address->id }}"><i
-                                                                    class="fa-solid fa-file-pen"></i>
+                                                                data-id="{{ $address->id }}"
+                                                                onclick="editAddress(event)"><i
+                                                                    class="fa-solid fa-file-pen"
+                                                                    data-id="{{ $address->id }}"
+                                                                    onclick="editAddress(event)"></i>
                                                                 Edit</span>
 
                                                         </div>
@@ -633,7 +641,7 @@
         </div>
 
 
-        <!-- profile verification model start -->
+
         <!-- profile modal start-->
 
         <div class="profileVerifyModel">
@@ -671,11 +679,213 @@
         <!-- Profile Modal ended here-->
 
 
-        <!-- profile verification model end -->
+        <!-- Edit Shipping address model start-->
+
+        <div class="editAddressModal" id="editAddressModal">
+            <div class="modal-content4">
+                <div class="closeIcon4">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+                <h2>Edit Shipping Address</h2>
+
+                <form action="{{ url('/editShippingAddress') }}" method="post" id="editShippingForm">
+                    <div class="my-4">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control shippingInput" id="name_ship" name="name"
+                            placeholder="Your Full Name">
+                    </div>
+
+                    @csrf
+
+                    <input type="hidden" name="id" id="AddressId">
+
+                    <div class="my-3">
+
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control shippingInput my-3" id="address1_ship"
+                            placeholder="Address Lane 1" name="street_address1">
+                        <input type="text" class="form-control shippingInput my-3" id="address2_ship"
+                            placeholder="Address Lane 2" name="street_address2">
+                        <input type="text" class="form-control shippingInput my-3" id="address3_ship"
+                            placeholder="Address Lane 3" name="street_address3">
+                    </div>
+                    <div class="my-3">
+                        <label for="state" class="form-label">State</label>
+                        <select class="form-select" id="state_ship" name="state">
+                            <option value="" disabled="" selected="">Select a state
+                            </option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Chhattisgarh">Chhattisgarh</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                            <option value="Jharkhand">Jharkhand</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Manipur">Manipur</option>
+                            <option value="Meghalaya">Meghalaya</option>
+                            <option value="Mizoram">Mizoram</option>
+                            <option value="Nagaland">Nagaland</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Sikkim">Sikkim</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Tripura">Tripura</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Uttarakhand">Uttarakhand</option>
+                            <option value="West Bengal">West Bengal</option>
+
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="my-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control shippingInput" id="city_ship"
+                                    placeholder="Enter City" name="city">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="my-3">
+                                <label for="pincode" class="form-label">ZIP Code</label>
+                                <input type="number" class="form-control shippingInput" id="postal_code_ship"
+                                    placeholder="Enter ZIP Code" name="postal_code">
+                                <span id="postal_error3" class="text-danger hideSpan">Service Unavailable in Your
+                                    Area!</span>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="my-3">
+                                <label for="phone_shipping" class="form-label">Phone Number</label>
+                                <input type="number" class="form-control shippingInput" id="phone_ship"
+                                    placeholder="Enter Phone Number" name="phone">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="my-3">
+                                <label for="alternate_phone_shipping" class="form-label">Alternative Phone
+                                    Number (Optional)</label>
+                                <input type="number" class="form-control shippingInput" id="alternate_phone_ship"
+                                    placeholder="Enter Alternate Phone Number" name="alternate_phone">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="my-3" style="text-align: right;">
+                        <button type="button" id="save-button4">Save</button>
+                        <button type="button" id="close-button5">Close</button>
+                    </div>
+
+                </form>
+
+
+
+            </div>
+        </div>
+
+        <!-- Edit Shipping address moddel end -->
 
 
 
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var closeButtons = document.querySelectorAll('#close-button5, .closeIcon4');
+                var modal = document.querySelector('.editAddressModal');
+
+                closeButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        modal.style.display = 'none';
+                    });
+                });
+            });
+
+            function editAddress(event) {
+                const id = event.target.getAttribute('data-id');
+                document.getElementById("AddressId").value = id;
+
+
+                var editAddressModal = document.getElementById('editAddressModal');
+                editAddressModal.style.display = 'block';
+
+                const formData = {
+                    id: id
+                };
+
+                const csrfToken = document.getElementById('profile_csrf').value;
+
+                fetch("{{ url('/getAddress') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(formData),
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        console.log(data);
+
+                        if (data.errors) {
+                            var error = data.errors;
+                            for (const fieldName in error) {
+                                if (error.hasOwnProperty(fieldName)) {
+                                    const errorMessages = error[fieldName];
+                                    errorMessages.forEach(errorMessage => {
+                                        toastr.error(errorMessage);
+                                    });
+                                }
+                            }
+                        }
+
+
+                        document.getElementById('name_ship').value = data.name;
+                        document.getElementById('address1_ship').value = data.street_address1;
+                        document.getElementById('address2_ship').value = data.street_address2;
+                        document.getElementById('address3_ship').value = data.street_address3;
+
+
+                        var state_ship = document.getElementById('state_ship');
+                        const selectedState = data.state;
+
+                        for (var i = 0; i < state_ship.options.length; i++) {
+                            if (state_ship.options[i].value === selectedState) {
+                                state_ship.options[i].selected = true;
+                                break;
+                            }
+                        }
+
+                        document.getElementById('city_ship').value = data.city;
+                        document.getElementById('postal_code_ship').value = data.postal_code;
+                        document.getElementById('phone_ship').value = data.phone;
+                        document.getElementById('alternate_phone_ship').value = data.alternate_phone;
+
+
+                        // toastr.success(data.msg, 'Success', {
+                        //     onHidden: function() {
+                        //        window.location.reload();
+                        //     }
+                        // });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetche error:', error);
+                    });
+            }
+
             document.addEventListener("DOMContentLoaded", function() {
 
                 var uploadform = document.getElementById('uploadForm');
@@ -1002,6 +1212,8 @@
                                         }
                                     }
                                 }
+
+
 
                                 if (data.code == 200 && data.is_verified == 1) {
 

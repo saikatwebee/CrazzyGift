@@ -3404,7 +3404,7 @@ input[type="tel"]:focus {
 /* modal 3 */
 
 .modal2,
-.modal4 {
+.modal4,.editAddressModal {
     display: none;
     position: fixed;
     z-index: 999;
@@ -3587,6 +3587,13 @@ input[type="tel"]:focus {
     font-size: 18px;
 }
 
+.editAddressModal h2{
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+}
+
 .modal5 h2 {
     font-family: 'DM Sans';
     font-style: normal;
@@ -3623,6 +3630,10 @@ input[type="tel"]:focus {
     width: 100% !important;
 }
 
+.editAddressModal input{
+    width: 100% !important;
+}
+
 
 
 .modal3 input {
@@ -3645,6 +3656,21 @@ input[type="tel"]:focus {
 }
 
 .modal4 button {
+    background-color: #004A8C;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 14px;
+    width: 25%;
+}
+
+.editAddressModal button{
     background-color: #004A8C;
     color: #fff;
     border: none;
