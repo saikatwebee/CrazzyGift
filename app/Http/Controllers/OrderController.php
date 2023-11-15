@@ -9,7 +9,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\GST;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Validator;
 use Exception;
 
 
@@ -673,6 +673,29 @@ class OrderController extends Controller
         else{
             return response()->json(['msg'=>'record not exist','code'=>210],200);
         }
+
+    }
+
+
+    public function getAddress(Request $request){
+        //var_dump($request->input('id'));
+
+        $rules = [
+           'id' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
+        $id=$request->input('id');
+
+        $address=Address::where('id',$id)->first();
+        return response()->json($address);
 
     }
 }

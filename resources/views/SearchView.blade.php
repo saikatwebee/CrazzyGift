@@ -63,7 +63,12 @@
                         </div>
                         <div class="slide-caption">
                             <h2>{{ $product->title }}</h2>
-                            <p><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->price }}</p>
+                            {{-- <p><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->price }}</p> --}}
+                            <div class="price-box">
+                                <p class="actual-price"><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->actual_price }}</p>
+                                 <p class="selling-price"><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->price }}</p>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>

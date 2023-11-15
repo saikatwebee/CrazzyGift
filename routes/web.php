@@ -110,6 +110,9 @@ Route::get('/demo', [UserController::class, "demo"])->name('demo')->withoutMiddl
     Route::post('/getShippingAddress', [OrderController::class, "getShippingAddress"])->name('getShippingAddress');
     Route::post('/editShippingAddress', [OrderController::class, "editShippingAddress"])->name('editShippingAddress');
 
+    Route::post('/getAddress', [OrderController::class, "getAddress"])->name('getAddress');
+    
+
     Route::post('/updateBillingOnInput', [OrderController::class, "updateBillingOnInput"])->name('updateBillingOnInput');
 
     Route::post('/addShippingAddress', [OrderController::class, "addShippingAddress"])->name('addShippingAddress');

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
 
-   
+
     public function index(Request $request)
     {
 
@@ -42,13 +42,10 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-           
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
-        
+
 
         $allProducts = $result->get();
         $totalRecords = count($allProducts);
@@ -72,32 +69,43 @@ class ProductController extends Controller
         $recordsPerPage = 12;
         $query = '';
 
+        // $result = DB::table('products')
+        //     ->leftJoin('main_categories', 'products.main_category', '=', 'main_categories.id')
+        //     ->leftJoin('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
+        //     ->where(['products.status'=>'1'])
+        //     ->where('tags', 'LIKE', '%'.$heading.'%')
+        //     ->orWhere('products.title', 'LIKE', '%' . $heading . '%')
+        //      ->orWhere('main_categories.name', 'LIKE', '%' . $heading . '%')
+        //      ->orWhere('sub_categories.name', 'LIKE', '%' . $heading . '%');
+
         $result = DB::table('products')
             ->leftJoin('main_categories', 'products.main_category', '=', 'main_categories.id')
             ->leftJoin('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
-            // ->where('products.title', 'LIKE', '%' . $heading . '%')
-            ->where('tags', 'LIKE', '%'.$heading.'%')
-            ->orWhere('main_categories.name', 'LIKE', '%' . $heading . '%')
-            ->orWhere('sub_categories.name', 'LIKE', '%' . $heading . '%');
+            ->where('products.status', '1')
+            ->where(function ($query) use ($heading) {
+                $query->where('tags', 'LIKE', '%' . $heading . '%')
+                    ->orWhere('products.title', 'LIKE', '%' . $heading . '%')
+                    ->orWhere('main_categories.name', 'LIKE', '%' . $heading . '%')
+                    ->orWhere('sub_categories.name', 'LIKE', '%' . $heading . '%');
+            });
+            
 
-            if ($request->has('query')) {
+
+        if ($request->has('query')) {
 
 
-                $query = $request->query('query');
-    
-                if ($query === 'price_high_to_low') {
-                    $result->orderBy('products.price', 'desc');
-                } elseif ($query === 'price_low_to_high') {
-                    $result->orderBy('products.price', 'asc');
-                } elseif ($query === 'latest_product') {
-                    $result->orderBy('products.created_at', 'desc');
-                }
-               
-    
-            }
-            else{
+            $query = $request->query('query');
+
+            if ($query === 'price_high_to_low') {
+                $result->orderBy('products.price', 'desc');
+            } elseif ($query === 'price_low_to_high') {
+                $result->orderBy('products.price', 'asc');
+            } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
+        } else {
+            $result->orderBy('products.created_at', 'desc');
+        }
 
 
 
@@ -119,7 +127,7 @@ class ProductController extends Controller
 
         // var_dump($query);die;
 
-        return view('SearchView', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage','query','searchQuery'));
+        return view('SearchView', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query', 'searchQuery'));
     }
 
 
@@ -150,9 +158,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-         else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -198,9 +204,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -240,9 +244,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -259,13 +261,13 @@ class ProductController extends Controller
     {
         //0 to 500
         //$products = Product::whereBetween('price', [0, 500])->paginate(12);
-         $title = '0 to 500|CrazzyGift';
+        $title = '0 to 500|CrazzyGift';
         $heading = "0 to 500";
         $recordsPerPage = 12;
         $query = '';
 
-       $result = DB::table('products')
-        ->whereBetween('price', [0, 500]);
+        $result = DB::table('products')
+            ->whereBetween('price', [0, 500]);
 
         if ($request->has('query')) {
 
@@ -278,9 +280,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -294,23 +294,22 @@ class ProductController extends Controller
         // die;
 
 
-       
+
         return view('Product-low-price', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query'));
-       
     }
 
     public function product_price_medium(Request $request)
     {
         //1001 to 2000
-       // $products = Product::whereBetween('price', [1001, 2000])->paginate(12);
+        // $products = Product::whereBetween('price', [1001, 2000])->paginate(12);
         $title = '1001 to 2000|CrazzyGift';
         $heading = "1001 to 2000";
 
         $recordsPerPage = 12;
         $query = '';
 
-       $result = DB::table('products')
-        ->whereBetween('price', [1001, 2000]);
+        $result = DB::table('products')
+            ->whereBetween('price', [1001, 2000]);
 
         if ($request->has('query')) {
 
@@ -323,9 +322,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -336,25 +333,20 @@ class ProductController extends Controller
         $products = $allProducts->forPage($currentPage, $recordsPerPage);
 
 
-       
+
         return view('Product-medium-price', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query'));
-
-
-
-
-      
     }
 
     public function product_price_high(Request $request)
     {
         //2000 and above
-       // $products = Product::where('price', '>=', 2000)->paginate(12);
+        // $products = Product::where('price', '>=', 2000)->paginate(12);
         $title = '2000 and Above|CrazzyGift';
         $heading = "2000 and Above";
         $recordsPerPage = 12;
         $query = '';
 
-       $result = DB::table('products')
+        $result = DB::table('products')
             ->where('price', '>=', 2000);
 
         if ($request->has('query')) {
@@ -368,9 +360,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -381,9 +371,8 @@ class ProductController extends Controller
         $products = $allProducts->forPage($currentPage, $recordsPerPage);
 
 
-       
+
         return view('Product-high-price', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query'));
-       
     }
 
 
@@ -398,7 +387,7 @@ class ProductController extends Controller
             ->join('main_categories', 'products.main_category', '=', 'main_categories.id')
             ->select('products.*', 'main_categories.name as maincategory')
             ->where('main_categories.name', 'LIKE', '%Occasion%');
-           
+
 
         if ($request->has('query')) {
 
@@ -411,9 +400,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -441,7 +428,7 @@ class ProductController extends Controller
             ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
             ->select('products.*', 'sub_categories.name as subcategory')
             ->where('sub_categories.name', 'LIKE', '%Anniversary%');
-           
+
 
         if ($request->has('query')) {
 
@@ -454,9 +441,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -483,9 +468,9 @@ class ProductController extends Controller
 
 
         $result = DB::table('products')
-        ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
-        ->select('products.*', 'sub_categories.name as subcategory')
-        ->where('sub_categories.name', 'LIKE', '%Birthday%');
+            ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
+            ->select('products.*', 'sub_categories.name as subcategory')
+            ->where('sub_categories.name', 'LIKE', '%Birthday%');
 
         if ($request->has('query')) {
 
@@ -498,9 +483,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-        else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -526,9 +509,9 @@ class ProductController extends Controller
 
 
         $result = DB::table('products')
-        ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
-        ->select('products.*', 'sub_categories.name as subcategory')
-        ->where('sub_categories.name', 'LIKE', '%Valentines%');
+            ->join('sub_categories', 'products.sub_category', '=', 'sub_categories.id')
+            ->select('products.*', 'sub_categories.name as subcategory')
+            ->where('sub_categories.name', 'LIKE', '%Valentines%');
 
 
         if ($request->has('query')) {
@@ -542,9 +525,7 @@ class ProductController extends Controller
             } elseif ($query === 'latest_product') {
                 $result->orderBy('products.created_at', 'desc');
             }
-
-        }
-         else{
+        } else {
             $result->orderBy('products.created_at', 'desc');
         }
 
@@ -568,7 +549,7 @@ class ProductController extends Controller
     public function details($slug)
     {
         //$product = Product::find($lug);
-        $product = Product::where('slug',$slug)->first();
+        $product = Product::where('slug', $slug)->first();
         $similarProducts = Product::where('main_category', $product->main_category)
             ->where('slug', '!=', $slug)
             ->take(4)
@@ -589,66 +570,61 @@ class ProductController extends Controller
             $pincode = $request->input('location');
 
 
-if($pincode!=""){
-    $username = "HACREATIONSLLP914909";
-            $password = "UlewRODjHc";
-            $url2 = "https://api.ecomexpress.in/apiv3/pincode/";
-            $curl = curl_init();
+            if ($pincode != "") {
+                $username = "HACREATIONSLLP914909";
+                $password = "UlewRODjHc";
+                $url2 = "https://api.ecomexpress.in/apiv3/pincode/";
+                $curl = curl_init();
 
-            curl_setopt_array(
-                $curl,
-                array(
-                    CURLOPT_URL => $url2,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS => array(
-                        'username' => $username,
-                        'password' => $password,
-                        'pincode' => $pincode
-                        // 'destination_pincode' => $destination_pincode
+                curl_setopt_array(
+                    $curl,
+                    array(
+                        CURLOPT_URL => $url2,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => '',
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => 'POST',
+                        CURLOPT_POSTFIELDS => array(
+                            'username' => $username,
+                            'password' => $password,
+                            'pincode' => $pincode
+                            // 'destination_pincode' => $destination_pincode
+                        ),
                     ),
-                ),
-            );
+                );
 
-            $response = curl_exec($curl);
-            curl_close($curl);
-
-
-            $data = json_decode($response);
-            if (auth()->check()) {
-                $userStatus = 1;
-            } else {
-                $userStatus = 0;
-            }
+                $response = curl_exec($curl);
+                curl_close($curl);
 
 
-            if (count($data) > 0) {
-                foreach ($data as $row) {
-                    if ($row->active) {
-                        //return redirect()->back()->with('success', 'Service Available in Your Area');
-                        return response()->json(['pincode' => $pincode, 'status' => $userStatus, 'message' => 'Service Available in Your Area', 'code' => 200], 200);
-                    } else {
-                        // return redirect()->back()->with('error', 'Service Unavailable in Your Area');
-                        return response()->json(['message' => 'Service Unavailable in Your Area', 'code' => 210], 200);
+                $data = json_decode($response);
+                if (auth()->check()) {
+                    $userStatus = 1;
+                } else {
+                    $userStatus = 0;
+                }
+
+
+                if (count($data) > 0) {
+                    foreach ($data as $row) {
+                        if ($row->active) {
+                            //return redirect()->back()->with('success', 'Service Available in Your Area');
+                            return response()->json(['pincode' => $pincode, 'status' => $userStatus, 'message' => 'Service Available in Your Area', 'code' => 200], 200);
+                        } else {
+                            // return redirect()->back()->with('error', 'Service Unavailable in Your Area');
+                            return response()->json(['message' => 'Service Unavailable in Your Area', 'code' => 210], 200);
+                        }
                     }
+                } else {
+                    //return redirect()->back()->with('error', 'Service Unavailable in Your Area');
+                    return response()->json(['message' => 'Service Unavailable in Your Area', 'code' => 210], 200);
                 }
             } else {
-                //return redirect()->back()->with('error', 'Service Unavailable in Your Area');
-                return response()->json(['message' => 'Service Unavailable in Your Area', 'code' => 210], 200);
+                return response()->json(['message' => 'Pincode is missing!', 'code' => 210], 200);
             }
-
-}
-else{
-    return response()->json(['message' => 'Pincode is missing!', 'code' => 210], 200);
-}
-
-            
-
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 502);
         }
@@ -713,9 +689,9 @@ else{
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS => array(
-                            'username' => $username,
-                            'password' => $password,
-                            'json_input' => '[{
+                        'username' => $username,
+                        'password' => $password,
+                        'json_input' => '[{
                     "AWB_NUMBER": "111914590534",
                     "ORDER_NUMBER": "12-903624",
                     "PRODUCT": "COD",
@@ -771,7 +747,7 @@ else{
                     "CONSIGNEE_LAT": "22.22",
                     "CONSIGNEE_LONG": "44.56"
                 }]'
-                        ),
+                    ),
                 )
             );
 
@@ -812,8 +788,7 @@ else{
 
                 if ($validator->fails()) {
                     return response()->json(['info' => $validator->errors()->toJson(), 'message' => 'Oops Invalid data request!',], 400);
-                } 
-                else {
+                } else {
                     //DB::enableQueryLog();
 
                     if (Cart::where(['product_id' => $product->id, 'user_id' => auth()->user()->id])->exists()) {
@@ -822,8 +797,6 @@ else{
                         $newQuantity = (int) $quantity + (int) $existingCart->quantity;
                         $data['quantity'] = $newQuantity;
                         DB::table('carts')->where(['product_id' => $product->id, 'user_id' => auth()->user()->id])->update($data);
-
-
                     } else {
                         // Cart::create($data);
                         $data['quantity'] = $quantity;
@@ -883,7 +856,7 @@ else{
                     //     $cartItem['user_id'] = auth()->user()->id;
                     //     DB::table('carts')->insert($cartItem);
                     // }
-                    
+
                     $user_id = auth()->user()->id;
 
                     foreach ($data as $cartItem) {
@@ -897,18 +870,14 @@ else{
                             $cartItem['quantity'] = (int) $existingCart->quantity + (int) $cartItem['quantity'];
 
                             DB::table('carts')->where(['user_id' => $user_id, 'product_id' => $cartItem['product_id']])->update($cartItem);
-
                         } else {
                             DB::table('carts')->insert($cartItem);
                         }
-
-
                     }
 
                     return response()->json(['msg' => 'Success'], 200);
                 }
             }
-
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 502);
         }
@@ -939,7 +908,7 @@ else{
     public function customUpload(Request $request)
     {
 
-        
+
         $rules = [
             'custom_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
         ];
@@ -948,7 +917,7 @@ else{
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
-        } 
+        }
 
 
 
@@ -983,10 +952,6 @@ else{
                     $image->move($uploadPath, $image_name);
 
                     DB::table('carts')->where('id', $cart_id)->update(array('custom_image' => $image_name));
-
-
-
-
                 } else {
 
                     if ($request->has('local_image')) {
@@ -999,14 +964,9 @@ else{
 
                     // Store the new image with the same name
                     $image->move($uploadPath, $image_name);
-
-
                 }
-                return response()->json(['code'=>200,'msg' => "Cart Image uploaded successfully", 'custom_image' => $image_name, 'uid' => $request->input('id')], 200);
+                return response()->json(['code' => 200, 'msg' => "Cart Image uploaded successfully", 'custom_image' => $image_name, 'uid' => $request->input('id')], 200);
             }
-
-
-
         }
     }
     public function customMessage(Request $request)
@@ -1018,8 +978,6 @@ else{
             Cart::where('id', $cart_id)->update($data);
             return response()->json(['msg' => 'Message updated successfully.'], 200);
         }
-
-
     }
 
     public function guestCartImgDelete(Request $request)
@@ -1058,11 +1016,9 @@ else{
 
 
                 Cart::where('id', $id)->update(['custom_image' => null]);
-
             }
 
             return response()->json(['msg' => "Image file deleted successfully", 'code' => 200], 200);
-
         }
     }
 
@@ -1080,49 +1036,45 @@ else{
         }
     }
 
-    public function cartValidation(){
-        $user_id =auth()->user()->id;
+    public function cartValidation()
+    {
+        $user_id = auth()->user()->id;
 
-        $data = Cart::where('user_id',$user_id)->get();
+        $data = Cart::where('user_id', $user_id)->get();
 
-        
+
         $allObjectsHaveCustomData = true;
 
         foreach ($data as $item) {
-             if (!isset($item->custom_text) || !isset($item->custom_image)) {
+            if (!isset($item->custom_text) || !isset($item->custom_image)) {
                 $allObjectsHaveCustomData = false;
-                break; 
+                break;
             }
         }
 
-    if ($allObjectsHaveCustomData) {
-    
-        return response()->json(['code'=>200,'msg'=>'proceed to payment'],200);
-    
-    } else {
+        if ($allObjectsHaveCustomData) {
 
-         return response()->json(['code'=>210,'msg'=>"Image or Message is missing for atleast one item in the cart."],200);
-    
-       
-    }
-}
+            return response()->json(['code' => 200, 'msg' => 'proceed to payment'], 200);
+        } else {
 
-public function editCustomMessage(Request $request){
-    try{
-        $id = $request->input('id');
-        $data['custom_text'] = $request->input('custom_text');
-
-        if($id!=""){
-            $res = Cart::where('id',$id)->update($data);
-            if($res){
-                return response()->json(['code'=>200,'msg'=>'Message updated successfully.'],200);
-            }
-
+            return response()->json(['code' => 210, 'msg' => "Image or Message is missing for atleast one item in the cart."], 200);
         }
     }
-    catch (Exception $e) {
-        return response()->json(['message' => $e->getMessage()], 502);
-    }
-}
 
+    public function editCustomMessage(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $data['custom_text'] = $request->input('custom_text');
+
+            if ($id != "") {
+                $res = Cart::where('id', $id)->update($data);
+                if ($res) {
+                    return response()->json(['code' => 200, 'msg' => 'Message updated successfully.'], 200);
+                }
+            }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 502);
+        }
+    }
 }
