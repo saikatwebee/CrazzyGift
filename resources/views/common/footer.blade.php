@@ -1,5 +1,16 @@
+
+<style>
+    .social-icons{
+        display: flex;
+        flex-direction: row;
+    }
+    .social-img{
+        width: 55px !important;
+    }
+</style>
+
 <scetion class="firstFooter">
-    <div class="cardFooter">
+    {{-- <div class="cardFooter">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-3 col-sm-12">
@@ -23,7 +34,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="footerMain">
         <footer>
             <div class="container">
@@ -45,25 +56,25 @@
                             <div class="col-md-6 my-3">
                                 <h4>Explore</h4>
                                 <ul>
-                                    <li><a href="#">Search</a></li>
+                                   
                                     <li><a href="#">TERMS & CONDITION</a></li>
                                     <li><a href="#">Cancellation and Refund Policy</a></li>
-                                    <li><a href="#">Blog</a></li>
+                                    
                                     <li><a href="#">Privacy Policy</a></li>
                                     <li><a href="#">Shipping Policy</a></li>
                                 </ul>
                             </div>
-                            <div class="col-md-6 my-3">
-                                <h4>Recent Posts</h4>
-                                <ul>
-                                    <li><a href="#">Crazzygift Valentines Day Gift Ideas - The Sweet Expression
-                                            of Pure Love</a></li>
-                                    <li><a href="#">BEST PERSONALISED BIRTHDAY GIFT IDEAS FOR MAY BORN</a></li>
-                                    <li><a href="#">BEST PERSONALISED BIRTHDAY GIFT IDEAS FOR MAY BORN</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                            
                     </div>
+                    {{-- <div class="social-footer">
+                        {{-- <p>Follow us on social media for daily gift inspiration, updates, and contests.</p> --}}
+                       
+                    </div> --}}
+                </div>
+                <div class="social-icons">
+                    <a href="#" style="text-decoration: none;"><img src="https://static-00.iconduck.com/assets.00/facebook-icon-512x512-seb542ju.png" class="social-img" alt="Facebook"></a>
+                    <a href="#" style="text-decoration: none;"><img src="https://www.iconpacks.net/icons/2/free-twitter-logo-icon-2429-thumb.png" class="social-img" alt="Twitter"></a>
+                    <a href="#" style="text-decoration: none;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png" class="social-img" alt="Instagram"></a>
                 </div>
                 <div class="horizontalLine"></div>
                 <div class="text-center">

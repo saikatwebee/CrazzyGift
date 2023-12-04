@@ -27,10 +27,12 @@ class PaymentController extends Controller
     {
 
         try {
-            $api_key = 'rzp_test_rJOE3IGvN7MvAl';
-            $api_secret = 't0kvT9O051MYC2XremGfQrZY';
+             $api_key = 'rzp_test_rJOE3IGvN7MvAl';  //test api key
+           // $api_key ='rzp_live_I9JOKVozqJBsIR';
+             $api_secret = 't0kvT9O051MYC2XremGfQrZY';  // test secret key
+           // $api_secret ='ucsmbpjo28It9Sv98FFM6LEp';
             $item_name = "CrazzyGift";
-            $item_desc = "test Description";
+            $item_desc = "We would like to introduce ourselves as a team of enthusiasts who understand the emotion of gifting. We specialise in personalising your gifts and memories that brings a smile day after day.";
 
             $name = auth()->user()->name;
             $email = auth()->user()->email;
@@ -109,8 +111,11 @@ class PaymentController extends Controller
 
             $title = 'Payment Status|CrazzyGift';
 
-            $api_key = 'rzp_test_rJOE3IGvN7MvAl';
-            $api_secret = 't0kvT9O051MYC2XremGfQrZY';
+            $api_key = 'rzp_test_rJOE3IGvN7MvAl'; // test api key
+           //$api_key ='rzp_live_I9JOKVozqJBsIR';
+
+             $api_secret = 't0kvT9O051MYC2XremGfQrZY'; // test api secret key
+           // $api_secret ='ucsmbpjo28It9Sv98FFM6LEp';
 
             $url = "https://api.razorpay.com/v1/payments/$payment_id";
 
@@ -276,7 +281,7 @@ if(count($product_arr) > 0){
                 $this->eachCartDelete();
 
                //MAIL SEND
-                Mail::to($user_email)->send(new OrderPlacedEmail($order_data,$user_name));
+                Mail::to($user_email)->cc('orders@crazzygift.com')->send(new OrderPlacedEmail($order_data,$user_name));
 
                //sms for order confirmed
                 $recipientMobileNumber = "91" .$user_phone;
@@ -655,7 +660,7 @@ else{
                             Order::where('id', $id)->update(['order_status' => 5,'invoice'=>$invoiceNumber]);
                             
                             //email sent for order delivered 
-                            Mail::to($user_mail)->send(new deliveredEmail($order));
+                            Mail::to($user_mail)->cc('orders@crazzygift.com')->send(new deliveredEmail($order));
         
                             //sms for order delivered
                             $msg = "Your Order ". $order_id ." with CrazzyGIFT.com has been delivered successfully. Thank You for choosing CrazzyGIFT.com for your gifting needs. HA Creations"; 

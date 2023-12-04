@@ -22,75 +22,80 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use App\Mail\contactEmail;
+use App\Mail\registerEmail;
+
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
 
-   
+
 
     public function index()
     {
         $title = 'Home|CrazzyGift';
-        $banners = Banner::where('status',1)->orderBy('id','desc')->get();
-        $testimonials = Testimonial::where('status',1)->orderBy('id','desc')->get();
-        $occasionimages_large = Occasionimage::where(['status'=>1,'type'=>1])->orderBy('id','desc')->get();
-        $occasionimages_small = Occasionimage::where(['status'=>1,'type'=>2])->orderBy('id','desc')->get();
-       
-        $featured_collection = DB::table('sliders')->where(['type'=>1,'status'=>1])->orderBy('id', 'desc')->first();
-        $best_selling = DB::table('sliders')->where(['type'=>2,'status'=>1])->orderBy('id', 'desc')->first();
+        $banners = Banner::where('status', 1)->orderBy('id', 'desc')->get();
+        $testimonials = Testimonial::where('status', 1)->orderBy('id', 'desc')->get();
+        $occasionimages_large = Occasionimage::where(['status' => 1, 'type' => 1])->orderBy('id', 'desc')->get();
+        $occasionimages_small = Occasionimage::where(['status' => 1, 'type' => 2])->orderBy('id', 'desc')->get();
+
+        $featured_collection = DB::table('sliders')->where(['type' => 1, 'status' => 1])->orderBy('id', 'desc')->first();
+        $best_selling = DB::table('sliders')->where(['type' => 2, 'status' => 1])->orderBy('id', 'desc')->first();
 
         $productsString1 = $featured_collection->products;
-        $productsString2 = $best_selling->products; 
+        $productsString2 = $best_selling->products;
         $featured_products_ids = explode(',', $productsString1);
         $best_products_ids = explode(',', $productsString2);
 
-        
-        $res1=[];
-        foreach($featured_products_ids as $id1){
-           $featured_products = Product::where('id',$id1)->first();
-           $data1['id']=$featured_products->id;
-           $data1['product_image']=$featured_products->product_image;
-           $data1['title']=$featured_products->title;
-           $data1['price']=$featured_products->price;
-           $data1['actual_price'] = $featured_products->actual_price;
-           $data1['slug']=$featured_products->slug;
 
-           $res1[]=$data1;
+        $res1 = [];
+        foreach ($featured_products_ids as $id1) {
+            $featured_products = Product::where('id', $id1)->first();
+            $data1['id'] = $featured_products->id;
+            $data1['product_image'] = $featured_products->product_image;
+            $data1['title'] = $featured_products->title;
+            $data1['price'] = $featured_products->price;
+            $data1['actual_price'] = $featured_products->actual_price;
+            $data1['slug'] = $featured_products->slug;
+
+            $res1[] = $data1;
         }
 
-        $res2=[];
-        foreach($best_products_ids as $id2){
-          $best_products = Product::where('id',$id2)->first();
-          $data2['id']=$best_products->id;
-          $data2['product_image']=$best_products->product_image;
-          $data2['title']=$best_products->title;
-          $data2['price']=$best_products->price;
-          $data2['actual_price'] = $best_products->actual_price;
-          $data2['slug']=$best_products->slug;
-           $res2[]=$data2;
+        $res2 = [];
+        foreach ($best_products_ids as $id2) {
+            $best_products = Product::where('id', $id2)->first();
+            $data2['id'] = $best_products->id;
+            $data2['product_image'] = $best_products->product_image;
+            $data2['title'] = $best_products->title;
+            $data2['price'] = $best_products->price;
+            $data2['actual_price'] = $best_products->actual_price;
+            $data2['slug'] = $best_products->slug;
+            $res2[] = $data2;
         }
 
-   
-        return view('DashboardView', compact('title','banners','res1','res2','testimonials','occasionimages_large','occasionimages_small'));
+
+        return view('DashboardView', compact('title', 'banners', 'res1', 'res2', 'testimonials', 'occasionimages_large', 'occasionimages_small'));
     }
 
-    public function aboutUs(){
+    public function aboutUs()
+    {
         $title = 'About Us | CrazzyGift';
         $heading = 'About Us';
-        return view('aboutUs', compact('title','heading'));
+        return view('aboutUs', compact('title', 'heading'));
     }
 
-    public function contactUs(){
+    public function contactUs()
+    {
         $title = 'Contact Us | CrazzyGift';
         $heading = 'Contact Us';
-        return view('contactUs', compact('title','heading'));
+        return view('contactUs', compact('title', 'heading'));
     }
 
-    public function corporateGifts(){
+    public function corporateGifts()
+    {
         $title = 'Corporate Gifts | CrazzyGift';
         $heading = 'Corporate Gifts';
-        return view('corporateGift', compact('title','heading'));
+        return view('corporateGift', compact('title', 'heading'));
     }
 
 
@@ -137,8 +142,8 @@ class UserController extends Controller
     {
         $title = 'My Profile|CrazzyGift';
         $user_id = auth()->user()->id;
-        $orders = Order::where(['user_id' => $user_id])->orderBy('id','desc')->get();
-         $trackingData = [];
+        $orders = Order::where(['user_id' => $user_id])->orderBy('id', 'desc')->get();
+        $trackingData = [];
         if ($orders) {
             if (count($orders) > 0) {
                 foreach ($orders as $order) {
@@ -146,17 +151,19 @@ class UserController extends Controller
 
                     $curl = curl_init();
 
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => 'https://plapi.ecomexpress.in/track_me/api/mawbd/',
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS => array('username' => 'HACREATIONSLLP914909', 'password' => 'UlewRODjHc', 'awb' => $order->awb),
-                    )
+                    curl_setopt_array(
+                        $curl,
+                        array(
+                            CURLOPT_URL => 'https://plapi.ecomexpress.in/track_me/api/mawbd/',
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS => array('username' => 'HACREATIONSLLP914909', 'password' => 'UlewRODjHc', 'awb' => $order->awb),
+                        )
                     );
 
                     $response = curl_exec($curl);
@@ -165,20 +172,18 @@ class UserController extends Controller
                     if ($httpCode === 200) {
 
                         $trackShipping = simplexml_load_string($response);
-                       if(count($trackShipping->object) > 0){
+                        if (count($trackShipping->object) > 0) {
                             $order->track_shipping = $trackShipping;
-                       }
-                       else{
-                        $order->track_shipping = null;
+                        } else {
+                            $order->track_shipping = null;
                         }
-
                     }
 
                     curl_close($curl);
                 }
             }
         }
-        
+
         $addresses = Address::where(['user_id' => $user_id])->get();
         return view('ProfileView', compact('title', 'orders', 'addresses'));
     }
@@ -220,14 +225,11 @@ class UserController extends Controller
                 $user_id = auth()->user()->id;
                 $res = $this->transferCartFromGoogle($user_id);
 
-                if($res){
+                if ($res) {
                     return redirect()->route('shippingcart');
-                }
-                else{
+                } else {
                     return redirect('/');
                 }
-
-
             } else {
 
                 return redirect()->route('login');
@@ -235,7 +237,7 @@ class UserController extends Controller
         } else {
 
 
-          //  echo "not found";
+            //  echo "not found";
 
 
             $create = [
@@ -249,20 +251,17 @@ class UserController extends Controller
 
             $newUser = User::create($create);
             if ($newUser) {
-                
+
                 if (auth()->attempt(['username' => $user->email, 'password' => 'Zikra@Byte'])) {
                     $token = auth()->user()->createToken('passport_token')->accessToken;
 
                     $user_id = auth()->user()->id;
                     $res = $this->transferCartFromGoogle($user_id);
-                    if($res){
+                    if ($res) {
                         return redirect()->route('shippingcart');
-                    }
-                    else{
+                    } else {
                         return redirect('/');
                     }
-                  
-
                 } else {
                     redirect()->route('login');
                 }
@@ -288,30 +287,23 @@ class UserController extends Controller
 
                 foreach ($cartsData as $cartItem) {
                     $cartItem['user_id'] = $user_id;
-    
-                   if(Cart::where(['user_id'=>$user_id,'product_id'=>$cartItem['product_id'] ])->exists()){
 
-                   $existingCart =  Cart::where(['user_id'=>$user_id,'product_id'=>$cartItem['product_id'] ])->first();
-                   
-                   $cartItem['quantity'] = (int)$existingCart->quantity + (int) $cartItem['quantity'];
+                    if (Cart::where(['user_id' => $user_id, 'product_id' => $cartItem['product_id']])->exists()) {
 
-                    DB::table('carts')->where(['user_id'=>$user_id,'product_id'=>$cartItem['product_id'] ])->update($cartItem);
+                        $existingCart =  Cart::where(['user_id' => $user_id, 'product_id' => $cartItem['product_id']])->first();
 
-                   }
-                   else{
+                        $cartItem['quantity'] = (int)$existingCart->quantity + (int) $cartItem['quantity'];
+
+                        DB::table('carts')->where(['user_id' => $user_id, 'product_id' => $cartItem['product_id']])->update($cartItem);
+                    } else {
                         DB::table('carts')->insert($cartItem);
-                   }
-                    
-
+                    }
                 }
 
                 return true;
-
-            }
-            else{
+            } else {
                 return false;
             }
-            
         }
     }
 
@@ -325,17 +317,17 @@ class UserController extends Controller
 
             $rules = [
                 'name' => 'required|string',
-                'phone'=> 'required|unique:users',
+                'phone' => 'required|unique:users',
                 'email' => 'required'
-              
+
             ];
-    
-             $validator = Validator::make($request->all(), $rules);
-            
-               
-                if ($validator->fails()) {
-                    return response()->json(['errors' => $validator->errors()], 400);
-                }
+
+            $validator = Validator::make($request->all(), $rules);
+
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
 
 
 
@@ -354,20 +346,20 @@ class UserController extends Controller
                 $otp = rand(1000, 9999);
                 //$authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
                 $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
-                
-                 //$senderId = "SLMYCL"; //sellMySell sendeId
+
+                //$senderId = "SLMYCL"; //sellMySell sendeId
                 $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
 
                 //$msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
-                 $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
+                $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
 
                 //  $dlt_id="1307161933111595817"; //sellmycell dlt
-                  $dlt_id="1707169709936342305"; //crazzygift dlt
+                $dlt_id = "1707169709936342305"; //crazzygift dlt
 
 
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=' . $dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -379,19 +371,19 @@ class UserController extends Controller
 
                 if ($httpCode == 200) {
 
-                    // insert the record in database after succesfully call the msg91 api
-
-                   $user = User::create([
+                    $registerData = [
                         'name' => $name,
                         'phone' => $phone,
                         'email' => $email,
                         'username' => $phone,
                         'otp' => (int) $otp,
                         'password' => Hash::make('Zikra@Byte'),
-                    ]);
+                    ];
 
-                    //mail to be sent for registration
-                    Mail::to($user->email)->send(new registerEmail($user));
+                    // store registraion data into session after succesfully call the msg91 api
+                    $token_register = uniqid(); // Generate a unique token
+                    session(['tokenRegister' => $token_register]);
+                    session(['register_' . $token_register => $registerData]);
 
                     $response = ['msg' => 'Otp has been sent successfully', 'code' => 200];
                 } else {
@@ -406,7 +398,8 @@ class UserController extends Controller
     }
 
 
-    public function sentMail(Request $request){
+    public function sentMail(Request $request)
+    {
 
         $data = $request->all();
         if (isset($data)) {
@@ -414,32 +407,29 @@ class UserController extends Controller
             foreach ($data as $row) {
                 $updata[$row['name']] = $row['value'];
             }
-    
+
             $rules = [
                 'name' => 'required|string',
                 'email' => 'required|email',
                 'phone' => 'required',
                 'desc' => 'required'
-               
+
             ];
-        
-           
+
+
             $validator = Validator::make($updata, $rules);
-        
-           
+
+
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
 
-            
+
 
             Mail::to($updata['email'])->send(new contactEmail($updata));
-                
-            return response()->json(['code'=>200,'msg'=>'Thank you for reaching out. Our team will promptly attend to your inquiry and will be in touch shortly.'],200);
 
-
+            return response()->json(['code' => 200, 'msg' => 'Thank you for reaching out. Our team will promptly attend to your inquiry and will be in touch shortly.'], 200);
         }
-       
     }
 
 
@@ -459,20 +449,20 @@ class UserController extends Controller
                 $otp = rand(1000, 9999);
                 //$authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
                 $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
-                
-                 //$senderId = "SLMYCL"; //sellMySell sendeId
+
+                //$senderId = "SLMYCL"; //sellMySell sendeId
                 $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
 
-               // $msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
-                 $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
+                // $msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
+                $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
 
                 //  $dlt_id="1307161933111595817"; //sellmycell dlt
-                  $dlt_id="1707169709936342305"; //crazzygift dlt
+                $dlt_id = "1707169709936342305"; //crazzygift dlt
 
 
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=' . $dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -490,9 +480,6 @@ class UserController extends Controller
                 } else {
                     $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
                 }
-
-
-
             } else {
                 $response = ['msg' => 'Phone number not found. Please verify the Phone number and try again.', 'code' => 210];
             }
@@ -512,25 +499,22 @@ class UserController extends Controller
             $userOtp = (int) $str;
             $phone = $request->input('phone');
 
-
-
             if (User::where('username', $phone)->orWhere('phone', $phone)->where('otp', $userOtp)->exists()) {
 
-              
-                    $user = User::where('username', $phone)->orWhere('phone', $phone)->where('otp', $userOtp)->first();
-                    $username = $user->username;
-                        
+
+                $user = User::where('username', $phone)->orWhere('phone', $phone)->where('otp', $userOtp)->first();
+                $username = $user->username;
+
                 // authentication attempt
                 if (auth()->attempt(['username' => $username, 'password' => 'Zikra@Byte'])) {
                     $token = auth()->user()->createToken('passport_token')->accessToken;
 
-                    if(User::where(['id'=>auth()->user()->id,'is_verified'=>0])->exists()){
-                        $data['is_verified']=1;
-                        User::where('id',auth()->user()->id)->update($data);
+                    if (User::where(['id' => auth()->user()->id, 'is_verified' => 0])->exists()) {
+                        $data['is_verified'] = 1;
+                        User::where('id', auth()->user()->id)->update($data);
                     }
 
-                        $response = ['msg' => 'OTP Verified successfully!', 'code' => 200];
-
+                    $response = ['msg' => 'OTP Verified successfully!', 'code' => 200];
                 } else {
 
                     $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
@@ -546,14 +530,63 @@ class UserController extends Controller
         }
     }
 
-    //only for login with otp
-    public function resendOtp(Request $request){
+    public function verifyOtpRegister(Request $request)
+    {
+        try {
 
-        if($request->input('phone')!=""){
-            
+            $token_register = session('tokenRegister');
+            $registerData = session('register_' . $token_register);
+
+            $str = $request->input('otp1') . "" . $request->input('otp2') . "" . $request->input('otp3') . "" . $request->input('otp4');
+            $userOtp = (int) $str;
+            $phone = $request->input('phone');
+            if ($registerData['otp'] == $userOtp) {
+                //otp verified
+                $registerUser = User::create($registerData); //insert register data into user table
+                //mail to be sent for registration
+                Mail::to($registerUser->email)->cc('orders@crazzygift.com')->send(new registerEmail($registerUser));
+                //attempt to direct login after registration
+
+                $user = User::where('username', $phone)->orWhere('phone', $phone)->where('otp', $userOtp)->first();
+                $username = $user->username;
+
+                // authentication attempt
+                if (auth()->attempt(['username' => $username, 'password' => 'Zikra@Byte'])) {
+                    $token = auth()->user()->createToken('passport_token')->accessToken;
+
+                    if (User::where(['id' => auth()->user()->id, 'is_verified' => 0])->exists()) {
+                        $data['is_verified'] = 1;
+                        User::where('id', auth()->user()->id)->update($data);
+                    }
+
+                    $response = ['msg' => 'OTP Verified successfully!', 'code' => 200];
+                } else {
+
+                    $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
+                }
+
+                
+            } else {
+                //otp verification failed
+                $response = ['msg' => 'OTP Verification failed!', 'code' => 210];
+            }
+
+            return response()->json($response, 200);
+
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 502);
+        }
+    }
+
+    //only for login with otp
+    public function resendOtp(Request $request)
+    {
+
+        if ($request->input('phone') != "") {
+
             $phone = $request->input('phone');
 
-             if (User::where('username', $phone)->orWhere('phone', $phone)->exists()) {
+            if (User::where('username', $phone)->orWhere('phone', $phone)->exists()) {
 
                 $user = User::where('username', $phone)->orWhere('phone', $phone)->first();
                 $username = $user->username;
@@ -564,20 +597,20 @@ class UserController extends Controller
                 $otp = rand(1000, 9999);
                 //$authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
                 $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
-                
-                 //$senderId = "SLMYCL"; //sellMySell sendeId
+
+                //$senderId = "SLMYCL"; //sellMySell sendeId
                 $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
 
                 //$msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
-                 $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
+                $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
 
                 //  $dlt_id="1307161933111595817"; //sellmycell dlt
-                    $dlt_id="1707169709936342305"; //crazzygift dlt
+                $dlt_id = "1707169709936342305"; //crazzygift dlt
 
 
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=' . $dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -597,9 +630,6 @@ class UserController extends Controller
                 } else {
                     $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
                 }
-
-
-
             } else {
                 $response = ['msg' => 'Phone number not found. Please verify the Phone number and try again.', 'code' => 210];
             }
@@ -608,37 +638,30 @@ class UserController extends Controller
         }
     }
 
-    public function verifyOtpProfile(Request $request){
+    public function verifyOtpProfile(Request $request)
+    {
         $str = $request->input('otp1') . "" . $request->input('otp2') . "" . $request->input('otp3') . "" . $request->input('otp4');
         $userOtp = (int) $str;
         $user_id = auth()->user()->id;
 
-        if($userOtp!=""){
-                if (User::where(['id' =>$user_id ,'otp' => $userOtp])->exists()) {
-            //verfied
-            if(User::where(['id'=>auth()->user()->id,'is_verified'=>0])->exists()){
-
-                        
-                            $data['is_verified']=1;
-                            User::where('id',auth()->user()->id)->update($data);
-
-                            //return response()->json(['msg'=>'Your phone number has been verified successfully.','code'=>200],200);
-                            return redirect('/')->with('success', 'Your phone number has been verified successfully.');
+        if ($userOtp != "") {
+            if (User::where(['id' => $user_id, 'otp' => $userOtp])->exists()) {
+                //verfied
+                if (User::where(['id' => auth()->user()->id, 'is_verified' => 0])->exists()) {
 
 
-                    }
+                    $data['is_verified'] = 1;
+                    User::where('id', auth()->user()->id)->update($data);
+
+                    //return response()->json(['msg'=>'Your phone number has been verified successfully.','code'=>200],200);
+                    return redirect('/')->with('success', 'Your phone number has been verified successfully.');
+                }
+            } else {
+                //return response()->json(['msg'=>'Invalid OTP!','code'=>210],200);
+                // return redirect('/Myprofile')->with('error', 'Invalid OTP!');
+                return redirect()->route('profile')->with('error', 'Invalid OTP!');
+            }
         }
-        else{
-             //return response()->json(['msg'=>'Invalid OTP!','code'=>210],200);
-            // return redirect('/Myprofile')->with('error', 'Invalid OTP!');
-            return redirect()->route('profile')->with('error', 'Invalid OTP!');
-
-
-        }
-
-        }
-        
-
     }
 
 
@@ -707,16 +730,16 @@ class UserController extends Controller
                 'phone' => 'required|unique:users',
                 'email' => 'required',
             ];
-    
-    
-    
+
+
+
             $validator = Validator::make($request->all(), $rules);
-    
-    
+
+
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
-    
+
 
 
 
@@ -725,25 +748,25 @@ class UserController extends Controller
             $data['phone'] = trim($request->input('phone'));
             $data['email'] = trim($request->input('email'));
 
-            if(auth()->user()->is_verified==0){
+            if (auth()->user()->is_verified == 0) {
                 $recipientMobileNumber = "91" . $request->input('phone');
                 $otp = rand(1000, 9999);
-               // $authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
+                // $authKey = '120132A9wLo7oCT63fc9230P1'; //sellMySell auth key
                 $authKey = '406334AgH6x4iTnFh16527aef9P1'; //crazzygift auth key
-                
-                 //$senderId = "SLMYCL"; //sellMySell sendeId
+
+                //$senderId = "SLMYCL"; //sellMySell sendeId
                 $senderId = "CRZGFT"; // crazzygift sellMySell sendeId
 
                 //$msg = "Your verification OTP for SellMyCell is $otp. Don't share it with anyone."; //sellmysell msg
                 $msg = "Your One Time Password for login into CrazzyGIFT.com is $otp. Please do not share. HA Creations."; //crazzygift msg
 
                 //  $dlt_id="1307161933111595817"; //sellmycell dlt
-                  $dlt_id="1707169709936342305"; //crazzygift dlt
+                $dlt_id = "1707169709936342305"; //crazzygift dlt
 
 
                 $message = urlencode($msg);
 
-                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID='.$dlt_id;
+                $api_url = 'https://api.msg91.com/api/sendhttp.php?mobiles=' . $recipientMobileNumber . '&authkey=' . $authKey . '&route=4&sender=' . $senderId . '&message=' . $message . '&country=91&DLT_TE_ID=' . $dlt_id;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -760,19 +783,15 @@ class UserController extends Controller
 
                     $res = User::where('id', $id)->update($data);
 
-                    return response()->json(['msg'=>'Profile updated successfully!','code'=>200,'is_verified'=>'0'],200);
+                    return response()->json(['msg' => 'Profile updated successfully!', 'code' => 200, 'is_verified' => '0'], 200);
                 } else {
-                    
-                    return response()->json(['msg'=>'Something went wrong,check your Internet Connection & try again','code'=>210],200);
+
+                    return response()->json(['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210], 200);
                 }
-
-            }else{
-                     $res = User::where('id', $id)->update($data);
-                     return response()->json(['msg'=>'Profile updated successfully!','code'=>200,'is_verified'=>'1'],200);
+            } else {
+                $res = User::where('id', $id)->update($data);
+                return response()->json(['msg' => 'Profile updated successfully!', 'code' => 200, 'is_verified' => '1'], 200);
             }
-
-
-          
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 502);
         }

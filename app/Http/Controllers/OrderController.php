@@ -111,7 +111,7 @@ class OrderController extends Controller
 
             $shippingDefault = Address::where(['user_id' => $user_id, 'is_shipping_address' => 1, 'status' => 2])->whereNull('is_billing_address')->first();
 
-                $gst_details = GST::first();
+            $gst_details = GST::where('status',1)->first();
 
 
 
@@ -696,6 +696,50 @@ class OrderController extends Controller
 
         $address=Address::where('id',$id)->first();
         return response()->json($address);
+
+    }
+
+    public function updateAddress(Request $request){
+        //var_dump($request->all());
+
+        $rules = [
+             'name' => 'required',
+            'street_address1' => 'required|string',
+            'street_address2' => 'required|string',
+            'city' => 'required|string',
+           'state' => 'required',
+           'phone' => 'required',
+           'postal_code' => 'required',
+
+
+        ];
+
+       
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
+        $id = $request->input('id');
+        $data['name'] = $request->input('name');
+        $data['street_address1'] =$request->input('street_address1');
+        $data['street_address2'] =$request->input('street_address2');
+        $data['street_address3'] =$request->input('street_address3'); 
+        $data['city'] =$request->input('city');
+        $data['state'] =$request->input('state');
+        $data['phone'] =$request->input('phone');
+        $data['alternate_phone'] =$request->input('alternate_phone');   
+
+
+       $res = Address::where('id',$id)->update($data);
+       if($res){
+            return response()->json(['code'=>200,'msg'=>'Address Updated successfully.']);
+       }
+
 
     }
 }

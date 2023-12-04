@@ -6,7 +6,7 @@
 
 
     <style>
-        .container {
+        .animate-container {
             /* opacity: 0;
             transform: scale(0.8);
             transition: opacity 1s ease-in-out, transform 1s ease-in-out; */
@@ -32,7 +32,7 @@
 
 
 
-    <section class="carousal container mb-4" style="margin-top: 3vh;">
+    <section class="carousal container animate-container mb-4" style="margin-top: 3vh;">
         <div class="slider-container">
             <div class="owl-slide">
 

@@ -20,31 +20,48 @@
                 <div class="row">
                     <div class="col-lg-2" id="col-LG-2">
                         <div class="sideProductImg ">
-                            <img src="{{($product->product_image) ? asset('/products').'/'.$product->product_image : asset('/products/dummyProduct.jpg') }}" class="side-item active"
-                                onmouseenter="imagePreviewOnHover(event)" alt="product_details">
+                            <img src="{{ $product->product_image ? asset('/products') . '/' . $product->product_image : asset('/products/dummyProduct.jpg') }}"
+                                class="side-item active" onmouseenter="imagePreviewOnHover(event)" alt="product_details">
                         </div>
 
-                        <div class="sideProductImg my-2">
-                            <img src="{{ $product->product_alt_image1 ?: 'https://crazzygift.netlify.app/assets/img/icons/user3.png' }}"
-                                class="side-item"  onmouseenter="imagePreviewOnHover(event)"
-                                alt="product_details">
-                        </div>
+                       
+                        @if ($altImages)
+                        
+                            @if (count($altImages) > 0)
+                                @foreach ($altImages as $altImage)
+                                    <div class="sideProductImg my-2">
+                                        <img src="{{ asset('/product_alt') . '/' . $altImage }}" class="side-item"
+                                            onmouseenter="imagePreviewOnHover(event)" alt="product_details">
+                                    </div>
+                                @endforeach
+                            
+                            @endif
 
-                        <div class="sideProductImg my-2">
-                            <img src="{{ $product->product_alt_image2 ?: 'https://crazzygift.netlify.app/assets/img/icons/user2.png' }}"
-                                class="side-item"  onmouseenter="imagePreviewOnHover(event)"
-                                alt="product_details">
-                        </div>
+                            @else
+                                <div class="sideProductImg my-2">
+                                    <img src="{{ 'https://crazzygift.netlify.app/assets/img/icons/user3.png' }}"
+                                        class="side-item" onmouseenter="imagePreviewOnHover(event)" alt="product_details">
+                                </div>
 
-                        <div class="sideProductImg my-2">
-                            <img src="{{ $product->product_alt_image3 ? $product->product_alt_image3 : 'https://crazzygift.netlify.app/assets/img/icons/user1.png' }}"
-                                class="side-item"  onmouseenter="imagePreviewOnHover(event)"
-                                alt="product_details">
-                        </div>
+                                <div class="sideProductImg my-2">
+                                    <img src="{{ 'https://crazzygift.netlify.app/assets/img/icons/user2.png' }}"
+                                        class="side-item" onmouseenter="imagePreviewOnHover(event)" alt="product_details">
+                                </div>
+
+                                <div class="sideProductImg my-2">
+                                    <img src="{{ 'https://crazzygift.netlify.app/assets/img/icons/user1.png' }}"
+                                        class="side-item" onmouseenter="imagePreviewOnHover(event)" alt="product_details">
+                                </div>
+
+                        @endif
+
+
+
                     </div>
                     <div class="col-lg-10">
                         <div class="mainProductImg">
-                            <img src="{{($product->product_image) ? asset('/products').'/'.$product->product_image : asset('/products/dummyProduct.jpg') }}" id="showPreview" alt="product_details" style="border-radius: 10px;">
+                            <img src="{{ $product->product_image ? asset('/products') . '/' . $product->product_image : asset('/products/dummyProduct.jpg') }}"
+                                id="showPreview" alt="product_details" style="border-radius: 10px;">
                         </div>
                     </div>
                 </div>
@@ -56,7 +73,7 @@
                         <h3><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->price }}</h3>
                     </div>
 
-                    
+
                     <div class="quantity_selector">
                         <div class="quantityBtn">
                             <b>Quantity</b>
@@ -91,11 +108,15 @@
                             <input type="hidden" name="quantity" id="product_quantity" value="1">
                             <input type="hidden" name="pincode">
                             <div class="cart-btns">
-                                <a href="javascript:void(0)" id="add_cart"><button id="add_cart_btn"><i class="fa-solid fa-cart-shopping" style="margin-right: 6px;"></i>Add to cart</button></a>
-                            
-                                <a href="{{url('/products-all')}}" id="continue_cart"><button type="button" id="continue_cart_btn" class="mt-3">Continue Shopping<i class="fa-solid fa-arrow-right-long" style="margin-left: 6px;"></i></button></a>
+                                <a href="javascript:void(0)" id="add_cart"><button id="add_cart_btn"><i
+                                            class="fa-solid fa-cart-shopping" style="margin-right: 6px;"></i>Add to
+                                        cart</button></a>
+
+                                <a href="{{ url('/products-all') }}" id="continue_cart"><button type="button"
+                                        id="continue_cart_btn" class="mt-3">Continue Shopping<i
+                                            class="fa-solid fa-arrow-right-long" style="margin-left: 6px;"></i></button></a>
                             </div>
-                           
+
                         </form>
 
                     </div>
@@ -104,7 +125,8 @@
                         <p>{!! $product->description !!}</p>
 
                         <ul>
-                            <li><strong>Size</strong> - {{ $product->product_length }} (width) x {{ $product->product_height }} (height)
+                            <li><strong>Size</strong> - {{ $product->product_length }} (width) x
+                                {{ $product->product_height }} (height)
                                 x {{ $product->product_breadth }} (thickness)</li>
                             {{-- <li><strong>Material</strong> - European quality crystal</li> --}}
                             <li><strong>To Personalize</strong> - Email photo to designs@crazzygift.com with Order ID. Our
@@ -123,17 +145,22 @@
                 <h3>Similar Products</h3>
             </div>
 
-           
+
             @foreach ($similarProducts as $similarProduct)
                 <div class="col-lg-3 my-3">
-                    <div class="products" onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">
-                        <div class="slide-image" onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">
-                            <img src="{{($similarProduct->product_image) ? asset('/products').'/'.$similarProduct->product_image : asset('/products/dummyProduct.jpg') }}" alt="Slide 1" class="slide"
-                            onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">
+                    <div class="products"
+                        onclick="window.location.href='{{ url('/productDetails') . '/' . $similarProduct->slug }}';">
+                        <div class="slide-image"
+                            onclick="window.location.href='{{ url('/productDetails') . '/' . $similarProduct->slug }}';">
+                            <img src="{{ $similarProduct->product_image ? asset('/products') . '/' . $similarProduct->product_image : asset('/products/dummyProduct.jpg') }}"
+                                alt="Slide 1" class="slide"
+                                onclick="window.location.href='{{ url('/productDetails') . '/' . $similarProduct->slug }}';">
                             {{-- <a href="{{ url('') . '/productDetails/' . $similarProduct->slug }}" class="overlay2">
                                 <button>Quick View</button>
                             </a> --}}
-                            <button type="button" class="btn btn-sm quick-view" onclick="window.location.href='{{url('/productDetails').'/'.$similarProduct->slug}}';">Quick View</button>
+                            <button type="button" class="btn btn-sm quick-view"
+                                onclick="window.location.href='{{ url('/productDetails') . '/' . $similarProduct->slug }}';">Quick
+                                View</button>
                         </div>
                         <div class="slide-caption">
                             <h2>{{ $similarProduct->title }}</h2>
@@ -144,7 +171,7 @@
             @endforeach
 
 
-           
+
         </div>
 
         <script>
@@ -169,12 +196,12 @@
                     }
 
                     var html = 'Service Available in Your Area  <i class="fa-solid fa-circle-check"></i>';
-                    
-                    
-                    
+
+
+
                     if ($("#responseLocation").hasClass('text-error')) {
                         $("#responseLocation").removeClass('text-error');
-                        $("#responseLocation").addClass('text-success'); 
+                        $("#responseLocation").addClass('text-success');
 
                     } else {
                         $("#responseLocation").addClass('text-success');

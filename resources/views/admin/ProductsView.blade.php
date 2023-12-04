@@ -90,13 +90,18 @@
                     <div class="profilebox-item">
 
                         <div class="profile-picture2">
+
                             <img src="https://www.pacificfoodmachinery.com.au/media/catalog/product/placeholder/default/no-product-image-400x400.png"
                                 id="edit_product_img" alt="Profile Picture"
                                 style="width: 255px;height: 255px;border-radius: 10px;border-color: transparent;">
 
                         </div>
 
+
                     </div>
+                    <!-- Add this div in your modal -->
+                    <div id="altImagesContainer" class="alt-images-container"></div>
+
                     <form id="editProductForm" method="post" action="{{ url('/admin/editProduct') }}"
                         enctype="multipart/form-data">
                         <input type="hidden" name="id" id="eid">
@@ -118,10 +123,6 @@
                                 placeholder="Enter Product Code" />
 
                         </div>
-
-
-
-
 
                         <div class="form-group">
                             <label for="edit_category">Category</label>
@@ -211,8 +212,13 @@
                         </div>
                         <div class="form-group">
                             <label for="edit_actual_price">Actual Price</label>
-                            <input type="number" name="actual_price" id="edit_actual_price"  placeholder="Enter Actual Price"
-                                class="form-control">
+                            <input type="number" name="actual_price" id="edit_actual_price"
+                                placeholder="Enter Actual Price" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_gst">GST</label>
+                            <input type="number" name="gst" id="edit_gst"
+                                placeholder="Enter GST" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="edit_product_status">Status</label>
@@ -234,7 +240,7 @@
                             <label for="slide_products">Select Tags</label>
 
                             <select class="selectpicker" multiple aria-label="Default select example"
-                                data-live-search="true" name="tags[]"  id="edit_tags">
+                                data-live-search="true" name="tags[]" id="edit_tags">
 
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->name }}">{{ $category->name }}</option>
@@ -255,7 +261,7 @@
 
 
                         <div class="form-group">
-                            <label>Upload Image</label>
+                            <label>Upload Product Image</label>
                             <label class="uploadFile">
                                 <i class="fas fa-paperclip fa-md mr-2"></i>
                                 <span class="filename">Attachment</span>
@@ -266,6 +272,18 @@
 
                         </div>
 
+
+                        <div class="form-group">
+                            <label>Upload Product Alternative Images</label>
+                            <label class="uploadFile">
+                                <i class="fas fa-paperclip fa-md mr-2"></i>
+                                <span class="filename">Attachment</span>
+                                <input type="file" class="inputfile form-control" name="product_alt_image[]"
+                                    id="edit_product_alt_image" accept="image/*" multiple>
+                            </label>
+                            <p class="text-danger font-weight-bolder">Note : Note :Upload Multiple Image</p>
+
+                        </div>
 
 
                 </div>
@@ -282,24 +300,32 @@
 
 
     <script>
+        // tinymce.init({
+        //     selector: 'textarea#edit_description',
+        //     plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+        //     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        //     tinycomments_mode: 'embedded',
+        //     tinycomments_author: 'Author name',
+        //     mergetags_list: [{
+        //             value: 'First.Name',
+        //             title: 'First Name'
+        //         },
+        //         {
+        //             value: 'Email',
+        //             title: 'Email'
+        //         },
+        //     ],
+        //     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject(
+        //         "See docs to implement AI Assistant")),
+        // });
+
         tinymce.init({
             selector: 'textarea#edit_description',
-            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            mergetags_list: [{
-                    value: 'First.Name',
-                    title: 'First Name'
-                },
-                {
-                    value: 'Email',
-                    title: 'Email'
-                },
-            ],
-            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject(
-                "See docs to implement AI Assistant")),
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
+
+
 
 
         function FormReset(id) {

@@ -555,7 +555,8 @@ class ProductController extends Controller
             ->take(4)
             ->get();
         $title = 'Product Details|CrazzyGift';
-        return view('ProductDetailsView', compact('title', 'product', 'similarProducts'));
+        $altImages = json_decode($product->product_alt_images, true);
+        return view('ProductDetailsView', compact('title', 'product', 'similarProducts','altImages'));
     }
 
     public function ecom()
@@ -940,15 +941,19 @@ class ProductController extends Controller
                 if (is_numeric($cart_id)) {
 
                     $cart = Cart::where('id', $cart_id)->first();
+                    // var_dump($cart);
+                    // die;
+                    if($cart){
+                        if ($cart->custom_image != "") {
 
-                    if ($cart->custom_image != "") {
-
-                        $existingImagePath = $uploadPath . '/' . $cart->custom_image;
-
-                        if (file_exists($existingImagePath)) {
-                            unlink($existingImagePath);
+                            $existingImagePath = $uploadPath . '/' . $cart->custom_image;
+    
+                            if (file_exists($existingImagePath)) {
+                                unlink($existingImagePath);
+                            }
                         }
                     }
+                   
                     $image->move($uploadPath, $image_name);
 
                     DB::table('carts')->where('id', $cart_id)->update(array('custom_image' => $image_name));
