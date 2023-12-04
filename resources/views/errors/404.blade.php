@@ -18,7 +18,8 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="{{ asset('/css/vertical-layout-light/style.css') }}">
   <!-- endinject -->
-  <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" />
+  {{-- <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" /> --}}
+  <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
@@ -33,11 +34,11 @@
           <div class="col-lg-7 mx-auto text-white">
             <div class="row align-items-center d-flex flex-row">
               <div class="col-lg-6 text-lg-right pr-lg-4">
-                <h1 class="display-1 mb-0">403</h1>
+                <h1 class="display-1 mb-0">404</h1>
               </div>
               <div class="col-lg-6 error-page-divider text-lg-left pl-lg-4">
                 <h2>SORRY!</h2>
-                <h3 class="font-weight-light">Access Denied!</h3>
+                <h3 class="font-weight-light">Not Found!</h3>
               </div>
             </div>
             <div class="row mt-5">
@@ -47,7 +48,7 @@
             </div>
             <div class="row mt-5">
               <div class="col-12 mt-xl-2">
-                <p class="text-white font-weight-medium text-center">Copyright &copy; 2021  All rights reserved.</p>
+                <p class="text-white font-weight-medium text-center">Copyright © 2023 CrazzyGift</p>
               </div>
             </div>
           </div>

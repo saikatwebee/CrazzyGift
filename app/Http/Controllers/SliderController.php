@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use App\Models\Occasionimage;
 use App\Models\Slider;
+use App\Models\GST;
 
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -38,6 +39,15 @@ class SliderController extends Controller
         $heading = "Menus";
         $menus = Menu::orderBy('id', 'desc')->get();
         return view('admin.MenuView', compact('title', 'heading', 'menus'));
+    }
+
+
+    public function additionalSetting()
+    {
+        $title = 'CGST/SGST | CrazzyGift';
+        $heading = "CGST/SGST";
+
+        return view('admin.AdditionalView', compact('title', 'heading'));
     }
 
     public function addMenuView()
@@ -105,19 +115,33 @@ class SliderController extends Controller
         return response()->json($banners);
     }
 
-     public function getOccasionImages()
+    public function getGst(Request $request)
+    {
+
+        $id = $request->input('id');
+        $gst = GST::where('id', $id)->first();
+        return response()->json($gst);
+    }
+
+    public function getOccasionImages()
     {
         $images = Occasionimage::orderBy('id', 'desc')->get();
         return response()->json($images);
     }
 
 
-    
+
 
     public function getAllCategories()
     {
         $categories = MainCategory::orderBy('id', 'desc')->get();
         return response()->json($categories);
+    }
+
+    public function getGstDetails()
+    {
+        $gsts = GST::orderBy('id', 'desc')->get();
+        return response()->json($gsts);
     }
 
 
@@ -143,7 +167,7 @@ class SliderController extends Controller
         return response()->json($image);
     }
 
-    
+
 
     public function getSlider(Request $request)
     {
@@ -159,7 +183,7 @@ class SliderController extends Controller
         return response()->json($slider);
     }
 
-    
+
 
 
     public function getAllSliders()
@@ -246,7 +270,7 @@ class SliderController extends Controller
         }
     }
 
-      public function TestimonialDelete(Request $request)
+    public function TestimonialDelete(Request $request)
     {
         if ($request->has('id')) {
 
@@ -297,6 +321,47 @@ class SliderController extends Controller
                     $res = $slider->save();
                     if ($res) {
                         return response()->json(['code' => 200, 'msg' => 'Slider status changed successfully'], 200);
+                    }
+                }
+            }
+        }
+    }
+
+    public function gstStatusUpdate(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+            $gst = GST::find($id);
+
+            $ch = GST::where(['status' => 1])->get();
+
+
+            if ($gst->status == 2) {
+                GST::where(['status' => 1])->update(['status' => 2]);
+
+                $gst->status = ($gst->status == 1) ? 2 : 1;
+
+                $gst->updated_at = date('Y-m-d H:i:s');
+                $res = $gst->save();
+                if ($res) {
+                    return response()->json(['code' => 200, 'msg' => 'GST status changed successfully'], 200);
+                }
+            }
+
+            if ($gst->status == 1) {
+
+
+                if (count($ch) < 2) {
+
+                    return response()->json(['errors' => "Atleast one GST details is mandatory"], 400);
+                } else {
+                    $gst->status = ($gst->status == 1) ? 2 : 1;
+
+                    $gst->updated_at = date('Y-m-d H:i:s');
+                    $res = $gst->save();
+                    if ($res) {
+                        return response()->json(['code' => 200, 'msg' => 'GST status changed successfully'], 200);
                     }
                 }
             }
@@ -413,13 +478,13 @@ class SliderController extends Controller
 
         $rules = [
             'testimonial_name' => 'required|string',
-            'testimonial_designation' =>'required',
-            'testimonial_description' =>'required',
+            'testimonial_designation' => 'required',
+            'testimonial_description' => 'required',
             'testimonial_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
 
         ];
 
-       
+
         $validator = Validator::make($request->all(), $rules);
 
 
@@ -431,7 +496,7 @@ class SliderController extends Controller
         if ($request->hasFile('testimonial_image')) {
 
             $testimonial_image = $request->file('testimonial_image');
-            
+
             $testimonial_image_name = time() . '.' . $testimonial_image->getClientOriginalExtension();
             $uploadPath = public_path('testimonials');
 
@@ -451,7 +516,7 @@ class SliderController extends Controller
             }
 
             DB::table('testimonials')->insert($testimonialData);
-          return response()->json(['msg' => "Testimonial Added Successfully", 'code' => 200], 200);
+            return response()->json(['msg' => "Testimonial Added Successfully", 'code' => 200], 200);
         }
     }
 
@@ -517,7 +582,7 @@ class SliderController extends Controller
     public function updateOccasionImage(Request $request)
     {
         $rules = [
-             'edit_image_type' => 'required',
+            'edit_image_type' => 'required',
             'edit_target_occasion' => 'required|string',
             'edit_button_occasion'  => 'required',
 
@@ -532,7 +597,7 @@ class SliderController extends Controller
 
         $target = $request->input('edit_target_occasion');
         $type = $request->input('edit_image_type');
-        $edit_button_occasion =$request->input('edit_button_occasion');  
+        $edit_button_occasion = $request->input('edit_button_occasion');
         $iid = $request->input('iid');
 
         if ($request->hasFile('edit_image_occasion')) {
@@ -569,13 +634,13 @@ class SliderController extends Controller
         $occasionData['target'] = $target;
         $occasionData['type'] = $type;
         $occasionData['button'] = $edit_button_occasion;
-        
+
         $occasionData['updated_at'] = date('Y-m-d H:i:s');
         DB::table('occasionimages')->where('id', $iid)->update($occasionData);
         return response()->json(['msg' => "Occasion Image updated successfully", 'code' => 200], 200);
     }
 
-    
+
 
     public function updateTestimonialSlider(Request $request)
     {
@@ -584,7 +649,7 @@ class SliderController extends Controller
             'edit_testimonial_name' => 'required|string',
             'edit_testimonial_designation' => 'required|string',
             'edit_testimonial_description' => 'required|string',
-           // 'edit_testimonial_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+            // 'edit_testimonial_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
 
         ];
 
@@ -599,7 +664,7 @@ class SliderController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        
+
         $tid = $request->input('tid');
 
         if ($request->hasFile('edit_testimonial_image')) {
@@ -682,6 +747,52 @@ class SliderController extends Controller
         return response()->json(['msg' => "Slider Added Successfully", 'code' => 200], 200);
     }
 
+
+
+    public function addGstDetails(Request $request)
+    {
+
+        $rules = [
+            'cgst' => 'required',
+            'sgst' => 'required',
+            'igst' => 'required',
+
+        ];
+
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $gsts = DB::table('gst')->get();
+
+        foreach ($gsts as $gst) {
+            if ($gst->status == 1) {
+                DB::table('gst')->where('id', $gst->id)->update(['status' => 2]);
+            }
+        }
+
+
+        $data['cgst'] = $request->input('cgst');
+        $data['sgst'] = $request->input('sgst');
+        $data['igst'] = $request->input('igst');
+
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['status'] = 1;
+
+        // var_dump($data);
+        // die;
+
+        DB::table('gst')->insert($data);
+        return response()->json(['msg' => "GST Details Added Successfully", 'code' => 200], 200);
+    }
+
+
+
+
     public function updateSlider(Request $request)
     {
         $rules = [
@@ -704,8 +815,37 @@ class SliderController extends Controller
         $data['updated_at'] = date('Y-m-d H:i:s');
         $sid = $request->input('sid');
         DB::table('sliders')->where('id', $sid)->update($data);
-        return response()->json(['msg' => "Slider updated Successfully", 'code' => 200], 200);
+        return response()->json(['msg' => "GST details updated Successfully", 'code' => 200], 200);
     }
+
+
+
+
+    public function updateGst(Request $request)
+    {
+        $rules = [
+            'cgst' => 'required',
+            'sgst' => 'required',
+            'igst' => 'required',
+
+        ];
+
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $data['cgst'] = $request->input('cgst');
+        $data['sgst'] = $request->input('sgst');
+        $data['igst'] = $request->input('igst');
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $gid = $request->input('gid');
+        DB::table('gst')->where('id', $gid)->update($data);
+        return response()->json(['msg' => "GST Details updated Successfully", 'code' => 200], 200);
+    }
+
 
 
 
@@ -896,9 +1036,9 @@ class SliderController extends Controller
 
                     $title = 'Home|CrazzyGift';
                     $banners = Banner::where('status', 1)->orderBy('id', 'desc')->get();
-                     $testimonials = Testimonial::where('status',1)->orderBy('id','desc')->get();
-                     $occasionimages_large = Occasionimage::where(['status'=>1,'type'=>1])->orderBy('id','desc')->get();
-                        $occasionimages_small = Occasionimage::where(['status'=>1,'type'=>2])->orderBy('id','desc')->get();
+                    $testimonials = Testimonial::where('status', 1)->orderBy('id', 'desc')->get();
+                    $occasionimages_large = Occasionimage::where(['status' => 1, 'type' => 1])->orderBy('id', 'desc')->get();
+                    $occasionimages_small = Occasionimage::where(['status' => 1, 'type' => 2])->orderBy('id', 'desc')->get();
                     $featured_collection = DB::table('sliders')->where(['type' => 1, 'status' => 1])->orderBy('id', 'desc')->first();
                     $best_selling = DB::table('sliders')->where(['type' => 2, 'status' => 1])->orderBy('id', 'desc')->first();
 
@@ -928,13 +1068,13 @@ class SliderController extends Controller
                         $data2['product_image'] = $best_products->product_image;
                         $data2['title'] = $best_products->title;
                         $data2['price'] = $best_products->price;
-                         $data2['actual_price'] = $best_products->actual_price;
+                        $data2['actual_price'] = $best_products->actual_price;
                         $data2['slug'] = $best_products->slug;
                         $res2[] = $data2;
                     }
 
 
-                    return view('DashboardView', compact('title', 'banners', 'res1', 'res2','testimonials','occasionimages_large','occasionimages_small'));
+                    return view('DashboardView', compact('title', 'banners', 'res1', 'res2', 'testimonials', 'occasionimages_large', 'occasionimages_small'));
                 } else if ($page->status == 0) {
                     //static Content
                     return view('Dynamicpage2', ['page' => $page]);
@@ -948,8 +1088,17 @@ class SliderController extends Controller
 
                         $mainCategory = $menu->page->mainCategory->name;
 
-                        $result = DB::table('products')->where(['main_category' => $main_category,'status'=>1])->orWhere('tags', 'LIKE', '%'.$mainCategory.'%');
-                       
+                         // DB::enableQueryLog();
+                        // $result = DB::table('products')->where(['main_category' => $main_category, 'status' => 1])->orWhere('tags', 'LIKE', '%' . $mainCategory . '%');
+                        $result = DB::table('products')
+                            ->where('status', 1)
+                            ->where(function ($query) use ($main_category, $mainCategory) {
+                                $query->where('main_category', $main_category)
+                                    ->orWhere('tags', 'LIKE', '%' . $mainCategory . '%');
+                            });
+
+                            // $queryLog = DB::getQueryLog();
+
                         if ($request->has('query')) {
 
 
@@ -975,6 +1124,7 @@ class SliderController extends Controller
 
                         $url = $menu->url;
 
+                       
                         return view('Dynamicpage1', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query', 'url'));
                     } else {
                         //who has main and sub category as well
@@ -986,14 +1136,17 @@ class SliderController extends Controller
 
                         //$mainCategory = $menu->page->mainCategory->name;
                         $subCategory = $menu->page->subCategory->name;
-                       
-                        // DB::enableQueryLog();
-                        $result = DB::table('products')->where(['main_category' => $main_category, 'sub_category' => $sub_category,'status'=>1])->orWhere('tags', 'LIKE', '%'.$subCategory.'%');
-                        // $queryLog = DB::getQueryLog();
 
                        
+                        // $result = DB::table('products')->where(['main_category' => $main_category, 'sub_category' => $sub_category,'status'=>1])->orWhere('tags', 'LIKE', '%'.$subCategory.'%');
+                        $result = DB::table('products')
+                            ->where('status', 1)
+                            ->where(function ($query) use ($main_category, $sub_category, $subCategory) {
+                                $query->where(['main_category' => $main_category, 'sub_category' => $sub_category])
+                                    ->orWhere('tags', 'LIKE', '%' . $subCategory . '%');
+                            });
+                        
 
-                      
 
                         if ($request->has('query')) {
 
@@ -1022,7 +1175,6 @@ class SliderController extends Controller
 
                         return view('Dynamicpage1', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query', 'url'));
                     }
-
                 } else if ($page->status == 2) {
                     //fetch all products
 
@@ -1034,7 +1186,7 @@ class SliderController extends Controller
 
                     // $products = Product::paginate(12);
 
-                    $result = DB::table('products')->where(['status'=>1]);
+                    $result = DB::table('products')->where(['status' => 1]);
 
                     if ($request->has('query')) {
 
@@ -1074,8 +1226,8 @@ class SliderController extends Controller
                         $query = '';
 
 
-                        $result = DB::table('products')->whereBetween('price', $arr)->where(['status'=>1]);
-                       
+                        $result = DB::table('products')->whereBetween('price', $arr)->where(['status' => 1]);
+
 
 
                         if ($request->has('query')) {
@@ -1104,8 +1256,7 @@ class SliderController extends Controller
                         $url = $menu->url;
 
                         return view('Dynamicpage1', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query', 'url'));
-                    } 
-                    else {
+                    } else {
                         $str = $page->product_price_range;
 
                         $title = $page->title . '|CrazzyGift';
@@ -1114,7 +1265,7 @@ class SliderController extends Controller
                         $query = '';
 
 
-                        $result = DB::table('products')->whereRaw("price $str")->where(['status'=>1]);
+                        $result = DB::table('products')->whereRaw("price $str")->where(['status' => 1]);
 
                         if ($request->has('query')) {
 

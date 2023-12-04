@@ -1090,8 +1090,6 @@
 
                                 if (status) {
 
-
-
                                     fetch(formAction, {
                                             method: 'POST',
                                             body: formData,

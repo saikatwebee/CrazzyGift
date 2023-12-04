@@ -43,7 +43,11 @@
     <!-- Datepicker -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <script src="https://cdn.tiny.cloud/1/b5gxdstl3drpbhi4wp3e0ca3pte4634i2rcas0lcbc06rhnb/tinymce/5/tinymce.min.js"
+    {{-- <script src="https://cdn.tiny.cloud/1/dsmlskmdv56114go17dzrwjgk03ftocsu46si42b69k2w4cq/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script> --}}
+
+    {{-- <script src="https://cdn.tiny.cloud/1/dsmlskmdv56114go17dzrwjgk03ftocsu46si42b69k2w4cq/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> --}}
+    <script src="https://cdn.tiny.cloud/1/dsmlskmdv56114go17dzrwjgk03ftocsu46si42b69k2w4cq/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
 
 
@@ -162,6 +166,15 @@
         .ribbon-box {
             position: relative;
         }
+
+
+        #altImagesContainer img {
+            width: 65px;
+            margin: 5px;
+            height: 65px;
+            border-radius: 10px !important;
+        }
+
 
         .ribbon-top-right {
             top: -7px;
@@ -951,6 +964,8 @@
                                         href="{{ url('admin/slider-management') }}">Slider Management</a></li>
                                 <li class="nav-item"> <a class="nav-link"
                                         href="{{ url('admin/category-management') }}">Category Management</a></li>
+                                {{-- <li class="nav-item"> <a class="nav-link"
+                                        href="{{ url('admin/additional-setting') }}">Additional Settings</a></li> --}}
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('admin/logout') }}">Logout
                                     </a></li>
 
@@ -1082,11 +1097,25 @@
 
 
 
+    // $(document).ready(function() {
+    //     $("input[type=file]").change(function(e) {
+    //         $(this).parents(".uploadFile").find(".filename").text(e.target.files[0].name);
+    //     });
+    // });
+
     $(document).ready(function() {
         $("input[type=file]").change(function(e) {
-            $(this).parents(".uploadFile").find(".filename").text(e.target.files[0].name);
+            var files = e.target.files;
+            var fileNameList = [];
+
+            for (var i = 0; i < files.length; i++) {
+                fileNameList.push(files[i].name);
+            }
+
+            $(this).parents(".uploadFile").find(".filename").text(fileNameList.join(', '));
         });
     });
+
 
 
 
@@ -1600,7 +1629,7 @@
                         render: function(data, type, row) {
                             if (type === 'display' && data) {
                                 const testimonial_image =
-                                `<img src="${baseUrl}/${data}" alt="Testimonial Image" style="border-radius: 5px; width: 60px; height: auto;" />`;
+                                    `<img src="${baseUrl}/${data}" alt="Testimonial Image" style="border-radius: 5px; width: 60px; height: auto;" />`;
                                 return testimonial_image;
                             }
                             return data;
@@ -1752,6 +1781,112 @@
             .catch(error => console.error(error));
     });
 
+    // GST DataTable
+
+    function getGstDataTable() {
+
+        const url = "{{ url('admin/getGstDetails') }}";
+        const tableId = "gstTable";
+        fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const columns = [{
+                        data: null,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+
+                                if (row.status == 1) {
+                                    return `
+    <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editGst(${row.id})"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeGstDetails(${row.id})"></i>
+    
+`;
+                                } else {
+                                    return `
+    <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editGst(${row.id})"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeGstDetails(${row.id})"></i>
+    
+`;
+                                }
+
+
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'cgst'
+                    },
+
+                    {
+                        data: 'sgst'
+                    },
+
+                    {
+                        data: 'igst',
+                        render: function(data) {
+                            if (data !== "" && data !== null) {
+                                return data;
+                            } else {
+                                return 'NA';
+                            }
+                        }
+                    },
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (type == 'display') {
+                                if (data == 1) {
+                                    return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                } else if (data == 2) {
+                                    return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                } else {
+                                    // Handle any other cases or unexpected values
+                                    return 'Unknown Status';
+                                }
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+
+                                if (data === null || data === '1970-01-01') {
+                                    return 'NA';
+                                }
+
+                                // Assuming 'created_at' is in the default ISO 8601 format
+                                var date = new Date(data);
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1).toString().padStart(2,
+                                    '0'); // Add 1 to month because it's zero-based
+                                var day = date.getDate().toString().padStart(2, '0');
+                                return year + '-' + month + '-' + day;
+                            } else {
+                                return data;
+                            }
+                        }
+                    }
+
+
+                ];
+
+                populateTable(data, tableId, columns);
+            })
+            .catch(error => console.error(error));
+    }
+
+
 
     //sub category datatable
 
@@ -1862,10 +1997,17 @@
     });
 
 
+
+
+
+    $(() => {
+        AllProductsDatatable();
+        getGstDataTable();
+    });
+
     //All products datatable
 
-
-    $(document).ready(function() {
+    function AllProductsDatatable() {
 
 
         const url = "{{ url('admin/getAllProducts') }}";
@@ -1879,23 +2021,7 @@
 
                 const columns = [
 
-                    //old
-                    //     {
-                    //         data: null,
-                    //         render: function(data, type, row) {
-                    //             if (type === 'display') {
 
-                    //                 return `
-                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="editProduct(${row.id},event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" onclick="editProduct(${row.id},event)"></i></button>
-                    //     <button class="btn btn-danger" onclick="deleteProduct(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteProduct(${row.id})"></i></button>
-
-                    // `;
-                    //             }
-                    //             return data;
-                    //         }
-                    //     },
-
-                    //new
 
                     {
                         data: null,
@@ -1988,19 +2114,7 @@
                     },
 
 
-                    // {
-                    //     data: 'description',
-                    //     render: function(data, type, row) {
-                    //         if (type === 'display') {
-                    //             if (data.length > 20) {
-                    //                 return `<span class="tooltipHover" title="${data}">${data.slice(0, 20)}...</span>`;
-                    //             } else {
-                    //                 return data;
-                    //             }
-                    //         }
-                    //         return data;
-                    //     }
-                    // },
+
                     {
                         data: 'price'
                     },
@@ -2015,22 +2129,7 @@
                         }
                     },
 
-                    // {
-                    //     data: 'status',
-                    //     render: function(data, type, row) {
-                    //         if (type == 'display') {
-                    //             if (data == 1) {
-                    //                 return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
-                    //             } else if (data == 2) {
-                    //                 return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
-                    //             } else {
-                    //                 // Handle any other cases or unexpected values
-                    //                 return 'Unknown Status';
-                    //             }
-                    //         }
-                    //         return data;
-                    //     }
-                    // },
+
 
                     {
                         data: 'created_at',
@@ -2061,7 +2160,11 @@
                 populateTable(data, tableId, columns);
             })
             .catch(error => console.error(error));
-    });
+    }
+
+
+
+
 
     //inactive products datatable
 
@@ -3540,11 +3643,11 @@
 
 
 
-
+    var Globaltable;
 
     function populateTable(data, tableId, columns) {
 
-        var table = $('#' + tableId).DataTable({
+        Globaltable = $('#' + tableId).DataTable({
             data: data,
             // buttons
             "dom": "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
@@ -3568,6 +3671,14 @@
 
         });
     }
+
+
+    function resetGSTForm(){
+        $("#addgstForm").trigger('reset');
+    }
+
+
+
 
 
     function editCategory(id) {
@@ -3608,6 +3719,41 @@
                 console.error('Fetch error:', error);
             });
 
+    }
+
+
+    function editGst(id) {
+        const csrfToken = getCsrfToken();
+        $("#gid").val(id);
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getGst') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#EditGstModal").modal('show');
+                $("#edit_cgst").val(data.cgst);
+                $("#edit_sgst").val(data.sgst);
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
     }
 
 
@@ -3967,6 +4113,27 @@
                 const imgurl = "{{ asset('/products') }}/" + data.product_image;
                 $("#edit_product_img").attr('src', imgurl);
 
+                // Clear existing alt images
+                $("#altImagesContainer").empty();
+
+                // Display product_alt_images
+                const altImages = JSON.parse(data.product_alt_images);
+
+
+                // Check if altImages is an array
+                if (Array.isArray(altImages) && altImages.length > 0) {
+                    altImages.forEach(altImage => {
+                        const altImageUrl = "{{ asset('/product_alt') }}/" + altImage;
+                        const altImageElement =
+                            `<img src="${altImageUrl}" class="img-thumbnail" alt="Product Alt Image">`;
+                        $("#altImagesContainer").append(altImageElement);
+                    });
+                } else {
+                    console.log(typeof(data.product_alt_images));
+                    console.error('product_alt_images is not an array or is empty');
+                }
+
+
                 $("#edit_title").val(data.title);
                 $("#edit_code").val(data.code);
                 $("#edit_sku").val(data.sku);
@@ -4018,14 +4185,15 @@
 
                 $("#edit_breadth").val(data.breadth);
                 $("#edit_price").val(data.price);
+                $("#edit_gst").val(data.gst);
 
                 console.log("Actual price" + data.actual_price);
 
-                    if(data.actual_price!="" && data.actual_price!=null){
-                        $("#edit_actual_price").val(data.actual_price);
+                if (data.actual_price != "" && data.actual_price != null) {
+                    $("#edit_actual_price").val(data.actual_price);
 
-                    }
-                
+                }
+
                 $("#edit_product_height").val(data.product_height);
                 $("#edit_product_breadth").val(data.product_breadth);
                 $("#edit_product_length").val(data.product_length);
@@ -4103,7 +4271,13 @@
                             if (data.code == 200) {
                                 toastr.success(data.msg, 'Success', {
                                     onHidden: function() {
-                                        window.location.reload();
+                                        //window.location.reload();
+
+                                        // refresh the DataTable
+
+                                        $("#editproductModal").modal('hide');
+                                        $('#productTable').DataTable().destroy();
+                                        AllProductsDatatable();
                                     },
                                 });
                             }
@@ -4144,7 +4318,12 @@
                                 if (data.code == 200) {
                                     toastr.success(data.msg, 'Success', {
                                         onHidden: function() {
-                                            window.location.reload();
+                                            //window.location.reload();
+
+                                            // refresh the DataTable
+                                            $("#editproductModal").modal('hide');
+                                            $('#productTable').DataTable().destroy();
+                                            AllProductsDatatable();
                                         },
                                     });
                                 }
@@ -4165,6 +4344,7 @@
 
 
     });
+
 
 
 
@@ -4579,6 +4759,66 @@
             }
         });
     }
+
+    //change gst status
+
+    function changeGstDetails(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the status",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/gstStatusUpdate') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        if (data.errors) {
+
+                            toastr.error(data.errors);
+
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success('GST status changed successfully', 'Success', {
+                                onHidden: function() {
+                                   // location.reload();
+                                   $('#gstTable').DataTable().destroy();
+                                   getGstDataTable();
+                                }
+                            });
+                        }
+
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+    }
+
+
 
     //delete testimonial slider
 

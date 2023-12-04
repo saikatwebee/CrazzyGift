@@ -58,7 +58,7 @@
                         </div>
                         <div class="submit_code deactive">
                             <form class="login-form otp-form my-4" id="submitcode_form" method="post"
-                                action="{{ url('/verifyOtp') }}">
+                                action="{{ url('/verifyOtpRegister') }}">
                                 @csrf
                                 <p>Enter 4 digit verification code sent to your mobile number</p>
 

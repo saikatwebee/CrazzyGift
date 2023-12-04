@@ -409,6 +409,145 @@ $(document).ready(() => {
 });
 
 
+//cart delete
+
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = getCsrfToken();
+    
+    const deleteButtons = document.querySelectorAll('.deleteBTN');
+
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    deleteButtons.forEach(function (btn) {
+                        btn.disabled = true;
+                    });
+
+                    var dataId = button.getAttribute('data-id');
+
+                    fetch(window.baseUrl + '/checkUser')
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(function (result) {
+                            console.log(result);
+
+                            if (result.code === 200) {
+                                const form_datas = {
+                                    id: dataId,
+                                };
+
+                                fetch(window.baseUrl + '/deleteCart', {
+                                    method: 'POST',
+                                    body: JSON.stringify(form_datas),
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                    },
+                                })
+                                    .then(function (response) {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(function (data) {
+                                        console.log(data);
+                                        toastr.error(data.msg, 'Oops!', {
+                                            onHidden: function () {
+                                                window.location.reload();
+                                            },
+                                        });
+                                    })
+                                    .catch(function (error) {
+                                        console.error('Fetch error:', error);
+                                    });
+                            } else if (result.code === 210) {
+                                var parsedData = JSON.parse(localStorage.getItem("cartData"));
+                                const updatedItemIndex = parsedData.findIndex(function (item) {
+                                    return item.id === dataId;
+                                });
+
+                                if (updatedItemIndex !== -1) {
+                                    if (parsedData[updatedItemIndex].custom_image !== undefined) {
+                                        var guestcrtImg = parsedData[updatedItemIndex].custom_image;
+                                        const form_datas = {
+                                            custom_image: guestcrtImg,
+                                        };
+
+                                        fetch(window.baseUrl + '/guestCartImgDelete', {
+                                            method: 'POST',
+                                            body: JSON.stringify(form_datas),
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': csrfToken,
+                                            },
+                                        })
+                                            .then(function (response) {
+                                                if (!response.ok) {
+                                                    throw new Error('Network response was not ok');
+                                                }
+                                                return response.json();
+                                            })
+                                            .then(function (data) {
+                                                if (parsedData.length > 0) {
+                                                    var NewData = parsedData.filter(function (row) {
+                                                        return row.id !== dataId;
+                                                    });
+                                                    localStorage.setItem('cartData', JSON.stringify(NewData));
+                                                    toastr.error("Cart Details Deleted Successfully", 'Oops!', {
+                                                        onHidden: function () {
+                                                            window.location.reload();
+                                                        },
+                                                    });
+                                                }
+                                            })
+                                            .catch(function (error) {
+                                                console.error('Fetch error:', error);
+                                            });
+                                    } else {
+                                        if (parsedData.length > 0) {
+                                            var NewData = parsedData.filter(function (row) {
+                                                return row.id !== dataId;
+                                            });
+                                            localStorage.setItem('cartData', JSON.stringify(NewData));
+                                            toastr.error("Cart Details Deleted Successfully", 'Oops!', {
+                                                onHidden: function () {
+                                                    window.location.reload();
+                                                },
+                                            });
+                                        }
+                                    }
+                                } else {
+                                    toastr.error("Something went wrong!", 'Oops!', {
+                                        onHidden: function () {
+                                            window.location.reload();
+                                        },
+                                    });
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error('Fetch error:', error);
+                        });
+                }
+            });
+        });
+    });
+});
+
 
 
 $(document).ready(() => {
@@ -569,178 +708,178 @@ $(document).ready(() => {
 });
 
 
-$(document).ready(function () {
-    const csrfToken = getCsrfToken();
-    // Use $.each() to attach a click event to each button with the class "my-button"
-    $('.deleteBTN').each(function () {
-        $(this).on('click', function () {
+// $(document).ready(function () {
+//     const csrfToken = getCsrfToken();
+//     // Use $.each() to attach a click event to each button with the class "my-button"
+//     $('.deleteBTN').each(function () {
+//         $(this).on('click', function () {
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#004a8c',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+//             Swal.fire({
+//                 title: 'Are you sure?',
+//                 text: "You won't be able to revert this!",
+//                 icon: 'warning',
+//                 showCancelButton: true,
+//                 confirmButtonColor: '#004a8c',
+//                 cancelButtonColor: '#d33',
+//                 confirmButtonText: 'Yes, delete it!'
+//             }).then((result) => {
+//                 if (result.isConfirmed) {
 
-                    $(".deleteBTN").prop("disabled", true);
+//                     $(".deleteBTN").prop("disabled", true);
 
-                    var dataId = $(this).attr('data-id');
-
-
-
-                    fetch(window.baseUrl + '/checkUser', {
-                            method: 'GET',
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(result => {
-                            console.log(result);
-                            if (result.code == 200) {
-
-                                const form_datas = {
-                                    id: dataId,
-                                };
-
-                                fetch(window.baseUrl +"/deleteCart", {
-                                        method: 'POST',
-                                        body: JSON.stringify(form_datas),
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': csrfToken,
-                                        },
-                                    })
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error('Network response was not ok');
-                                        }
-                                        return response.json();
-                                    })
-                                    .then(data => {
-                                        console.log(data);
-                                        toastr.error(data.msg,'Oops!',{
-                                             onHidden: function() {
-                                                 window.location.reload();
-                                            },
-                                        });
-
-                                    })
-                                    .catch(error => {
-                                        console.error('Fetch error:', error);
-                                    });
+//                     var dataId = $(this).attr('data-id');
 
 
 
+//                     fetch(window.baseUrl + '/checkUser', {
+//                             method: 'GET',
+//                         })
+//                         .then(response => {
+//                             if (!response.ok) {
+//                                 throw new Error('Network response was not ok');
+//                             }
+//                             return response.json();
+//                         })
+//                         .then(result => {
+//                             console.log(result);
+//                             if (result.code == 200) {
 
-                            } else if (result.code == 210) {
+//                                 const form_datas = {
+//                                     id: dataId,
+//                                 };
+
+//                                 fetch(window.baseUrl +"/deleteCart", {
+//                                         method: 'POST',
+//                                         body: JSON.stringify(form_datas),
+//                                         headers: {
+//                                             'Content-Type': 'application/json',
+//                                             'X-CSRF-TOKEN': csrfToken,
+//                                         },
+//                                     })
+//                                     .then(response => {
+//                                         if (!response.ok) {
+//                                             throw new Error('Network response was not ok');
+//                                         }
+//                                         return response.json();
+//                                     })
+//                                     .then(data => {
+//                                         console.log(data);
+//                                         toastr.error(data.msg,'Oops!',{
+//                                              onHidden: function() {
+//                                                  window.location.reload();
+//                                             },
+//                                         });
+
+//                                     })
+//                                     .catch(error => {
+//                                         console.error('Fetch error:', error);
+//                                     });
 
 
-                                var parsedData = JSON.parse(localStorage.getItem("cartData"));
 
 
-                                const updatedItemIndex = parsedData.findIndex(item => item.id === dataId);
-
-                                if (updatedItemIndex !== -1) {
+//                             } else if (result.code == 210) {
 
 
-                                    if (parsedData[updatedItemIndex].custom_image != undefined) {
-                                        guestcrtImg = parsedData[updatedItemIndex].custom_image;
-                                        const form_datas = {
-                                            custom_image: guestcrtImg,
-                                        };
+//                                 var parsedData = JSON.parse(localStorage.getItem("cartData"));
 
-                                        fetch(window.baseUrl +"/guestCartImgDelete", {
-                                                method: 'POST',
-                                                body: JSON.stringify(form_datas),
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                    'X-CSRF-TOKEN': csrfToken,
-                                                },
-                                            })
-                                            .then(response => {
-                                                if (!response.ok) {
-                                                    throw new Error('Network response was not ok');
-                                                }
-                                                return response.json();
-                                            })
-                                            .then(data => {
 
-                                                //delete the cart from localstorage
-                                                if (parsedData.length > 0) {
-                                                    NewData = parsedData.filter(row => row.id != dataId);
-                                                    localStorage.setItem('cartData', JSON.stringify(NewData));
+//                                 const updatedItemIndex = parsedData.findIndex(item => item.id === dataId);
+
+//                                 if (updatedItemIndex !== -1) {
+
+
+//                                     if (parsedData[updatedItemIndex].custom_image != undefined) {
+//                                         guestcrtImg = parsedData[updatedItemIndex].custom_image;
+//                                         const form_datas = {
+//                                             custom_image: guestcrtImg,
+//                                         };
+
+//                                         fetch(window.baseUrl +"/guestCartImgDelete", {
+//                                                 method: 'POST',
+//                                                 body: JSON.stringify(form_datas),
+//                                                 headers: {
+//                                                     'Content-Type': 'application/json',
+//                                                     'X-CSRF-TOKEN': csrfToken,
+//                                                 },
+//                                             })
+//                                             .then(response => {
+//                                                 if (!response.ok) {
+//                                                     throw new Error('Network response was not ok');
+//                                                 }
+//                                                 return response.json();
+//                                             })
+//                                             .then(data => {
+
+//                                                 //delete the cart from localstorage
+//                                                 if (parsedData.length > 0) {
+//                                                     NewData = parsedData.filter(row => row.id != dataId);
+//                                                     localStorage.setItem('cartData', JSON.stringify(NewData));
                                                    
-                                                     toastr.error("Cart Details Deleted Successfully",'Oops!',{
-                                                            onHidden: function() {
-                                                                 window.location.reload();
-                                                            },
-                                                        });
+//                                                      toastr.error("Cart Details Deleted Successfully",'Oops!',{
+//                                                             onHidden: function() {
+//                                                                  window.location.reload();
+//                                                             },
+//                                                         });
 
-                                                }
-
-
-                                            })
-                                            .catch(error => {
-                                                console.error('Fetch error:', error);
-                                            });
-
-                                    } else {
-                                        if (parsedData.length > 0) {
-                                            NewData = parsedData.filter(row => row.id != dataId);
-                                            localStorage.setItem('cartData', JSON.stringify(NewData));
-                                            toastr.error("Cart Details Deleted Successfully",'Oops!',{
-                                                            onHidden: function() {
-                                                                 window.location.reload();
-                                                            },
-                                                        });
-
-                                        }
-                                    }
+//                                                 }
 
 
-                                } else {
+//                                             })
+//                                             .catch(error => {
+//                                                 console.error('Fetch error:', error);
+//                                             });
+
+//                                     } else {
+//                                         if (parsedData.length > 0) {
+//                                             NewData = parsedData.filter(row => row.id != dataId);
+//                                             localStorage.setItem('cartData', JSON.stringify(NewData));
+//                                             toastr.error("Cart Details Deleted Successfully",'Oops!',{
+//                                                             onHidden: function() {
+//                                                                  window.location.reload();
+//                                                             },
+//                                                         });
+
+//                                         }
+//                                     }
+
+
+//                                 } else {
 
                                   
 
-                                     toastr.error("Something went wrong!",'Oops!',{
-                                                            onHidden: function() {
-                                                                 window.location.reload();
-                                                            },
-                                        });
+//                                      toastr.error("Something went wrong!",'Oops!',{
+//                                                             onHidden: function() {
+//                                                                  window.location.reload();
+//                                                             },
+//                                         });
 
 
-                                }
+//                                 }
 
 
-                            }
+//                             }
 
 
                             
 
-                        })
-                        .catch(error => {
-                            console.error('Fetch error:', error);
-                        });
+//                         })
+//                         .catch(error => {
+//                             console.error('Fetch error:', error);
+//                         });
 
 
 
 
 
 
-                }
+//                 }
 
-            });
+//             });
 
-        });
-    });
-});
+//         });
+//     });
+// });
 
 
 

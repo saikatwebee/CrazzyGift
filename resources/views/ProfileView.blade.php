@@ -288,10 +288,10 @@
 
                                                         </div>
                                                         <!-- <div class="row">
-                                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                                        <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                                </div> -->
+                                                                            <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                            <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                            <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                    </div> -->
 
                                                     </div>
 
@@ -688,7 +688,7 @@
                 </div>
                 <h2>Edit Shipping Address</h2>
 
-                <form action="{{ url('/editShippingAddress') }}" method="post" id="editShippingForm">
+                <form action="{{ url('/updateAddress') }}" method="post" id="updateAddressForm">
                     <div class="my-4">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control shippingInput" id="name_ship" name="name"
@@ -784,8 +784,12 @@
 
                     </div>
                     <div class="my-3" style="text-align: right;">
-                        <button type="button" id="save-button4">Save</button>
-                        <button type="button" id="close-button5">Close</button>
+                        <input type="submit" value="Save" style="color: #fff;
+                        background: #004a8c;
+                        border-color: transparent;
+                        padding: 5px;
+                        border-radius: 20px;">
+                        {{-- <button type="button" id="close-button5">Close</button> --}}
                     </div>
 
                 </form>
@@ -1271,6 +1275,63 @@
                 $(".modal3").show();
 
             }
+
+
+
+            //edit bannerupdate address form sub
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var updateAddressForm = document.getElementById('updateAddressForm');
+
+                updateAddressForm.onsubmit = function(event) {
+
+                    event.preventDefault();
+
+                    let formElement = event.target;
+                    const formData = new FormData(formElement);
+                    let formAction = formElement.getAttribute('action');
+
+                    const csrfToken = getCsrfToken();
+
+                    fetch(formAction, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then((response) => response.json())
+                        .then(data => {
+
+                            console.log(data);
+                            if (data.errors) {
+                                var error = data.errors;
+                                for (const fieldName in error) {
+                                    if (error.hasOwnProperty(fieldName)) {
+                                        const errorMessages = error[fieldName];
+                                        errorMessages.forEach(errorMessage => {
+                                            toastr.error(errorMessage);
+                                        });
+                                    }
+                                }
+                            }
+
+                            if (data.code == 200) {
+                                toastr.success(data.msg, 'Success', {
+                                    onHidden: function() {
+                                        window.location.reload();
+                                    },
+                                });
+                            }
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+                }
+
+            });
         </script>
 
     </section>

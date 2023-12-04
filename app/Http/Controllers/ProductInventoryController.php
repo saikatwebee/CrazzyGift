@@ -207,15 +207,17 @@ class ProductInventoryController extends Controller
         'product_breadth' => 'required|numeric',
         'price' => 'required|numeric',
         'actual_price' => 'required|numeric',
+        'gst' => 'required',
         'status' => 'required',
         'description' => 'required',
         'product_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5242880',
+        'product_alt_image.*' => 'image|mimes:jpeg,png,jpg,gif|max:5242880',
+
         
 
     ];
 
-
-
+    
    
     $validator = Validator::make($request->all(), $rules);
 
@@ -224,13 +226,11 @@ class ProductInventoryController extends Controller
         return redirect()->back()->withErrors($validator)->withInput();
     }
 
-
+    
  
     // Handle file upload and storage
     if ($request->hasFile('product_image')) {
-        // echo "<pre>";
-        // var_dump($request->all());
-        // die;
+        
 
         $image = $request->file('product_image');
        
@@ -248,6 +248,22 @@ class ProductInventoryController extends Controller
 
         if ($image->move($uploadPath, $imageName)) {
             // File has been successfully uploaded
+
+             // Handle multiple alternative product images
+             $altImageNames = [];
+             if ($request->hasFile('product_alt_image')) {
+                 $altUploadPath = public_path('product_alt');
+ 
+                 if (!is_dir($altUploadPath)) {
+                     mkdir($altUploadPath, 0755, true);
+                 }
+ 
+                 foreach ($request->file('product_alt_image') as $altImage) {
+                     $altImageName = time() . '_' . $altImage->getClientOriginalName();
+                     $altImage->move($altUploadPath, $altImageName);
+                     $altImageNames[] = $altImageName;
+                 }
+             }
 
             $tag_arr = $request->input('tags');
             $tags = $string = implode(", ", $tag_arr);
@@ -268,15 +284,16 @@ class ProductInventoryController extends Controller
         'product_breadth' => $request->input('product_breadth'),
         'price' => $request->input('price'),
         'actual_price' => $request->input('actual_price'),
+        'gst' => $request->input('gst'),
         'status' => $request->input('status'),
         'description' => $request->input('description'),
         'product_image' => $imageName,
+        'product_alt_images' => json_encode($altImageNames),
         'slug'=>Str::slug($request->input('title')),
         'created_at'=>date('Y-m-d H:i:s'),
         'tags'=> $tags
     ];
 
-    
 
     DB::table('products')->insert($data);
 
@@ -324,6 +341,7 @@ class ProductInventoryController extends Controller
                 'product_length' => 'required|string',
                 'product_breadth' => 'required|string',
                 'price' => 'required|numeric',
+                'gst' => 'required',
                 // 'actual_price' => 'required|numeric',
                 'status' => 'required',
                 'slug' => 'required',
@@ -359,6 +377,7 @@ class ProductInventoryController extends Controller
 
                 $data['price']=$request->input('price');
                 $data['actual_price']=$request->input('actual_price');
+                $data['gst']=$request->input('gst');
                 $data['status']=$request->input('status');
                 $data['slug']=$request->input('slug');
 
@@ -373,7 +392,7 @@ class ProductInventoryController extends Controller
 
                 $data['updated_at']=date('Y-m-d H:i:s');
 
-
+                $product = Product::where('id', $id)->first();
 
             if ($request->hasFile('product_image')) {
             
@@ -390,10 +409,6 @@ class ProductInventoryController extends Controller
 
                  if ($request->has('id')) {
 
-                       
-                        $product = Product::where('id', $id)->first();
-
-                        
 
                             if ($product->product_image != "") {
 
@@ -413,6 +428,38 @@ class ProductInventoryController extends Controller
 
                     }
 
+        }
+
+
+        // Handle multiple alternative product images
+        if ($request->hasFile('product_alt_image')) {
+            $altImageNames = [];
+            $altUploadPath = public_path('product_alt');
+
+            if (!is_dir($altUploadPath)) {
+                mkdir($altUploadPath, 0755, true);
+            }
+
+            // Delete existing product_alt_images
+            $existingAltImages = json_decode($product->product_alt_images, true);
+           
+            if($existingAltImages){
+                foreach ($existingAltImages as $altImage) {
+                    $existingAltImagePath = $altUploadPath . '/' . $altImage;
+                    if (file_exists($existingAltImagePath)) {
+                        unlink($existingAltImagePath);
+                    }
+                }
+            }
+          
+
+            foreach ($request->file('product_alt_image') as $altImage) {
+                $altImageName = time() . '_' . $altImage->getClientOriginalName();
+                $altImage->move($altUploadPath, $altImageName);
+                $altImageNames[] = $altImageName;
+            }
+
+            $data['product_alt_images'] = json_encode($altImageNames);
         }
 
 
