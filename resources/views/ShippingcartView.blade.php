@@ -119,7 +119,8 @@
                                                             data-id="{{ $cart->custom_text }}"><i
                                                                 class="fa-solid fa-envelope-open-text showtextBTN_i"
                                                                 data-id="{{ $cart->custom_text }}"
-                                                                id="{{ $cart->id }}"></i></div><span id="{{ $cart->id }}"
+                                                                id="{{ $cart->id }}"></i></div><span
+                                                            id="{{ $cart->id }}"
                                                             style="font-family: 'DM Sans';font-style: normal;font-weight: 900;font-size: 12px;line-height: 16px;color: #4caf50;"
                                                             data-id="{{ $cart->custom_text }}">Show Message</span>
                                                     </button>
@@ -420,6 +421,32 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+
+           
+
+
+            $(document).ready(function() {
+                fetch(window.baseUrl + "/checkGoogle")
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        if (response.headers.get("content-type") !== "application/json") {
+                            throw new Error("Response is not JSON");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data.code == 200) {
+                            cartAuthenticate();
+                        }
+                    })
+                    .catch((error) => {
+                        if (error.message === "Response is not JSON") {} else {
+                            console.error("Error:", error);
+                        }
+                    });
+            });
         </script>
 
     </section>

@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/service',[ProductController::class,'serviceAjax']);
-Route::post('/awb',[ProductController::class,'awbAjax']);
-Route::post('/manifest',[ProductController::class,'manifestAjax']);
+
 
 
