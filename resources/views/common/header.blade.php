@@ -252,3 +252,21 @@
     </div>
      --}}
 </section>
+
+<script>
+    const toggleBtn = document.getElementById('toggle-btn');
+const closeBtn = document.getElementById('close-btn');
+const nav = document.querySelector('nav');
+
+closeBtn.addEventListener('click', () => {
+    toggleBtn.checked = false;
+});
+
+toggleBtn.addEventListener('click', () => {
+    if (toggleBtn.checked) {
+        nav.classList.add('open');
+    } else {
+        nav.classList.remove('open');
+    }
+});
+</script>

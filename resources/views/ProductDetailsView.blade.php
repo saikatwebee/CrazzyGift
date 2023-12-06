@@ -92,7 +92,7 @@
                             <div class="input-container my-3">
                                 <input type="text" name="location" class="form-control" id="location"
                                     placeholder="Enter Pin code here" required>
-                                <span class="checkButton" id="checkLocatin">Check Servicebility <i
+                                <span class="checkButton" id="checkLocation">Check Servicebility <i
                                         class="fa-solid fa-arrow-right-long"></i></span>
                                 <span class="checkButton" id="responseLocation"></span>
 
@@ -207,7 +207,7 @@
                         $("#responseLocation").addClass('text-success');
                     }
                     $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
+                    $("#checkLocation").html("");
 
 
                     $("#add_cart").css('pointer-events', 'auto');
@@ -219,5 +219,6 @@
 
             });
         </script>
+        
     </section>
 @endsection

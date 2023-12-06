@@ -19,8 +19,8 @@
             <div class="col-md-2 my-3 align-item-center">
                 <div class="loginGiftLeft">
                     <!-- <div class="homeButton">
-                                        <a href="index.html">Home</a>
-                                    </div> -->
+                                            <a href="index.html">Home</a>
+                                        </div> -->
                     <img src="{{ asset('images/leftgift.png') }}" alt="gift" class="giftImage">
                 </div>
             </div>
@@ -60,12 +60,21 @@
                                 <input type="hidden" name="phone" id="hid-phone">
                                 <div class="otp-input">
                                     <input type="text" id="otp1" name="otp1" maxlength="1"
-                                        onkeyup="moveToNext(this, 'otp2')" onkeyup="moveToPreviousInput(this, 'otp1',event)" onkeypress="moveToPreviousInput(this, 'otp1',event)" onkeydown="moveToPreviousInput(this, 'otp1',event)"  required>
+                                        onkeyup="moveToNext(this, 'otp2')" onkeyup="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp1',event)" required>
                                     <input type="text" id="otp2" name="otp2" maxlength="1"
-                                        onkeyup="moveToNext(this, 'otp3')" onkeyup="moveToPreviousInput(this, 'otp1',event)" onkeypress="moveToPreviousInput(this, 'otp1',event)" onkeydown="moveToPreviousInput(this, 'otp1',event)"  required>
+                                        onkeyup="moveToNext(this, 'otp3')" onkeyup="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp1',event)" required>
                                     <input type="text" id="otp3" name="otp3" maxlength="1"
-                                        onkeyup="moveToNext(this, 'otp4')" onkeyup="moveToPreviousInput(this, 'otp2',event)" onkeypress="moveToPreviousInput(this, 'otp2',event)" onkeydown="moveToPreviousInput(this, 'otp2',event)"  required>
-                                    <input type="text" id="otp4" name="otp4" maxlength="1" onkeyup="moveToPreviousInput(this, 'otp3',event)" onkeypress="moveToPreviousInput(this, 'otp3',event)" onkeydown="moveToPreviousInput(this, 'otp3',event)"  required>
+                                        onkeyup="moveToNext(this, 'otp4')" onkeyup="moveToPreviousInput(this, 'otp2',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp2',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp2',event)" required>
+                                    <input type="text" id="otp4" name="otp4" maxlength="1"
+                                        onkeyup="moveToPreviousInput(this, 'otp3',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp3',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp3',event)" required>
                                 </div>
 
                                 <div class="logtimer">
@@ -76,10 +85,10 @@
                                     <p id="resendp" onclick="resendOtp(event)">Resend OTP</p>
                                 </div>
 
-                                 <div class="submit-container">
+                                <div class="submit-container">
                                     <i class="fa fa-spinner fa-spin spinner" style="display:none;"></i>
-                                <input type="submit" id="submitcode-btn" class="loginButton mt-4" value="Login">
-                            </div>
+                                    <input type="submit" id="submitcode-btn" class="loginButton mt-4" value="Login">
+                                </div>
 
                             </form>
                         </div>
@@ -111,7 +120,8 @@
                                 class="loginButton mt-4">Register</a>
                         </div>
                         <div class="login-form my-3 mt-5">
-                            <form class="googleForm" id="googleForm4" action="{{ url('auth/redirect') }}" method="get">
+                            <form class="googleForm" id="googleForm4" action="{{ url('auth/redirect') }}"
+                                method="get">
 
                                 <a href="javascript:void(0)" class="googleLogin" onclick="googleLogin2()"><img
                                         src="{{ asset('images/icons/google.png') }}" alt=""> <span>Sign in with
@@ -229,6 +239,120 @@
                 localStorage.removeItem('cartData');
 
             }
+
+            $(() => {
+                $(document).on("click", "#getcode-btn", () => {
+                    $("#getcode-form").submit();
+                });
+            });
+
+
+            //login otp sent from  signin/register page
+
+$("#getcode-form").on("submit", (event) => {
+    event.preventDefault();
+
+    var html = '<i class="fa fa-spinner fa-spin" ></i>';
+    var resetbtn = "Get Code";
+    const clickedButtonId = $(event.target).find("a").attr("id");
+
+    let formElement = event.target;
+    let formAction = formElement.getAttribute("action");
+    let formMethod = formElement.getAttribute("method");
+    let formData = new FormData(formElement);
+    var phone = formData.get("phone");
+
+    if (phone != "") {
+        $("#" + clickedButtonId)
+            .css({ "pointer-events": "none", background: "#004a8cab" })
+            .html(html);
+
+        fetch(formAction, {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                if (data.code == 200) {
+                    $("#hid-phone").val(phone);
+                    $("#resendp").attr("data-id", phone);
+
+                    toastr.success(data.msg, "Success", {
+                        onHidden: function () {
+                            $("#" + clickedButtonId)
+                                .css({
+                                    "pointer-events": "auto",
+                                    background: "#004a8c",
+                                })
+                                .html(resetbtn);
+                            if ($(".submit-code").hasClass("deactive")) {
+                                $(".submit-code").removeClass("deactive");
+                                $(".submit-code").addClass("active");
+                            }
+                            if ($(".get-code").hasClass("active")) {
+                                $(".get-code").removeClass("active");
+                                $(".get-code").addClass("deactive");
+                            }
+
+                            var countdownInterval = setInterval(function () {
+                                var countdownElement =
+                                    document.getElementById("countdown");
+
+                                if (countdownElement) {
+                                    var countdownValue = parseInt(
+                                        countdownElement.textContent
+                                    );
+
+                                    if (countdownValue > 0) {
+                                        countdownValue--;
+                                        countdownElement.textContent =
+                                            countdownValue;
+                                    }
+                                    if (countdownValue == 0) {
+                                        clearInterval(countdownInterval);
+                                        $(".logtimer").hide();
+
+                                        if ($("#resend").hasClass("hideSpan")) {
+                                            $("#resend").removeClass(
+                                                "hideSpan"
+                                            );
+                                            $("#resend").addClass("showSpan");
+                                        }
+                                    }
+                                }
+                            }, 1000);
+                        },
+                    });
+                } else if (data.code == 210) {
+                    toastr.error(data.msg, "Oops!", {
+                        onHidden: function () {
+                            $("#" + clickedButtonId)
+                                .css({
+                                    "pointer-events": "auto",
+                                    background: "#004a8c",
+                                })
+                                .html(resetbtn);
+                            window.location.href =window.baseUrl +"/register";
+                        },
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Fetch error:", error);
+            });
+    } else {
+        $("[name='phone']").css("border-color", "#fb483a");
+        $(".input-group-text").css("border-color", "#fb483a");
+    }
+});
+
+
         </script>
     </section>
 

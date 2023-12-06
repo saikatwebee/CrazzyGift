@@ -559,11 +559,6 @@ class ProductController extends Controller
         return view('ProductDetailsView', compact('title', 'product', 'similarProducts','altImages'));
     }
 
-    public function ecom()
-    {
-        return view('EcomapiView');
-    }
-
     public function serviceAjax(Request $request)
     {
         try {

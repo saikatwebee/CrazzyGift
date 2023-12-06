@@ -288,10 +288,10 @@
 
                                                         </div>
                                                         <!-- <div class="row">
-                                                                            <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                                            <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                                            <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
-                                                                    </div> -->
+                                                                                <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                                <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                                <div class="col-lg-12"><p class="mt-2">{{ $order->shipping_address }}</p></div>
+                                                                        </div> -->
 
                                                     </div>
 
@@ -784,7 +784,8 @@
 
                     </div>
                     <div class="my-3" style="text-align: right;">
-                        <input type="submit" value="Save" style="color: #fff;
+                        <input type="submit" value="Save"
+                            style="color: #fff;
                         background: #004a8c;
                         border-color: transparent;
                         padding: 5px;
@@ -1332,6 +1333,33 @@
                 }
 
             });
+
+            //profile picture preview
+            $(document).ready(function() {
+                $("#image").change(function() {
+                    readURL(this);
+                    const existingErrorMessage = document.querySelector(".uploaderrorSpan");
+                    if (existingErrorMessage) {
+                        existingErrorMessage.remove();
+                        if ($("#image").hasClass("inputError")) {
+                            $("#image").removeClass("inputError");
+                        }
+                    }
+                });
+            });
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        $("#preview-image").attr("src", e.target.result);
+                        $("#image-preview").show();
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
         </script>
 
     </section>

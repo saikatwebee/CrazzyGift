@@ -74,7 +74,7 @@ $(document).ready(() => {
 
 
         //  html +="Check Servicebility <i class='fa-solid fa-arroe-right-long'></i>";
-        $("#checkLocatin").html("Check Servicebility <i class='fa-solid fa-arrow-right-long'></i>");
+        $("#checkLocation").html("Check Servicebility <i class='fa-solid fa-arrow-right-long'></i>");
     });
 
 
@@ -96,7 +96,7 @@ $(document).ready(() => {
 // });
 
 
-$(document).on("click", "#checkLocatin", () => {
+$(document).on("click", "#checkLocation", () => {
     //validate pincode
     var userPincode = $('input[name="location"]').val();
     $("[name='location']").css("pointer-events", "none");
@@ -108,7 +108,7 @@ $(document).on("click", "#checkLocatin", () => {
         $('input[name="location"]').css('pointer-events', 'auto');
     } else {
         var html = 'Checking Servicebility <i class="fa fa-spinner fa-spin" ></i>';
-        $("#checkLocatin").html(html);
+        $("#checkLocation").html(html);
         $('input[name="pincode"]').val(userPincode);
         $("#servicecheckForm").submit();
         // if ($('input[name="location"]').hasClass('inputError')) {
@@ -161,14 +161,14 @@ $("#servicecheckForm").on("submit", (event) => {
 
                 if ($("#responseLocation").hasClass('checkButton')) {
                     $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
+                    $("#checkLocation").html("");
                     $("#responseLocation").addClass('text-success');
 
                 }
 
                 if ($("#responseLocation").hasClass('text-danger')) {
                     $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
+                    $("#checkLocation").html("");
                     $("#responseLocation").removeClass('text-danger');
                     $("#responseLocation").addClass('text-success');
 
@@ -189,14 +189,14 @@ $("#servicecheckForm").on("submit", (event) => {
                 var html = data.message + ' <i class="fa-solid fa-circle-exclamation"></i>';
                 if ($("#responseLocation").hasClass('checkButton')) {
                     $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
+                    $("#checkLocation").html("");
                     $("#responseLocation").addClass('text-danger');
 
                 }
 
                 if ($("#responseLocation").hasClass('text-success')) {
                     $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
+                    $("#checkLocation").html("");
                     $("#responseLocation").removeClass('text-success');
                     $("#responseLocation").addClass('text-danger');
 

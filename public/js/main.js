@@ -77,7 +77,7 @@ $(document).ready(() => {
 
 
         //  html +="Check Servicebility <i class='fa-solid fa-arroe-right-long'></i>";
-        $("#checkLocatin").html("Check Servicebility <i class='fa-solid fa-arrow-right-long'></i>");
+        $("#checkLocation").html("Check Servicebility <i class='fa-solid fa-arrow-right-long'></i>");
     });
 
 
@@ -102,7 +102,7 @@ $(document).ready(() => {
 // });
 
 
-$(document).on("click", "#checkLocatin", () => {
+$(document).on("click", "#checkLocation", () => {
     //validate pincode
     var userPincode = $('input[name="location"]').val();
     $("[name='location']").css("pointer-events", "none");
@@ -114,118 +114,130 @@ $(document).on("click", "#checkLocatin", () => {
         $('input[name="location"]').css('pointer-events', 'auto');
     } else {
         var html = 'Checking Servicebility <i class="fa fa-spinner fa-spin" ></i>';
-        $("#checkLocatin").html(html);
+        $("#checkLocation").html(html);
         $('input[name="pincode"]').val(userPincode);
-        $("#servicecheckForm").submit();
-        // if ($('input[name="location"]').hasClass('inputError')) {
-        //     $('input[name="location"]').removeClass('inputError');
-        //     $('input[name="location"]').addClass('inputSuccess');
-        // } else {
-        //     $('input[name="location"]').addClass('inputSuccess');
-        // }
+       // $("#servicecheckForm").submit();
 
+        serviceCheck();
 
-
-
+      
     }
 
 
 });
 
+function serviceCheck(){
+    var servicecheckForm = document.getElementById('servicecheckForm');
+    var pincode = document.getElementById('location').value;
+    const csrfToken = getCsrfToken();
 
+    console.log(pincode);
+       
+        let formData = {location:pincode};
+       
+        fetch(window.baseUrl + '/serviceAjax', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+              
+            })
+            .then((response) => response.json())
+            .then(data => {
 
-$("#servicecheckForm").on("submit", (event) => {
-    event.preventDefault();
-    let formElement = event.target;
-    let formAction = formElement.getAttribute('action');
-    let formData = new FormData(formElement);
-    var pincode = formData.get("location");
-
-    fetch(formAction, {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-            if (data.code == 200) {
-
-                localStorage.setItem('service_pincode', data.pincode);
-
-                $("#add_cart").css('pointer-events', 'auto');
-                $("#add_cart_btn").css('background', '#004a8c');
-
-
-                $("[name='location']").css("pointer-events", "auto");
-                var html = data.message + ' <i class="fa-solid fa-circle-check"></i>';
-
-
-                if ($("#responseLocation").hasClass('checkButton')) {
-                    $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
-                    $("#responseLocation").addClass('text-success');
-
+                console.log(data);
+                if (data.errors) {
+                    var error = data.errors;
+                    for (const fieldName in error) {
+                        if (error.hasOwnProperty(fieldName)) {
+                            const errorMessages = error[fieldName];
+                            errorMessages.forEach(errorMessage => {
+                                toastr.error(errorMessage);
+                            });
+                        }
+                    }
                 }
 
-                if ($("#responseLocation").hasClass('text-danger')) {
-                    $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
-                    $("#responseLocation").removeClass('text-danger');
-                    $("#responseLocation").addClass('text-success');
+                if (data.code == 200) {
 
+                    localStorage.setItem('service_pincode', data.pincode);
+    
+                    $("#add_cart").css('pointer-events', 'auto');
+                    $("#add_cart_btn").css('background', '#004a8c');
+    
+    
+                    $("[name='location']").css("pointer-events", "auto");
+                    var html = data.message + ' <i class="fa-solid fa-circle-check"></i>';
+    
+    
+                    if ($("#responseLocation").hasClass('checkButton')) {
+                        $("#responseLocation").html(html);
+                        $("#checkLocation").html("");
+                        $("#responseLocation").addClass('text-success');
+    
+                    }
+    
+                    if ($("#responseLocation").hasClass('text-danger')) {
+                        $("#responseLocation").html(html);
+                        $("#checkLocation").html("");
+                        $("#responseLocation").removeClass('text-danger');
+                        $("#responseLocation").addClass('text-success');
+    
+                    }
+    
+                    if ($('input[name="location"]').hasClass('inputError')) {
+                        $('input[name="location"]').removeClass('inputError');
+                        $('input[name="location"]').addClass('inputSuccess');
+                    } else {
+                        $('input[name="location"]').addClass('inputSuccess');
+                    }
+    
+    
+    
+                } else if (data.code == 210) {
+                    $("[name='location']").css("pointer-events", "auto");
+                    //toastr.error(data.msg);
+                    var html = data.message + ' <i class="fa-solid fa-circle-exclamation"></i>';
+                    if ($("#responseLocation").hasClass('checkButton')) {
+                        $("#responseLocation").html(html);
+                        $("#checkLocation").html("");
+                        $("#responseLocation").addClass('text-danger');
+    
+                    }
+    
+                    if ($("#responseLocation").hasClass('text-success')) {
+                        $("#responseLocation").html(html);
+                        $("#checkLocation").html("");
+                        $("#responseLocation").removeClass('text-success');
+                        $("#responseLocation").addClass('text-danger');
+    
+                    }
+    
+                    if ($('input[name="location"]').hasClass('inputSuccess')) {
+                        $('input[name="location"]').removeClass('inputSuccess');
+                        $('input[name="location"]').addClass('inputError');
+                    } else {
+                        $('input[name="location"]').addClass('inputError');
+                    }
+    
+    
+    
                 }
-
-                if ($('input[name="location"]').hasClass('inputError')) {
-                    $('input[name="location"]').removeClass('inputError');
-                    $('input[name="location"]').addClass('inputSuccess');
-                } else {
-                    $('input[name="location"]').addClass('inputSuccess');
-                }
+    
 
 
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    
 
-            } else if (data.code == 210) {
-                $("[name='location']").css("pointer-events", "auto");
-                //toastr.error(data.msg);
-                var html = data.message + ' <i class="fa-solid fa-circle-exclamation"></i>';
-                if ($("#responseLocation").hasClass('checkButton')) {
-                    $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
-                    $("#responseLocation").addClass('text-danger');
-
-                }
-
-                if ($("#responseLocation").hasClass('text-success')) {
-                    $("#responseLocation").html(html);
-                    $("#checkLocatin").html("");
-                    $("#responseLocation").removeClass('text-success');
-                    $("#responseLocation").addClass('text-danger');
-
-                }
-
-                if ($('input[name="location"]').hasClass('inputSuccess')) {
-                    $('input[name="location"]').removeClass('inputSuccess');
-                    $('input[name="location"]').addClass('inputError');
-                } else {
-                    $('input[name="location"]').addClass('inputError');
-                }
+}
 
 
 
-            }
-
-            //$('input[name="pincode"]').val(pincode);
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
-
-});
 
 
 $(document).ready(() => {
@@ -411,13 +423,299 @@ $(document).ready(() => {
 
 //cart delete
 
+// document.addEventListener('DOMContentLoaded', function () {
+//     const csrfToken = getCsrfToken();
+
+   
+    
+//     const deleteButtons = document.querySelectorAll('.deleteBTN');
+    
+
+//     deleteButtons.forEach(function (button) {
+//         button.addEventListener('click', function () {
+//             console.log(deleteButtons);
+//             Swal.fire({
+//                 title: 'Are you sure?',
+//                 text: "You won't be able to revert this!",
+//                 icon: 'warning',
+//                 showCancelButton: true,
+//                 confirmButtonColor: '#004a8c',
+//                 cancelButtonColor: '#d33',
+//                 confirmButtonText: 'Yes, delete it!'
+//             }).then(function (result) {
+//                 if (result.isConfirmed) {
+//                     deleteButtons.forEach(function (btn) {
+//                         btn.disabled = true;
+//                     });
+
+//                     var dataId = button.getAttribute('data-id');
+
+//                     fetch(window.baseUrl + '/checkUser')
+//                         .then(function (response) {
+//                             if (!response.ok) {
+//                                 throw new Error('Network response was not ok');
+//                             }
+//                             return response.json();
+//                         })
+//                         .then(function (result) {
+//                             console.log(result);
+
+//                             if (result.code === 200) {
+//                                 const form_datas = {
+//                                     id: dataId,
+//                                 };
+
+//                                 fetch(window.baseUrl + '/deleteCart', {
+//                                     method: 'POST',
+//                                     body: JSON.stringify(form_datas),
+//                                     headers: {
+//                                         'Content-Type': 'application/json',
+//                                         'X-CSRF-TOKEN': csrfToken,
+//                                     },
+//                                 })
+//                                     .then(function (response) {
+//                                         if (!response.ok) {
+//                                             throw new Error('Network response was not ok');
+//                                         }
+//                                         return response.json();
+//                                     })
+//                                     .then(function (data) {
+//                                         console.log(data);
+//                                         toastr.error(data.msg, 'Oops!', {
+//                                             onHidden: function () {
+//                                                 window.location.reload();
+//                                             },
+//                                         });
+//                                     })
+//                                     .catch(function (error) {
+//                                         console.error('Fetch error:', error);
+//                                     });
+//                             } else if (result.code === 210) {
+//                                 var parsedData = JSON.parse(localStorage.getItem("cartData"));
+//                                 const updatedItemIndex = parsedData.findIndex(function (item) {
+//                                     return item.id === dataId;
+//                                 });
+
+//                                 if (updatedItemIndex !== -1) {
+//                                     if (parsedData[updatedItemIndex].custom_image !== undefined) {
+//                                         var guestcrtImg = parsedData[updatedItemIndex].custom_image;
+//                                         const form_datas = {
+//                                             custom_image: guestcrtImg,
+//                                         };
+
+//                                         fetch(window.baseUrl + '/guestCartImgDelete', {
+//                                             method: 'POST',
+//                                             body: JSON.stringify(form_datas),
+//                                             headers: {
+//                                                 'Content-Type': 'application/json',
+//                                                 'X-CSRF-TOKEN': csrfToken,
+//                                             },
+//                                         })
+//                                             .then(function (response) {
+//                                                 if (!response.ok) {
+//                                                     throw new Error('Network response was not ok');
+//                                                 }
+//                                                 return response.json();
+//                                             })
+//                                             .then(function (data) {
+//                                                 if (parsedData.length > 0) {
+//                                                     var NewData = parsedData.filter(function (row) {
+//                                                         return row.id !== dataId;
+//                                                     });
+//                                                     localStorage.setItem('cartData', JSON.stringify(NewData));
+//                                                     toastr.error("Cart Details Deleted Successfully", 'Oops!', {
+//                                                         onHidden: function () {
+//                                                             window.location.reload();
+//                                                         },
+//                                                     });
+//                                                 }
+//                                             })
+//                                             .catch(function (error) {
+//                                                 console.error('Fetch error:', error);
+//                                             });
+//                                     } else {
+//                                         if (parsedData.length > 0) {
+//                                             var NewData = parsedData.filter(function (row) {
+//                                                 return row.id !== dataId;
+//                                             });
+//                                             localStorage.setItem('cartData', JSON.stringify(NewData));
+//                                             toastr.error("Cart Details Deleted Successfully", 'Oops!', {
+//                                                 onHidden: function () {
+//                                                     window.location.reload();
+//                                                 },
+//                                             });
+//                                         }
+//                                     }
+//                                 } else {
+//                                     toastr.error("Something went wrong!", 'Oops!', {
+//                                         onHidden: function () {
+//                                             window.location.reload();
+//                                         },
+//                                     });
+//                                 }
+//                             }
+//                         })
+//                         .catch(function (error) {
+//                             console.error('Fetch error:', error);
+//                         });
+//                 }
+//             });
+//         });
+//     });
+// });
+
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     const csrfToken = getCsrfToken();
+
+//     document.addEventListener('click', function (event) {
+//         const target = event.target;
+
+//         if (target.classList.contains('deleteBTN')) {
+//             const button = target;
+//             console.log(button);
+
+//             Swal.fire({
+//                 title: 'Are you sure?',
+//                 text: "You won't be able to revert this!",
+//                 icon: 'warning',
+//                 showCancelButton: true,
+//                 confirmButtonColor: '#004a8c',
+//                 cancelButtonColor: '#d33',
+//                 confirmButtonText: 'Yes, delete it!'
+//             }).then(function (result) {
+//                 if (result.isConfirmed) {
+//                     button.disabled = true;
+//                     var dataId = button.getAttribute('data-id');
+
+//                     fetch(window.baseUrl + '/checkUser')
+//                         .then(function (response) {
+//                             if (!response.ok) {
+//                                 throw new Error('Network response was not ok');
+//                             }
+//                             return response.json();
+//                         })
+//                         .then(function (result) {
+//                             console.log(result);
+
+//                             if (result.code === 200) {
+//                                 const form_datas = {
+//                                     id: dataId,
+//                                 };
+
+//                                 fetch(window.baseUrl + '/deleteCart', {
+//                                     method: 'POST',
+//                                     body: JSON.stringify(form_datas),
+//                                     headers: {
+//                                         'Content-Type': 'application/json',
+//                                         'X-CSRF-TOKEN': csrfToken,
+//                                     },
+//                                 })
+//                                     .then(function (response) {
+//                                         if (!response.ok) {
+//                                             throw new Error('Network response was not ok');
+//                                         }
+//                                         return response.json();
+//                                     })
+//                                     .then(function (data) {
+//                                         console.log(data);
+//                                         toastr.error(data.msg, 'Oops!', {
+//                                             onHidden: function () {
+//                                                 window.location.reload();
+//                                             },
+//                                         });
+//                                     })
+//                                     .catch(function (error) {
+//                                         console.error('Fetch error:', error);
+//                                     });
+//                             } else if (result.code === 210) {
+//                                 var parsedData = JSON.parse(localStorage.getItem("cartData"));
+//                                 const updatedItemIndex = parsedData.findIndex(function (item) {
+//                                     return item.id === dataId;
+//                                 });
+
+//                                 if (updatedItemIndex !== -1) {
+//                                     if (parsedData[updatedItemIndex].custom_image !== undefined) {
+//                                         var guestcrtImg = parsedData[updatedItemIndex].custom_image;
+//                                         const form_datas = {
+//                                             custom_image: guestcrtImg,
+//                                         };
+
+//                                         fetch(window.baseUrl + '/guestCartImgDelete', {
+//                                             method: 'POST',
+//                                             body: JSON.stringify(form_datas),
+//                                             headers: {
+//                                                 'Content-Type': 'application/json',
+//                                                 'X-CSRF-TOKEN': csrfToken,
+//                                             },
+//                                         })
+//                                             .then(function (response) {
+//                                                 if (!response.ok) {
+//                                                     throw new Error('Network response was not ok');
+//                                                 }
+//                                                 return response.json();
+//                                             })
+//                                             .then(function (data) {
+//                                                 if (parsedData.length > 0) {
+//                                                     var NewData = parsedData.filter(function (row) {
+//                                                         return row.id !== dataId;
+//                                                     });
+//                                                     localStorage.setItem('cartData', JSON.stringify(NewData));
+//                                                     toastr.error("Cart Details Deleted Successfully", 'Oops!', {
+//                                                         onHidden: function () {
+//                                                             window.location.reload();
+//                                                         },
+//                                                     });
+//                                                 }
+//                                             })
+//                                             .catch(function (error) {
+//                                                 console.error('Fetch error:', error);
+//                                             });
+//                                     } else {
+//                                         if (parsedData.length > 0) {
+//                                             var NewData = parsedData.filter(function (row) {
+//                                                 return row.id !== dataId;
+//                                             });
+//                                             localStorage.setItem('cartData', JSON.stringify(NewData));
+//                                             toastr.error("Cart Details Deleted Successfully", 'Oops!', {
+//                                                 onHidden: function () {
+//                                                     window.location.reload();
+//                                                 },
+//                                             });
+//                                         }
+//                                     }
+//                                 } else {
+//                                     toastr.error("Something went wrong!", 'Oops!', {
+//                                         onHidden: function () {
+//                                             window.location.reload();
+//                                         },
+//                                     });
+//                                 }
+//                             }
+//                         })
+//                         .catch(function (error) {
+//                             console.error('Fetch error:', error);
+//                         });
+//                 }
+//             });
+//         }
+//     });
+// });
+
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = getCsrfToken();
-    
-    const deleteButtons = document.querySelectorAll('.deleteBTN');
 
-    deleteButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
+    document.addEventListener('click', function (event) {
+        const target = event.target;
+
+        // Check if the clicked element is the button or one of its child elements
+        const button = target.closest('.deleteBTN');
+
+        if (button) {
+          
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -428,10 +726,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 confirmButtonText: 'Yes, delete it!'
             }).then(function (result) {
                 if (result.isConfirmed) {
-                    deleteButtons.forEach(function (btn) {
-                        btn.disabled = true;
-                    });
-
+                    button.disabled = true;
                     var dataId = button.getAttribute('data-id');
 
                     fetch(window.baseUrl + '/checkUser')
@@ -544,9 +839,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                 }
             });
-        });
+
+            // Stop event propagation if the target is a child element of the button
+            if (target !== button) {
+                event.stopPropagation();
+            }
+        }
     });
 });
+
+
 
 
 
@@ -1034,21 +1336,7 @@ function hideDropdown(event) {
 
 
 
-const toggleBtn = document.getElementById('toggle-btn');
-const closeBtn = document.getElementById('close-btn');
-const nav = document.querySelector('nav');
 
-closeBtn.addEventListener('click', () => {
-    toggleBtn.checked = false;
-});
-
-toggleBtn.addEventListener('click', () => {
-    if (toggleBtn.checked) {
-        nav.classList.add('open');
-    } else {
-        nav.classList.remove('open');
-    }
-});
 
 
 // carousal

@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/register.css') }}"> --}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
@@ -35,6 +35,32 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
+    <script>
+        window.baseUrl = "{{ url('/') }}";
+        window.imgUrl = "{{ asset('/') }}";
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/magic-checkout.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.28/sweetalert2.min.js"
+        integrity="sha512-CyYoxe9EczMRzqO/LsqGsDbTl3wBj9lvLh6BYtXzVXZegJ8VkrKE90fVZOk1BNq3/9pyg+wn+TR3AmDuRjjiRQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/owl.carousel.min.js"></script>
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+    <script src="{{ asset('js/main.js') }}"></script>
+    {{-- <script src="{{ asset('js/register.js') }}"></script> --}}
+
 </head>
 
 <body>
@@ -57,31 +83,266 @@
 </body>
 
 <script>
-    window.baseUrl = "{{ url('/') }}";
-    window.imgUrl = "{{ asset('/') }}";
+    //coomon js functionalities
+
+    toastr.options = {
+        closeButton: true,
+        debug: false,
+        newestOnTop: false,
+        progressBar: false,
+        positionClass: "toast-top-center",
+        preventDuplicates: false,
+        onclick: null,
+        showDuration: "2000",
+        hideDuration: "1000",
+        timeOut: "1000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
+    };
+
+    function moveToNext(currentInput, nextInputId) {
+        if (currentInput.value.length === 1) {
+            document.getElementById(nextInputId).focus();
+        }
+    }
+
+    function moveToPreviousInput(currentInput, previousInputId, event) {
+        const currentInputValue = currentInput.value;
+        console.log(event.keyCode);
+
+        // If the input is empty and the Backspace key is pressed, move focus to the previous input.
+        if (currentInputValue === "" && event.keyCode === 8) {
+            const previousInput = document.getElementById(previousInputId);
+
+            if (previousInput) {
+                previousInput.focus();
+            }
+        }
+    }
+
+    function getCsrfToken() {
+        return document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+    }
+
+    function resendOtp(event) {
+        var phone = event.target.getAttribute("data-id");
+
+        var resetBtn = "Resend";
+
+        var html = "Resending... <i class='fa fa-spinner fa-spin'></i>";
+        event.target.innerHTML = html;
+        event.target.style.pointerEvents = "none";
+
+        if (phone != undefined) {
+            console.log(phone);
+
+            const form_datas = {
+                phone: phone,
+            };
+            const csrfToken = getCsrfToken();
+            fetch(window.baseUrl + "/resendOtp", {
+                    method: "POST",
+                    body: JSON.stringify(form_datas),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    if (data.code == 200) {
+                        event.target.innerHTML = resetBtn;
+                        event.target.style.pointerEvents = "auto";
+                    }
+                })
+                .catch((error) => {
+                    console.error("Fetch error:", error);
+                });
+        } else {
+            toastr.error("Something went wrong", "Oops", {
+                onHidden: function() {
+                    event.target.innerHTML = resetBtn;
+                    event.target.style.pointerEvents = "auto";
+                },
+            });
+        }
+    }
+
+
+    function cartAuthenticate() {
+        var cartstr = localStorage.getItem("cartData");
+        var cartData = JSON.parse(cartstr);
+        if (cartData && cartData.length > 0) {
+            const csrfToken = getCsrfToken();
+            var form_data = [];
+            cartData.forEach((cart) => {
+                form_obj = {
+                    product_id: cart.productId,
+                    quantity: cart.quantity,
+                    pincode: cart.pincode,
+                    // 'custom_image' : cart.custom_image,
+                    // 'custom_text' : cart.custom_text
+                };
+
+                if (cart.custom_image != undefined) {
+                    form_obj.custom_image = cart.custom_image;
+                } else {
+                    form_obj.custom_image = "";
+                }
+
+                if (cart.custom_text != undefined) {
+                    form_obj.custom_text = cart.custom_text;
+                } else {
+                    form_obj.custom_text = "";
+                }
+
+                form_data.push(form_obj);
+            });
+
+            fetch(window.baseUrl + "/transferCart", {
+                    method: "POST",
+                    body: JSON.stringify(form_data),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                })
+                .then((response) => {
+                    console.log(response);
+                    localStorage.removeItem("cartData");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //otp submission
+
+    $(document).ready(function() {
+        $(".otp-form").on("submit", function(event) {
+            //var html = '<i class="fa fa-spinner fa-spin" ></i>';
+            // var resetbtn = "Login";
+            const clickedButtonId = $(event.target)
+                .find(":submit:focus")
+                .attr("id");
+
+            event.preventDefault();
+            var formElement = event.target;
+            var formAction = formElement.getAttribute("action");
+            var formData = new FormData(formElement);
+
+            console.log(clickedButtonId);
+
+            $("#" + clickedButtonId)
+                .css({
+                    "pointer-events": "none",
+                    background: "#004a8cab",
+                })
+                .val("");
+
+            $(".spinner").css("display", "block");
+
+            fetch(formAction, {
+                    method: "POST",
+                    body: formData,
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    $(".spinner").css("display", "none");
+                    $("#" + clickedButtonId).val("Login");
+
+                    if (data.code == 200) {
+                        //console.log(cartAuthenticate());
+
+                        if (cartAuthenticate()) {
+                            toastr.success(data.msg, "Success", {
+                                onHidden: function() {
+                                    console.log("Toast hidden");
+
+                                    $("#" + clickedButtonId).css({
+                                        "pointer-events": "auto",
+                                        background: "#004a8c",
+                                    });
+
+                                    window.location.href = window.baseUrl +
+                                        "/shippingCart";
+                                },
+                            });
+                        } else {
+                            toastr.success(data.msg, "Success", {
+                                onHidden: function() {
+                                    console.log("Toast hidden");
+
+                                    $("#" + clickedButtonId).css({
+                                        "pointer-events": "auto",
+                                        background: "#004a8c",
+                                    });
+
+                                    window.location.href = window.baseUrl + "/home";
+                                },
+                            });
+                        }
+                    } else if (data.code == 210) {
+                        toastr.error(data.msg, "Oops!", {
+                            onHidden: function() {
+                                console.log("Toast hidden");
+
+                                $("#" + clickedButtonId).css({
+                                    "pointer-events": "auto",
+                                    background: "#004a8c",
+                                });
+                            },
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Fetch error:", error);
+                });
+        });
+    });
+
+    //force logout
+    function forceLogout() {
+        let redirectedUrl = window.baseUrl + "/logout";
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to Logout?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#004a8c",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = redirectedUrl;
+            }
+        });
+    }
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<script src="https://checkout.razorpay.com/v1/magic-checkout.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.28/sweetalert2.min.js"
-    integrity="sha512-CyYoxe9EczMRzqO/LsqGsDbTl3wBj9lvLh6BYtXzVXZegJ8VkrKE90fVZOk1BNq3/9pyg+wn+TR3AmDuRjjiRQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/owl.carousel.min.js"></script>
-
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-<!-- Owl Carousel JavaScript -->
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js" integrity="sha512-9CWGXFSJ+/X0LWzSRCZFsOPhSfm6jbnL+Mpqo0o8Ke2SYr8rCTqb4/wGm+9n13HtDE1NQpAEOrMecDZw4FXQGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
-
-<script src="{{ asset('js/main.js') }}"></script>
-<script src="{{ asset('js/register.js') }}"></script>
-
+{{-- session msg --}}
 
 @if (session('otpVerificationError'))
     <script>
@@ -1116,7 +1377,8 @@
                                                         sresponse_str)
                                                     .razorpay_payment_id;
                                                 let redirecturl =
-                                                window.baseUrl +"/payment/status/" +
+                                                    window.baseUrl +
+                                                    "/payment/status/" +
                                                     payment_id + "/" + amount;
                                                 window.location.href = redirecturl;
                                             }
@@ -1135,7 +1397,8 @@
                                                     .metadata
                                                     .payment_id;
                                                 let redirecturl =
-                                                window.baseUrl +"/payment/status/" +
+                                                    window.baseUrl +
+                                                    "/payment/status/" +
                                                     payment_id + "/" + amount;
                                                 window.location.href = redirecturl;
                                             });

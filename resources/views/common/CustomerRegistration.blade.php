@@ -32,7 +32,8 @@
                                 <div class="input-group">
 
                                     <input type="text" class="form-control register-inputText" id="userName"
-                                        name="name" placeholder="eg:John Doe" aria-label="Fullname" required style="border: 1px solid #CCCCCC;" >
+                                        name="name" placeholder="eg:John Doe" aria-label="Fullname" required
+                                        style="border: 1px solid #CCCCCC;">
 
                                 </div>
                                 <label for="userPhone">Mobile Number</label>
@@ -47,7 +48,8 @@
                                 <div class="input-group">
 
                                     <input type="text" class="form-control register-inputText" id="userEmail"
-                                        name="email" placeholder="eg:john@gmail.com" aria-label="Email" required style="border: 1px solid #CCCCCC;" >
+                                        name="email" placeholder="eg:john@gmail.com" aria-label="Email" required
+                                        style="border: 1px solid #CCCCCC;">
 
                                 </div>
 
@@ -65,14 +67,22 @@
                                 <div class="otp-input">
                                     <input type="hidden" name="phone" id="hid_phone">
                                     <input type="text" name="otp1" id="otp1" name="otp1" maxlength="1"
-                                        onkeyup="moveToNext(this, 'otp2')" onkeyup="moveToPreviousInput(this, 'otp1',event)" onkeypress="moveToPreviousInput(this, 'otp1',event)" onkeydown="moveToPreviousInput(this, 'otp1',event)"  required>
+                                        onkeyup="moveToNext(this, 'otp2')" onkeyup="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp1',event)" required>
 
                                     <input type="text" name="otp2" id="otp2" name="otp2" maxlength="1"
-                                        onkeyup="moveToNext(this, 'otp3')" onkeyup="moveToPreviousInput(this, 'otp1',event)" onkeypress="moveToPreviousInput(this, 'otp1',event)" onkeydown="moveToPreviousInput(this, 'otp1',event)"  required>
+                                        onkeyup="moveToNext(this, 'otp3')" onkeyup="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp1',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp1',event)" required>
                                     <input type="text" name="otp3" id="otp3" name="otp3" maxlength="1"
-                                        onkeyup="moveToNext(this, 'otp4')" onkeyup="moveToPreviousInput(this, 'otp2',event)" onkeypress="moveToPreviousInput(this, 'otp2',event)" onkeydown="moveToPreviousInput(this, 'otp2',event)"  required>
-                                    <input type="text" name="otp4" id="otp4" name="otp4" maxlength="1" onkeyup="moveToPreviousInput(this, 'otp3',event)" onkeypress="moveToPreviousInput(this, 'otp3',event)" onkeydown="moveToPreviousInput(this, 'otp3',event)" 
-                                        required>
+                                        onkeyup="moveToNext(this, 'otp4')" onkeyup="moveToPreviousInput(this, 'otp2',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp2',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp2',event)" required>
+                                    <input type="text" name="otp4" id="otp4" name="otp4" maxlength="1"
+                                        onkeyup="moveToPreviousInput(this, 'otp3',event)"
+                                        onkeypress="moveToPreviousInput(this, 'otp3',event)"
+                                        onkeydown="moveToPreviousInput(this, 'otp3',event)" required>
                                 </div>
 
                                 <div class="logtimer">
@@ -83,16 +93,17 @@
                                     <p id="resendp" onclick="resendOtp(event)">Resend OTP</p>
                                 </div>
 
-                                 <div class="submit-container">
+                                <div class="submit-container">
                                     <i class="fa fa-spinner fa-spin spinner" style="display:none;"></i>
-                                <input type="submit" id="submitcodeBtn" class="loginButton mt-4" value="Register">
-                            </div>
+                                    <input type="submit" id="submitcodeBtn" class="loginButton mt-4" value="Register">
+                                </div>
                             </form>
                         </div>
 
                         <div class="login-form mb-3">
                             <p class="mt-4">Or continue with</p>
-                            <form class="googleForm" id="googleForm2" action="{{ url('auth/redirect') }}" method="get">
+                            <form class="googleForm" id="googleForm2" action="{{ url('auth/redirect') }}"
+                                method="get">
 
                                 <a href="javascript:void(0)" class="googleLogin" onclick="googleLogin()"><img
                                         src="{{ asset('images/icons/google.png') }}" alt=""> <span>Sign in with
@@ -132,7 +143,7 @@
                             var productId = item.productId;
                             var quantity = item.quantity;
                             var pincode = item.pincode;
-                             var custom_image = item.custom_image;
+                            var custom_image = item.custom_image;
                             var custom_text = item.custom_text;
 
                             // Create input fields for each item
@@ -207,6 +218,151 @@
                 localStorage.removeItem('cartData');
 
             }
+
+            $(document).ready(() => {
+
+                $(document).on("click", "#getcode_btn", () => {
+                    $("#getcode_form").submit();
+                });
+            });
+
+            //Register otp sent
+
+            $("#getcode_form").on("submit", (event) => {
+                event.preventDefault();
+
+                var html = '<i class="fa fa-spinner fa-spin" ></i>';
+                var resetbtn = "Get Code";
+                const clickedButtonId = $(event.target).find("a").attr("id");
+
+                let formElement = event.target;
+                let formAction = formElement.getAttribute("action");
+                let formMethod = formElement.getAttribute("method");
+                let formData = new FormData(formElement);
+                var phone = formData.get("phone");
+                var name = formData.get("name");
+                var email = formData.get("email");
+                console.log(name);
+                console.log(typeof email);
+
+                if (name == "") {
+                    $("#userName").css("border-color", "#fb483a");
+                }
+
+                if (phone == "") {
+                    $("[name='phone']").css("border-color", "#fb483a");
+                    $(".input-group-text").css("border-color", "#fb483a");
+                }
+
+                if (email == "") {
+                    $("#userEmail").css("border-color", "#fb483a");
+                }
+
+                if (phone != "" && name != "" && email != "") {
+                    $("#" + clickedButtonId)
+                        .css({
+                            "pointer-events": "none",
+                            background: "#004a8cab"
+                        })
+                        .html(html);
+                    fetch(formAction, {
+                            method: "POST",
+                            body: formData,
+                        })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log(data);
+
+                            if (data.errors) {
+                                var error = data.errors;
+                                for (const fieldName in error) {
+                                    if (error.hasOwnProperty(fieldName)) {
+                                        const errorMessages = error[fieldName];
+                                        errorMessages.forEach((errorMessage) => {
+                                            toastr.error(errorMessage, "Oops", {
+                                                onHidden: function() {
+                                                    $("#" + clickedButtonId)
+                                                        .css({
+                                                            "pointer-events": "auto",
+                                                            background: "#004a8c",
+                                                        })
+                                                        .html(resetbtn);
+                                                },
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+
+                            if (data.code == 200) {
+                                $("#hid_phone").val(phone);
+                                $("#resendp").attr("data-id", phone);
+
+                                toastr.success(data.msg, "Success", {
+                                    onHidden: function() {
+                                        $("#" + clickedButtonId)
+                                            .css({
+                                                "pointer-events": "auto",
+                                                background: "#004a8c",
+                                            })
+                                            .html(resetbtn);
+                                        if ($(".submit_code").hasClass("deactive")) {
+                                            $(".submit_code").removeClass("deactive");
+                                            $(".submit_code").addClass("active");
+                                        }
+                                        if ($(".get_code").hasClass("active")) {
+                                            $(".get_code").removeClass("active");
+                                            $(".get_code").addClass("deactive");
+                                        }
+
+                                        var countdownInterval = setInterval(function() {
+                                            var countdownElement =
+                                                document.getElementById("countdown");
+
+                                            if (countdownElement) {
+                                                var countdownValue = parseInt(
+                                                    countdownElement.textContent
+                                                );
+
+                                                if (countdownValue > 0) {
+                                                    countdownValue--;
+                                                    countdownElement.textContent =
+                                                        countdownValue;
+                                                }
+                                                if (countdownValue == 0) {
+                                                    clearInterval(countdownInterval);
+                                                    $(".logtimer").hide();
+
+                                                    if ($("#resend").hasClass("hideSpan")) {
+                                                        $("#resend").removeClass(
+                                                            "hideSpan"
+                                                        );
+                                                        $("#resend").addClass("showSpan");
+                                                    }
+                                                }
+                                            }
+                                        }, 1000);
+                                    },
+                                });
+                            } else if (data.code == 210) {
+                                toastr.error(data.msg, "Oops!", {
+                                    onHidden: function() {
+                                        $("#" + clickedButtonId)
+                                            .css({
+                                                "pointer-events": "auto",
+                                                background: "#004a8c",
+                                            })
+                                            .html(resetbtn);
+                                        window.location.href = window.baseUrl + "/login";
+                                    },
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Fetch error:", error);
+                        });
+                }
+            });
         </script>
 
     </section>
