@@ -159,6 +159,20 @@ class ProductInventoryController extends Controller
 
     public function productDelete(Request $request){
 
+         if($request->has('id')){
+
+            $productId = $request->input('id');
+
+        $res =  Product::where('id',$productId)->delete();
+             if($res){
+                return response()->json(['code'=>200,'msg'=>'Product deleted successfully'],200);
+            }
+        }
+    }
+
+     public function productChange(Request $request){
+
+
         if($request->has('id')){
 
             $productId = $request->input('id');
@@ -169,19 +183,6 @@ class ProductInventoryController extends Controller
             $res=$product->save();
              if($res){
                 return response()->json(['code'=>200,'msg'=>'Product status changed successfully'],200);
-            }
-        }
-    }
-
-     public function product_delete(Request $request){
-
-        if($request->has('id')){
-
-            $productId = $request->input('id');
-
-        $res =  Product::where('id',$productId)->delete();
-             if($res){
-                return response()->json(['code'=>200,'msg'=>'Product deleted successfully'],200);
             }
         }
     }
