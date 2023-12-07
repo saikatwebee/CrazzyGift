@@ -188,7 +188,7 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
 
 
     Route::post('/productDelete', [ProductInventoryController::class, 'productDelete'])->name('productDelete');
-    Route::post('/product_delete', [ProductInventoryController::class, 'product_delete'])->name('product_delete');
+    Route::post('/productChange', [ProductInventoryController::class, 'productChange'])->name('productChange');
     Route::post('/subproducts', [ProductInventoryController::class, 'subproducts'])->name('subproducts');
 
     Route::post('/getProduct', [ProductInventoryController::class, 'getProduct'])->name('getProduct');
@@ -208,6 +208,7 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
 
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/userReport', [AdminController::class, 'userReport'])->name('userReport');
+    Route::post('/userChange', [AdminController::class, 'userChange'])->name('userChange');
     Route::post('/userDelete', [AdminController::class, 'userDelete'])->name('userDelete');
 
 

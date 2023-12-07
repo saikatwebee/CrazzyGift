@@ -165,7 +165,7 @@ class AdminController extends Controller
 
     }
 
-    public function userDelete(Request $request){
+    public function userChange(Request $request){
         if($request->has('id')){
 
             $id = $request->input('id');
@@ -179,6 +179,21 @@ class AdminController extends Controller
             }
         }
     }
+
+    public function userDelete(Request $request){
+        if($request->has('id')){
+
+            $id = $request->input('id');
+
+            $res = User::where('id',$id)->delete();
+           
+             if($res){
+                return response()->json(['code'=>200,'msg'=>'user deleted successfully'],200);
+            }
+        }
+    }
+
+
 
 
 

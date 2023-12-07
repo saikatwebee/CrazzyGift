@@ -218,7 +218,7 @@ class UserController extends Controller
 
             //echo "found";
 
-            if (auth()->attempt(['username' => $user->email, 'password' => 'Zikra@Byte'])) {
+            if (auth()->attempt(['username' => $user->email, 'password' => 'Crazzygigt@2023','status'=>1])) {
 
                 $token = auth()->user()->createToken('passport_token')->accessToken;
 
@@ -245,14 +245,14 @@ class UserController extends Controller
                 'email' => $user->email,
                 'username' => $user->email,
                 'google_id' => $user->id,
-                'password' => Hash::make('Zikra@Byte')
+                'password' => Hash::make('Crazzygigt@2023')
 
             ];
 
             $newUser = User::create($create);
             if ($newUser) {
 
-                if (auth()->attempt(['username' => $user->email, 'password' => 'Zikra@Byte'])) {
+                if (auth()->attempt(['username' => $user->email, 'password' => 'Crazzygigt@2023','status'=>1])) {
                     $token = auth()->user()->createToken('passport_token')->accessToken;
 
                     $user_id = auth()->user()->id;
@@ -377,7 +377,7 @@ class UserController extends Controller
                         'email' => $email,
                         'username' => $phone,
                         'otp' => (int) $otp,
-                        'password' => Hash::make('Zikra@Byte'),
+                        'password' => Hash::make('Crazzygigt@2023'),
                     ];
 
                     // store registraion data into session after succesfully call the msg91 api
@@ -506,7 +506,7 @@ class UserController extends Controller
                 $username = $user->username;
 
                 // authentication attempt
-                if (auth()->attempt(['username' => $username, 'password' => 'Zikra@Byte'])) {
+                if (auth()->attempt(['username' => $username, 'password' => 'Crazzygigt@2023','status'=>1])) {
                     $token = auth()->user()->createToken('passport_token')->accessToken;
 
                     if (User::where(['id' => auth()->user()->id, 'is_verified' => 0])->exists()) {
@@ -517,7 +517,7 @@ class UserController extends Controller
                     $response = ['msg' => 'OTP Verified successfully!', 'code' => 200];
                 } else {
 
-                    $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
+                    $response = ['msg' => 'Your account is currently inactive. Please reach out to us at orders@crazzygift.com to activate your account. Thank you for your attention to this matter.', 'code' => 210];
                 }
             } else {
 
@@ -551,7 +551,7 @@ class UserController extends Controller
                 $username = $user->username;
 
                 // authentication attempt
-                if (auth()->attempt(['username' => $username, 'password' => 'Zikra@Byte'])) {
+                if (auth()->attempt(['username' => $username, 'password' => 'Crazzygigt@2023','status'=>1])) {
                     $token = auth()->user()->createToken('passport_token')->accessToken;
 
                     if (User::where(['id' => auth()->user()->id, 'is_verified' => 0])->exists()) {
