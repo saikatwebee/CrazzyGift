@@ -8,9 +8,9 @@
         <div class="breadcrumb">
             <div aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="shipping.html">Shipping Cart</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Login</li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    
+                    <li class="breadcrumb-item active" aria-current="page">Resister | Login</li>
                 </ol>
             </div>
         </div>
@@ -18,9 +18,7 @@
         <div class="row">
             <div class="col-md-2 my-3 align-item-center">
                 <div class="loginGiftLeft">
-                    <!-- <div class="homeButton">
-                                            <a href="index.html">Home</a>
-                                        </div> -->
+                    
                     <img src="{{ asset('images/leftgift.png') }}" alt="gift" class="giftImage">
                 </div>
             </div>

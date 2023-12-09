@@ -11,7 +11,7 @@
         <div class="breadcrumb">
             <div aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">My Orders</li>
                 </ol>
             </div>
@@ -274,7 +274,63 @@
             @endif
         @endif
 
-                
+    <script>
+        
+        function reattemptShipment(order_id){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to Reattempt the shipment.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#004a8c',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        //put all code if yes
+
+                        const url = "{{ url('/shipmentReattempt') }}";
+
+                        const csrfToken = getCsrfToken();
+
+                        const form_datas = {
+                            id: order_id,
+
+                        };
+
+                        fetch(url, {
+                                method: 'POST',
+                                body: JSON.stringify(form_datas),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken,
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+
+                                if (data.code == 200) {
+                                    toastr.success(data.msg, 'Success', {
+                                        onHidden: function() {
+                                            location.reload();
+                                        }
+                                    })
+                                } else {
+                                    toastr.error("Something went wrong!", 'oops', {
+                                        onHidden: function() {
+                                            location.reload();
+                                        }
+                                    })
+                                }
+                            })
+                            .catch(error => console.error(error));
+                    }
+                })
+            }
+
+        
+        </script>                
 
     </section>
 @endsection

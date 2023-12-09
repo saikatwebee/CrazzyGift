@@ -9,7 +9,7 @@
             <div aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ url('/products') }}">Product</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/products-all') }}">Product</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $product->title }}</li>
                 </ol>
             </div>
@@ -164,7 +164,12 @@
                         </div>
                         <div class="slide-caption">
                             <h2>{{ $similarProduct->title }}</h2>
-                            <p><i class="fa-solid fa-indian-rupee-sign"></i> {{ $similarProduct->price }}</p>
+                            <div class="price-box">
+                                <p class="actual-price"><i class="fa-solid fa-indian-rupee-sign"></i> {{ $similarProduct->actual_price }}</p>
+                                 <p class="selling-price"><i class="fa-solid fa-indian-rupee-sign"></i> {{ $similarProduct->price }}</p>
+                                
+                            </div>
+                          
                         </div>
                     </div>
                 </div>

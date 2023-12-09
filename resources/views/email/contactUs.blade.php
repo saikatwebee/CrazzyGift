@@ -103,9 +103,9 @@
         <div class="social-footer">
             <p>Follow us on social media for daily gift inspiration, updates, and contests.</p>
             <div class="social-icons">
-                <a href="#" style="text-decoration: none;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Facebook_icon.svg/1200px-Facebook_icon.svg.png" alt="Facebook"></a>
-                <a href="#" style="text-decoration: none;"><img src="https://e7.pngegg.com/pngimages/708/311/png-clipart-twitter-twitter-thumbnail.png" alt="Twitter"></a>
-                <a href="#" style="text-decoration: none;"><img src="https://img.freepik.com/premium-vector/vinnytsia-ukraine-april-27-2023-popular-social-media-icon-instagram-vector-design_545793-1681.jpg" alt="Instagram"></a>
+                <a href="https://www.facebook.com/Crazzygift/" target="_blank" style="text-decoration: none;"><img src="https://static-00.iconduck.com/assets.00/facebook-icon-512x512-seb542ju.png" alt="Facebook"></a>
+                <a href="https://twitter.com/undergrndmedia" target="_blank" style="text-decoration: none;"><img src="https://www.iconpacks.net/icons/2/free-twitter-logo-icon-2429-thumb.png" alt="Twitter"></a>
+                {{-- <a href="#" style="text-decoration: none;"><img src="https://img.freepik.com/premium-vector/vinnytsia-ukraine-april-27-2023-popular-social-media-icon-instagram-vector-design_545793-1681.jpg" alt="Instagram"></a> --}}
             </div>
         </div>
 

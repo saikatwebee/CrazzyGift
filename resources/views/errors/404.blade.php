@@ -18,7 +18,7 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="{{ asset('/css/vertical-layout-light/style.css') }}">
   <!-- endinject -->
-  {{-- <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" /> --}}
+ 
   <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"

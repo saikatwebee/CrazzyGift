@@ -60,6 +60,13 @@ Route::middleware(['auth', 'verifyUser'])->group(function () {
     Route::get('/', [UserController::class, "index"])->name('home')->withoutMiddleware('auth');
     Route::get('/{products-all}', [ProductController::class, "index"])->name('products-all')->withoutMiddleware('auth');
 
+
+    Route::get('/term-condition', [UserController::class, "termCondition"])->name('term-condition')->withoutMiddleware('auth');
+    Route::get('/cancellationRefundPolicy', [UserController::class, "cancellationRefundPolicy"])->name('cancellationRefundPolicy')->withoutMiddleware('auth');
+    Route::get('/privacy-policy', [UserController::class, "privacyPolicy"])->name('privacy-policy')->withoutMiddleware('auth');
+    Route::get('/shipping-policy', [UserController::class, "shippingPolicy"])->name('shipping-policy')->withoutMiddleware('auth');
+    
+
     // Route::get('/about-us', [UserController::class, "aboutUs"])->name('about-us')->withoutMiddleware('auth');
     // Route::get('/contact-us', [UserController::class, "contactUs"])->name('contact-us')->withoutMiddleware('auth');
     // Route::get('/corporate-gifts', [UserController::class, "corporateGifts"])->name('corporate-gifts')->withoutMiddleware('auth');
@@ -142,6 +149,9 @@ Route::middleware(['auth', 'verifyUser'])->group(function () {
     Route::get('/awbAjax', [ProductController::class, "awbAjax"]);
     Route::get('/manifestAjax', [ProductController::class, "manifestAjax"]);
     Route::post('/cancellShipment', [PaymentController::class, "cancellShipment"]);
+    Route::post('/cancellShipmentMail', [PaymentController::class, "cancellShipmentMail"]);
+    Route::post('/shipmentReattempt', [PaymentController::class, "shipmentReattempt"]);
+    
 
 
 

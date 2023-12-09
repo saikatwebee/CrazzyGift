@@ -6,6 +6,16 @@
     <!-- Your page-specific content goes here -->
 
     <section class="loginRegister container">
+        <div class="breadcrumb">
+            <div aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    
+                    <li class="breadcrumb-item active" aria-current="page">Resister</li>
+                </ol>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-4 my-3 align-item-center">
                 <div class="loginGiftLeft">

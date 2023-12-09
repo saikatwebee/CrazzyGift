@@ -84,6 +84,37 @@ class UserController extends Controller
         return view('aboutUs', compact('title', 'heading'));
     }
 
+    public function termCondition(){
+        
+        $title = 'Terms & Conditions | CrazzyGift';
+        $heading = 'Terms & Conditions';
+        return view('TermConditionView', compact('title', 'heading'));
+    }
+
+    public function cancellationRefundPolicy(){
+        $title = 'Cancellation and Refund Policy | CrazzyGift';
+        $heading = 'Cancellation and Refund Policy';
+        return view('CancellationRefundPolicyView', compact('title', 'heading'));
+    }
+
+    public function privacyPolicy(){
+       
+        $title = 'privacy Policy | CrazzyGift';
+        $heading = 'privacy Policy';
+        return view('privacyPolicyView', compact('title', 'heading'));
+    }
+
+    public function shippingPolicy(){
+       
+        $title = 'Shipping Policy | CrazzyGift';
+        $heading = 'Shipping Policy';
+        return view('shippingPolicyView', compact('title', 'heading'));
+    }
+
+
+    
+    
+
     public function contactUs()
     {
         $title = 'Contact Us | CrazzyGift';
