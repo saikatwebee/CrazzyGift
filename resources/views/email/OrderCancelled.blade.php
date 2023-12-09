@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +12,7 @@
             margin: 0;
             padding: 0;
         }
+
 
         .container {
             max-width: 600px;
@@ -73,16 +75,30 @@
             <h2>Welcome to CrazzyGift</h2>
         </div>
         <div class="content">
-            <p>Dear {{$user->name}},</p>
-            <p>Welcome to CrazzyGift, your go-to destination for unique and exciting gifts that will make every occasion memorable! We're thrilled to have you as a part of our growing community of gift enthusiasts. At CrazzyGift, we believe in the power of thoughtful gifting, and we're here to make your gift-giving experience as fun and hassle-free as possible. Whether it's a birthday, anniversary, holiday, or just a spontaneous gesture, we've got the perfect gift waiting for you.</p>
-            <p>Here's a quick overview of what you can expect as a registered member:</p>
-            <ul>
-                <li>Exclusive Offers: As a CrazzyGift member, you'll be the first to know about our special promotions, discounts, and exciting offers. Keep an eye on your inbox for exclusive deals!</li>
-                <li>Wishlist and Favorites: Easily save your favorite items to your wishlist, making it simple to keep track of the gifts you love.</li>
-                <li>Personalized Recommendations: Our advanced recommendation system will suggest unique gift ideas based on your preferences and past searches.</li>
-                <li>Fast Checkout: Enjoy a seamless and speedy checkout process to ensure your gifts are on their way in no time.</li>
-                <li>Order History: Access your order history to keep track of your previous purchases and reorder your favorite items with ease.</li>
-            </ul>
+            <p>Dear {{$name}},</p>
+            <p>Welcome to CrazzyGift, your order has been successfully Cancelled.</p>
+            <p>Order Details are stated below:</p>
+            
+
+            <table style="width: 100% !important;margin-bottom: 1rem !important;color: #212529 !important;border:1px solid #212529;">
+                <tr style="border:1px solid #212529 !important;">
+                    <th style="border:1px solid #212529 !important;">Order ID</th>
+                    <td style="border:1px solid #212529 !important;">{{$order_data->order_id}}</td>
+                </tr>
+                 <tr style="border:1px solid #212529 !important;">
+                      <th style="border:1px solid #212529 !important;">Amount</th>
+                    <td style="border:1px solid #212529 !important;">{{$order_data->amount}}</td>
+                 </tr>
+                  <tr style="border:1px solid #212529 !important;">
+                       <th style="border:1px solid #212529 !important;">Transaction ID</th>
+                    <td style="border:1px solid #212529 !important;">{{$order_data->transaction_id}}</td>
+                  </tr>
+                 
+
+            </table>
+
+
+
             <p>We're committed to providing you with a fantastic shopping experience, so if you have any questions or need assistance with anything, our friendly customer support team is here to help. Just drop us a line at <a href="mailto:support@crazzygift.com">support@crazzygift.com</a>.</p>
             <p>Thank you for choosing CrazzyGift. We're excited to embark on this gift-giving journey with you. Start exploring our collection of unique gifts today!</p>
         </div>
@@ -108,4 +124,6 @@
     </div>
 </body>
 </html>
+
+
 

@@ -167,7 +167,7 @@ class ProductInventoryController extends Controller
              if($res){
                 return response()->json(['code'=>200,'msg'=>'Product deleted successfully'],200);
             }
-        }
+        }   
     }
 
      public function productChange(Request $request){

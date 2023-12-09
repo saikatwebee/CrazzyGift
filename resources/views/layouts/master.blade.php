@@ -85,6 +85,21 @@
 <script>
     //coomon js functionalities
 
+
+  
+
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/65720b41ff45ca7d4788196f/1hh2nnunl';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+
+
+
     toastr.options = {
         closeButton: true,
         debug: false,
@@ -409,11 +424,28 @@
                         console.log(data);
 
                         if (data.code == 200) {
-                            toastr.success(data.msg, 'Success', {
-                                onHidden: function() {
-                                    location.reload();
-                                }
-                            })
+                            const callbackUrl = "{{ url('/cancellShipmentMail') }}";
+
+                            fetch(callbackUrl, {
+                                    method: 'POST',
+                                    body: JSON.stringify(form_datas),
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                    },
+                                })
+                                .then(response => response.json())
+                                .then(callbackData => {
+                                    console.log(callbackData);
+                                    if (callbackData.code == 200) {
+                                        toastr.success(data.msg, 'Success', {
+                                            onHidden: function() {
+                                                location.reload();
+                                            }
+                                        });
+                                    }
+                                })
+                                .catch(callbackError => console.error(callbackError));
                         } else {
                             toastr.error("Something went wrong!", 'oops', {
                                 onHidden: function() {

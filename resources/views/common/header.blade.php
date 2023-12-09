@@ -7,13 +7,13 @@
         <div class="search-container">
             <form action="{{ route('search') }}" method="GET">
                 <input type="text" placeholder="Search for gifts" name="searchQuery">
-                <button type="submit"><i class="fa fa-search"></i><span>Search</span></button>
+                <button type="submit"><i class="fa fa-search"></i><span id="mob-search">Search</span></button>
             </form>
         </div>
 
         <div class="icons">
-            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.facebook.com/Crazzygift/" target="_blank" id="fb-menu"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://twitter.com/undergrndmedia" target="_blank" id="twitter-menu"><i class="fa-brands fa-twitter"></i></a>
             <div class="user-dropdown">
                 <a href="#" class="user-icon"><i class="fa-solid fa-user"></i></a>
                 <div class="user-content">
@@ -24,7 +24,7 @@
                     @endif
                 </div>
             </div>
-            <a href="{{ url('/shippingCart') }}">
+            <a href="{{ url('/shippingCart') }}" id="cart-menu">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="cart-count"></span>
             </a>
@@ -37,12 +37,12 @@
                 <ul>
                     <li><a href="{{ url('/') }}"><i class="fa-solid fa-house-chimney-window"></i> Home</a></li>
                     @if (!auth()->check())
-                        <li><a href="{{ url('/signin') }}">Sign In / Register</a></li>
-                        <li><a href="{{ url('/login') }}">Log In</a></li>
+                        <li><a href="{{ url('/signin') }}"><i class="fa-solid fa-users"></i> Register</a></li>
+                        <li><a href="{{ url('/login') }}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log In</a></li>
                     @endif
 
 
-                    <li><a href="{{ url('/products/all') }}"><i class="fa-solid fa-gift"></i> Products</a></li>
+                    <li><a href="{{ url('/products-all') }}"><i class="fa-solid fa-gift"></i> Products</a></li>
 
                     <li><a href="{{ url('/shippingCart') }}"><i class="fa-solid fa-cart-shopping"></i> Cart Page</a></li>
 

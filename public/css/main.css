@@ -1407,11 +1407,11 @@ footer span {
     }
 
     header {
-        padding: 10px 24px;
+        padding: 10px 8px;
     }
 
     .logo img {
-        width: 80px;
+        width: 50px;
     }
 
 
@@ -1427,7 +1427,29 @@ footer span {
   } */
 
     .search-container {
+        /* display: none; */
+        margin: 5px;
+    }
+
+    #mob-search{
         display: none;
+    }
+
+    #fb-menu{
+        display: none;
+    }
+
+    #twitter-menu{
+        display: none;
+    }
+
+    #cart-menu{
+        margin-left: 5px;
+
+    }
+
+    .toggle{
+        margin-left: 3vw;
     }
 
     button[type="submit"] {
@@ -1470,6 +1492,8 @@ footer span {
         margin-top: 0vh;
     }
 
+
+
     small {
         font-size: 14px;
     }
@@ -1479,6 +1503,7 @@ footer span {
         font-size: 12px;
         padding: 6px 16px; */
         width: 100%;
+        padding: 6px 12px;
     }
 
     .order {

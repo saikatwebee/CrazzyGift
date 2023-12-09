@@ -24,7 +24,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('css/vertical-layout-light/style.css') }}">
     <!-- endinject -->
-    <!-- <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" /> -->
+   
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -2008,7 +2008,9 @@
         userReport();
         getAllInactiveDatatable();
         getAllorderDatatable();
-        getAllNewordersDatatable()
+        getAllNewordersDatatable();
+        getAllCancelledordersDatatable();
+        getAllCompletedordersDatatable();
     });
 
     //All products datatable
@@ -3445,7 +3447,7 @@
 
     //completed orders datatable
 
-    $(document).ready(function() {
+    function getAllCompletedordersDatatable() {
 
 
         const url = "{{ url('admin/getCompletedOrders') }}";
@@ -3458,20 +3460,7 @@
                 console.log(data);
 
                 const columns = [
-                    //       {
-                    //         data: null,
-                    //         render: function(data, type, row) {
-                    //             if (type === 'display') {
-
-                    //                 return `
-                    //     <button class="btn btn-primary" data-id="${row.id}" onclick="viewOrder(event)" style="padding: 7px 11px;" ><i class="fa-regular fa-eye" style="margin-left:4px;" data-id="${row.id}" onclick="viewOrder(event)"></i></button>
-                    //     <button class="btn btn-danger" onclick="deleteOrder(${row.id})" style="padding: 7px 11px;"><i class="fa-solid fa-trash" style="margin-left:4px;" onclick="deleteOrder(${row.id})"></i></button>
-
-                    // `;
-                    //             }
-                    //             return data;
-                    //         }
-                    //     },
+                   
                     {
                         data: null,
                         render: function(data, type, row) {
@@ -3480,7 +3469,7 @@
 
                                 return `
             <i class="fa-regular fa-eye text-primary" title="Edit" style="margin-left:4px;font-size:20px;" data-id="${row.id}" onclick="viewOrder(event)"></i>
-            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrder(${row.id})"></i>
+            <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteOrderCompleted(${row.id})"></i>
             
         `;
 
@@ -3576,7 +3565,7 @@
                 populateTable(data, tableId, columns);
             })
             .catch(error => console.error(error));
-    });
+    }
 
 
 
@@ -4413,7 +4402,8 @@
 
                         toastr.error('Order deleted successfully', 'Oops', {
                             onHidden: function() {
-                                location.reload();
+                                $('#allOrdersTable2').DataTable().destroy();
+                                orderReport();
                             }
                         });
 
@@ -4600,10 +4590,62 @@
 
     }
 
-    
+
+    function deleteOrderCompleted(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#004a8c',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrfToken = getCsrfToken();
+                const form_datas = {
+                    id: id,
+                };
+
+                fetch("{{ url('/admin/orderDelete') }}", {
+                        method: 'POST',
+                        body: JSON.stringify(form_datas),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
 
 
-    
+                        toastr.error('Order deleted successfully', 'Oops', {
+                            onHidden: function() {
+                                //location.reload();
+
+                                $('#completedOrdersTable').DataTable().destroy();
+                                getAllCompletedordersDatatable();
+;
+                            }
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+
+
+
+            }
+        });
+
+    }
 
     function changeUser(id) {
         Swal.fire({
@@ -4883,7 +4925,7 @@
             showCancelButton: true,
             confirmButtonColor: '#004a8c',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes Delete It'
+            confirmButtonText: 'Yes'
         }).then((result) => {
             if (result.isConfirmed) {
                 const csrfToken = getCsrfToken();
