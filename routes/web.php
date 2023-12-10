@@ -244,6 +244,7 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
 
     Route::get('/slider-management', [SliderController::class, 'sliderManagement'])->name('sliderManagement');
     Route::get('/getAllMenus', [SliderController::class, 'getAllMenus'])->name('getAllMenus');
+    Route::post('/menuChange', [SliderController::class, 'menuChange'])->name('menuChange');
     Route::post('/menuDelete', [SliderController::class, 'menuDelete'])->name('menuDelete');
     Route::post('/showMenu', [SliderController::class, 'showMenu'])->name('showMenu');
     Route::post('/editMenu', [SliderController::class, 'editMenu'])->name('editMenu');
@@ -277,13 +278,19 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
     Route::post('/updateSlider', [SliderController::class, 'updateSlider'])->name('updateSlider');
     Route::post('/updateTestimonialSlider', [SliderController::class, 'updateTestimonialSlider'])->name('updateTestimonialSlider');
 
+    Route::post('/bannerChange', [SliderController::class, 'bannerChange'])->name('bannerChange');
     Route::post('/bannerDelete', [SliderController::class, 'bannerDelete'])->name('bannerDelete');
+
     Route::post('/imageDelete', [SliderController::class, 'imageDelete'])->name('imageDelete');
+    Route::post('/imageChange', [SliderController::class, 'imageChange'])->name('imageChange');
 
     Route::post('/sliderDelete', [SliderController::class, 'sliderDelete'])->name('sliderDelete');
+    Route::post('/sliderChange', [SliderController::class, 'sliderChange'])->name('sliderChange');
+
     Route::post('/gstStatusUpdate', [SliderController::class, 'gstStatusUpdate'])->name('gstStatusUpdate');
     
     Route::post('/TestimonialDelete', [SliderController::class, 'TestimonialDelete'])->name('TestimonialDelete');
+    Route::post('/TestimonialChange', [SliderController::class, 'TestimonialChange'])->name('TestimonialChange');
 
     Route::get('/getAllSliders', [SliderController::class, 'getAllSliders'])->name('getAllSliders');
     Route::get('/getAllTestimonials', [SliderController::class, 'getAllTestimonials'])->name('getAllTestimonials');
@@ -308,7 +315,9 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
     Route::post('/updateCategory', [ProductInventoryController::class, 'updateCategory'])->name('updateCategory');
     Route::post('/updateSubcategory', [ProductInventoryController::class, 'updateSubcategory'])->name('updateSubcategory');
     Route::post('/categoryDelete', [ProductInventoryController::class, 'categoryDelete'])->name('categoryDelete');
+    Route::post('/categoryChange', [ProductInventoryController::class, 'categoryChange'])->name('categoryChange');
     Route::post('/subcategoryDelete', [ProductInventoryController::class, 'subcategoryDelete'])->name('subcategoryDelete');
+    Route::post('/subcategoryChange', [ProductInventoryController::class, 'subcategoryChange'])->name('subcategoryChange');
 
 
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('adminDashboard');

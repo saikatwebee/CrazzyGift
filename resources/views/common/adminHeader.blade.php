@@ -7,7 +7,7 @@
       <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
         <span class="icon-menu"></span>
       </button>
-      <ul class="navbar-nav mr-lg-2">
+      {{-- <ul class="navbar-nav mr-lg-2">
         <li class="nav-item nav-search d-none d-lg-block">
           <div class="input-group">
             <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
@@ -18,15 +18,19 @@
             <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
           </div>
         </li>
-      </ul>
+      </ul> --}}
       <ul class="navbar-nav navbar-nav-right">
-        <li class="nav-item dropdown">
+        {{-- <li class="nav-item dropdown">
+
           <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
             <i class="icon-bell mx-0"></i>
             <span class="count"></span>
           </a>
+
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+           
             <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+
             <a class="dropdown-item preview-item">
               <div class="preview-thumbnail">
                 <div class="preview-icon bg-success">
@@ -40,6 +44,7 @@
                 </p>
               </div>
             </a>
+
             <a class="dropdown-item preview-item">
               <div class="preview-thumbnail">
                 <div class="preview-icon bg-warning">
@@ -53,6 +58,7 @@
                 </p>
               </div>
             </a>
+
             <a class="dropdown-item preview-item">
               <div class="preview-thumbnail">
                 <div class="preview-icon bg-info">
@@ -66,17 +72,19 @@
                 </p>
               </div>
             </a>
+
           </div>
-        </li>
+        </li> --}}
+
         <li class="nav-item nav-profile dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-            <img src="{{ asset('img/logo.png') }}" alt="profile"/>
+            <img src="{{ asset('images/icons/profileAvatar.png') }}" alt="profile" style="width:30px; height:auto;">
           </a>
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-            <a class="dropdown-item">
+            {{-- <a class="dropdown-item">
               <i class="ti-settings text-primary"></i>
               Settings
-            </a>
+            </a> --}}
             <a class="dropdown-item" href="{{url('admin/logout')}}">
               <i class="ti-power-off text-primary"></i>
               Logout

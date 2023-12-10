@@ -17,7 +17,7 @@
                 <div class="col-lg-3 grid-margin stretch-card">
                     <div class="card banner-hearder-card">
                         <div class="card-body  d-flex justify-content-center align-items-center panel-active"
-                            onclick="toggleSliders(event),openTab('uploadBannerTab')"><i
+                            onclick="toggleSliders(event),openTab('uploadBannerTab'),getAllBannersDatatable()"><i
                                 class="fa-solid fa-flag-checkered mr-2"></i> Banners
                         </div>
 
@@ -27,7 +27,7 @@
                 <div class="col-lg-3 grid-margin stretch-card">
                     <div class="card slider-hearder-card">
                         <div class="card-body  d-flex justify-content-center align-items-center panel-inactive"
-                            onclick="toggleSliders(event),openTab('uploadSliderTab')"><i
+                            onclick="toggleSliders(event),openTab('uploadSliderTab'), getAllSlidersDatatable()"><i
                                 class="fa-solid fa-sliders mr-2"></i>
                             Products Sliders
                         </div>
@@ -37,7 +37,7 @@
                 <div class="col-lg-3 grid-margin stretch-card">
                     <div class="card slider-hearder-card">
                         <div class="card-body  d-flex justify-content-center align-items-center panel-inactive"
-                            onclick="toggleSliders(event),openTab('uploadOtherSliderTab')"><i
+                            onclick="toggleSliders(event),openTab('uploadOtherSliderTab'), getAllTestimonialSlider()"><i
                                 class="fa-solid fa-sliders mr-2"></i>
                             Testimonial Sliders
                         </div>
@@ -47,7 +47,7 @@
                 <div class="col-lg-3 grid-margin stretch-card">
                     <div class="card slider-hearder-card">
                         <div class="card-body  d-flex justify-content-center align-items-center panel-inactive"
-                            onclick="toggleSliders(event),openTab('uploadImageSliderTab')"><i
+                            onclick="toggleSliders(event),openTab('uploadImageSliderTab'),getAllOccasionDatatable()"><i
                                 class="fa-regular fa-image mr-2"></i>
                             Occasions Image
                         </div>
@@ -603,7 +603,8 @@
 
                             <div class="form-group">
                                 <label for="image_type">Image Type</label>
-                                <select name="image_type" id="image_type" class="form-control" required onchange="show_note(event)">
+                                <select name="image_type" id="image_type" class="form-control" required
+                                    onchange="show_note(event)">
                                     <option value="">Select Image Type</option>
                                     <option value="1">Large Image</option>
                                     <option value="2">Small Image</option>
@@ -731,55 +732,17 @@
     <!-- main-panel ends -->
 
     <script>
-        // tinymce.init({
-        //     selector: 'textarea#testimonial_description',
-        //     plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-        //     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-        //     tinycomments_mode: 'embedded',
-        //     tinycomments_author: 'Author name',
-        //     mergetags_list: [{
-        //             value: 'First.Name',
-        //             title: 'First Name'
-        //         },
-        //         {
-        //             value: 'Email',
-        //             title: 'Email'
-        //         },
-        //     ],
-        //     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject(
-        //         "See docs to implement AI Assistant")),
-        // });
-
-        // tinymce.init({
-        //     selector: 'textarea#edit_testimonial_description',
-        //     plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-        //     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-        //     tinycomments_mode: 'embedded',
-        //     tinycomments_author: 'Author name',
-        //     mergetags_list: [{
-        //             value: 'First.Name',
-        //             title: 'First Name'
-        //         },
-        //         {
-        //             value: 'Email',
-        //             title: 'Email'
-        //         },
-        //     ],
-        //     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject(
-        //         "See docs to implement AI Assistant")),
-        // });
+        tinymce.init({
+            selector: 'textarea#edit_testimonial_description',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
 
         tinymce.init({
-    selector: 'textarea#edit_testimonial_description',
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-  });
-
-  tinymce.init({
-    selector: 'textarea#testimonial_description',
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-  });
+            selector: 'textarea#testimonial_description',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
 
 
         function showNote(event) {
@@ -857,6 +820,7 @@
             const tabToOpen = document.getElementById(tabId);
             if (tabToOpen) {
                 tabToOpen.style.display = 'block';
+
             }
         }
 
@@ -871,6 +835,125 @@
                 document.getElementById('second-btn').disabled = false;
             }
         }
+
+
+
+
+
+        $(() => {
+
+            getAllBannersDatatable();
+
+        });
+
+
+        //banner datatable
+
+        function getAllBannersDatatable() {
+
+            $('#bannerTable').DataTable().destroy();
+            const url = "{{ url('admin/getAllBanners') }}";
+            const tableId = "bannerTable";
+
+
+            fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const columns = [{
+                            data: null,
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+
+                                    if (row.status == 1) {
+                                        return `
+    <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editBanner(${row.id})"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeBanner(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteBanner(${row.id})"></i>
+    
+`;
+                                    } else {
+                                        return `
+    <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editBanner(${row.id})"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeBanner(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="deleteBanner(${row.id})"></i>
+    
+`;
+                                    }
+
+
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'target'
+                        },
+                        {
+                            data: 'image',
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+                                    const imageUrl = `{{ asset('banners/${data}') }}`;
+                                    return `<img src="${imageUrl}"  style="border-radius:5px; width:100px;height:auto;" />`;
+                                }
+                                return data;
+                            }
+                        },
+
+
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (type == 'display') {
+                                    if (data == 1) {
+                                        return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                    } else if (data == 2) {
+                                        return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                    } else {
+                                        // Handle any other cases or unexpected values
+                                        return 'Unknown Status';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'created_at',
+                            render: function(data, type, row) {
+                                if (type === 'display' || type === 'filter') {
+
+                                    if (data === null || data === '1970-01-01') {
+                                        return 'NA';
+                                    }
+
+                                    // Assuming 'created_at' is in the default ISO 8601 format
+                                    var date = new Date(data);
+                                    var year = date.getFullYear();
+                                    var month = (date.getMonth() + 1).toString().padStart(2,
+                                        '0'); // Add 1 to month because it's zero-based
+                                    var day = date.getDate().toString().padStart(2, '0');
+                                    return year + '-' + month + '-' + day;
+                                } else {
+                                    return data;
+                                }
+                            }
+                        }
+
+
+                    ];
+
+                    populateTable(data, tableId, columns);
+                })
+                .catch(error => console.error(error));
+        }
+
 
         //add banner form sub
 
@@ -913,63 +996,10 @@
                         if (data.code == 200) {
                             toastr.success(data.msg, 'Success', {
                                 onHidden: function() {
-                                    window.location.reload();
-                                },
-                            });
-                        }
-
-
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
-            }
-
-        });
-
-
-        //add occasion image form sub
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var add_occasion_image_form = document.getElementById('add_occasion_image_form');
-
-            add_occasion_image_form.onsubmit = function(event) {
-
-                event.preventDefault();
-
-                let formElement = event.target;
-                const formData = new FormData(formElement);
-                let formAction = formElement.getAttribute('action');
-
-                const csrfToken = getCsrfToken();
-
-                fetch(formAction, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                    })
-                    .then((response) => response.json())
-                    .then(data => {
-
-                        console.log(data);
-                        if (data.errors) {
-                            var error = data.errors;
-                            for (const fieldName in error) {
-                                if (error.hasOwnProperty(fieldName)) {
-                                    const errorMessages = error[fieldName];
-                                    errorMessages.forEach(errorMessage => {
-                                        toastr.error(errorMessage);
-                                    });
-                                }
-                            }
-                        }
-
-                        if (data.code == 200) {
-                            toastr.success(data.msg, 'Success', {
-                                onHidden: function() {
-                                    window.location.reload();
+                                    $("#banner_form").trigger('reset');
+                                    $("#AddBannerModal").modal('hide');
+                                    $('#bannerTable').DataTable().destroy();
+                                    getAllBannersDatatable();
                                 },
                             });
                         }
@@ -1024,7 +1054,10 @@
                         if (data.code == 200) {
                             toastr.success(data.msg, 'Success', {
                                 onHidden: function() {
-                                    window.location.reload();
+                                    $("#edit_banner_form").trigger('reset');
+                                    $("#EditBannerModal").modal('hide');
+                                    $('#bannerTable').DataTable().destroy();
+                                    getAllBannersDatatable();
                                 },
                             });
                         }
@@ -1037,6 +1070,1054 @@
             }
 
         });
+
+
+        //delete banner
+
+        function deleteBanner(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this record",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/bannerDelete') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+
+
+                            toastr.success('Banner deleted successfully', 'Success', {
+                                onHidden: function() {
+
+                                    $('#bannerTable').DataTable().destroy();
+                                    getAllBannersDatatable();
+                                }
+                            });
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+        //change banner
+
+        function changeBanner(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to change the status",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/bannerChange') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+
+
+                            toastr.success('Banner status changed successfully', 'Success', {
+                                onHidden: function() {
+                                    $('#bannerTable').DataTable().destroy();
+                                    getAllBannersDatatable();
+                                }
+                            });
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+
+        // product slider DataTable
+
+        function getAllSlidersDatatable() {
+
+            $('#sliderTable').DataTable().destroy();
+            const url = "{{ url('admin/getAllSliders') }}";
+            const tableId = "sliderTable";
+
+
+
+            fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const columns = [{
+                            data: null,
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+
+                                    if (row.status == 1) {
+                                        return `
+    <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editSlider(${row.id})"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeSlider(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteSlider(${row.id})"></i>
+`;
+                                    } else {
+                                        return `
+    <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editSlider(${row.id})"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeSlider(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteSlider(${row.id})"></i>
+    
+`;
+                                    }
+
+
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'type',
+                            render: function(data, type, row) {
+                                if (type == 'display') {
+                                    if (data == 1) {
+                                        return 'Featured Collection';
+                                    } else if (data == 2) {
+                                        return 'Best Selling';
+                                    } else {
+                                        // Handle any other cases or unexpected values
+                                        return 'Unknown Status';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'product_images',
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+                                    console.log('data:', data);
+                                    const productImages = data.map(image =>
+                                        `<img src="{{ asset('products/${image}') }}" alt="Product Image" style="border-radius:5px; width:60px; height:auto;" />`
+                                    );
+                                    console.log('productImages:', productImages);
+                                    return productImages.join(', ');
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (type == 'display') {
+                                    if (data == 1) {
+                                        return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                    } else if (data == 2) {
+                                        return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                    } else {
+                                        // Handle any other cases or unexpected values
+                                        return 'Unknown Status';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'created_at',
+                            render: function(data, type, row) {
+                                if (type === 'display' || type === 'filter') {
+
+                                    if (data === null || data === '1970-01-01') {
+                                        return 'NA';
+                                    }
+
+                                    // Assuming 'created_at' is in the default ISO 8601 format
+                                    var date = new Date(data);
+                                    var year = date.getFullYear();
+                                    var month = (date.getMonth() + 1).toString().padStart(2,
+                                        '0'); // Add 1 to month because it's zero-based
+                                    var day = date.getDate().toString().padStart(2, '0');
+                                    return year + '-' + month + '-' + day;
+                                } else {
+                                    return data;
+                                }
+                            }
+                        }
+
+
+                    ];
+
+                    populateTable(data, tableId, columns);
+                })
+                .catch(error => console.error(error));
+        }
+
+
+        // add product slider form
+        document.addEventListener("DOMContentLoaded", function() {
+            var slider_form = document.getElementById('slider_form');
+
+            slider_form.onsubmit = function(event) {
+
+                event.preventDefault();
+
+                let formElement = event.target;
+                const formData = new FormData(formElement);
+                let formAction = formElement.getAttribute('action');
+
+                const csrfToken = getCsrfToken();
+
+                fetch(formAction, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        console.log(data);
+
+                        if (data.errors) {
+                            var error = data.errors;
+                            for (const fieldName in error) {
+                                if (error.hasOwnProperty(fieldName)) {
+                                    const errorMessages = error[fieldName];
+                                    errorMessages.forEach(errorMessage => {
+                                        toastr.error(errorMessage);
+                                    });
+                                }
+                            }
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success(data.msg, 'Success', {
+                                onHidden: function() {
+                                    // window.location.reload();
+                                    $("#slider_form").trigger('reset');
+                                    $("#AddSliderModal").modal('hide');
+                                    $('#sliderTable').DataTable().destroy();
+                                    getAllSlidersDatatable();
+
+                                },
+                            });
+                        }
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+            }
+
+        });
+
+        // edit product slider
+        document.addEventListener("DOMContentLoaded", function() {
+            var slider_form = document.getElementById('slider_form2');
+
+            slider_form.onsubmit = function(event) {
+
+                event.preventDefault();
+
+                let formElement = event.target;
+                const formData = new FormData(formElement);
+                let formAction = formElement.getAttribute('action');
+
+                const csrfToken = getCsrfToken();
+
+                fetch(formAction, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        console.log(data);
+
+                        if (data.errors) {
+                            var error = data.errors;
+                            for (const fieldName in error) {
+                                if (error.hasOwnProperty(fieldName)) {
+                                    const errorMessages = error[fieldName];
+                                    errorMessages.forEach(errorMessage => {
+                                        toastr.error(errorMessage);
+                                    });
+                                }
+                            }
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success(data.msg, 'Success', {
+                                onHidden: function() {
+                                    $("#slider_form2").trigger('reset');
+                                    $("#EditSliderModal").modal('hide');
+                                    $('#sliderTable').DataTable().destroy();
+                                    getAllSlidersDatatable();
+                                },
+                            });
+                        }
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+            }
+
+        });
+
+
+        //status toggle for product slider
+
+        function changeSlider(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to change the status",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/sliderChange') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then((response) => response.json())
+                        .then(data => {
+
+                            if (data.errors) {
+
+                                toastr.error(data.errors);
+
+                            }
+
+                            if (data.code == 200) {
+                                toastr.success('Slider status changed successfully', 'Success', {
+                                    onHidden: function() {
+                                        $('#sliderTable').DataTable().destroy();
+                                        getAllSlidersDatatable();
+                                    }
+                                });
+                            }
+
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+        //delete product slider
+
+        function deleteSlider(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this record",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/sliderDelete') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then((response) => response.json())
+                        .then(data => {
+
+                            if (data.errors) {
+
+                                toastr.error(data.errors);
+
+                            }
+
+                            if (data.code == 200) {
+                                toastr.success('Slider deleted successfully', 'Success', {
+                                    onHidden: function() {
+                                        $('#sliderTable').DataTable().destroy();
+                                        getAllSlidersDatatable();
+
+                                    }
+                                });
+                            }
+
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+        //Testimonial datatable
+
+        function getAllTestimonialSlider() {
+
+            $('#sliderTestimonialTable').DataTable().destroy();
+
+            const url = "{{ url('admin/getAllTestimonials') }}";
+            const tableId = "sliderTestimonialTable";
+            fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const columns = [{
+                            data: null,
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+
+                                    if (row.status == 1) {
+                                        return `
+    <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editTestimonialSlider(${row.id})"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeTestimonialSlider(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteTestimonialSlider(${row.id})"></i>
+    
+`;
+                                    } else {
+                                        return `
+    <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editTestimonialSlider(${row.id})"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeTestimonialSlider(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteTestimonialSlider(${row.id})"></i>
+`;
+                                    }
+
+
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            data: 'designation'
+                        },
+
+                        {
+                            data: 'image',
+                            render: function(data, type, row) {
+                                if (type === 'display' && data) {
+                                    const testimonial_image =
+                                        `<img src="${baseUrl}/${data}" alt="Testimonial Image" style="border-radius: 5px; width: 60px; height: auto;" />`;
+                                    return testimonial_image;
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'description'
+                        },
+
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (type == 'display') {
+                                    if (data == 1) {
+                                        return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                    } else if (data == 2) {
+                                        return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                    } else {
+                                        // Handle any other cases or unexpected values
+                                        return 'Unknown Status';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'created_at',
+                            render: function(data, type, row) {
+                                if (type === 'display' || type === 'filter') {
+
+                                    if (data === null || data === '1970-01-01') {
+                                        return 'NA';
+                                    }
+
+                                    // Assuming 'created_at' is in the default ISO 8601 format
+                                    var date = new Date(data);
+                                    var year = date.getFullYear();
+                                    var month = (date.getMonth() + 1).toString().padStart(2,
+                                        '0'); // Add 1 to month because it's zero-based
+                                    var day = date.getDate().toString().padStart(2, '0');
+                                    return year + '-' + month + '-' + day;
+                                } else {
+                                    return data;
+                                }
+                            }
+                        }
+
+
+                    ];
+
+                    populateTable(data, tableId, columns);
+                })
+                .catch(error => console.error(error));
+        }
+
+
+        // add slider for testimonials
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var slider_form = document.getElementById('testimonial_slider_form');
+
+            slider_form.onsubmit = function(event) {
+
+                event.preventDefault();
+
+                let formElement = event.target;
+
+                let formData = new FormData(formElement);
+
+                let testimonial_name = document.getElementById('testimonial_name').value;
+                let testimonial_designation = document.getElementById('testimonial_designation').value;
+                let testimonial_description = tinymce.get('testimonial_description').getContent();
+                let testimonial_image = document.getElementById('testimonial_image').files[0];
+
+
+                formData.set('testimonial_name', testimonial_name);
+                formData.set('testimonial_designation', testimonial_designation);
+                formData.set('testimonial_description', testimonial_description);
+                formData.append('testimonial_image', testimonial_image);
+
+                let formAction = formElement.getAttribute('action');
+
+                const csrfToken = getCsrfToken();
+
+                fetch(formAction, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        console.log(data);
+
+                        if (data.errors) {
+                            var error = data.errors;
+                            for (const fieldName in error) {
+                                if (error.hasOwnProperty(fieldName)) {
+                                    const errorMessages = error[fieldName];
+                                    errorMessages.forEach(errorMessage => {
+                                        toastr.error(errorMessage);
+                                    });
+                                }
+                            }
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success(data.msg, 'Success', {
+                                onHidden: function() {
+                                    $("#testimonial_slider_form").trigger('reset');
+                                    $("#AddTestimonialSliderModal").modal('hide');
+                                    $('#sliderTestimonialTable').DataTable().destroy();
+                                    getAllTestimonialSlider();
+                                },
+                            });
+                        }
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+            }
+
+        });
+
+
+        // edit testimonial slider 
+        document.addEventListener("DOMContentLoaded", function() {
+            var slider_form = document.getElementById('edit_testimonial_slider_form');
+
+            slider_form.onsubmit = function(event) {
+
+                event.preventDefault();
+
+                let formElement = event.target;
+
+                let formData = new FormData(formElement);
+
+                let edit_testimonial_name = document.getElementById('edit_testimonial_name').value;
+                let edit_testimonial_designation = document.getElementById('edit_testimonial_designation')
+                    .value;
+                let edit_testimonial_description = tinymce.get('edit_testimonial_description').getContent();
+                let edit_testimonial_image = document.getElementById('edit_testimonial_image').files[0];
+
+
+                formData.set('edit_testimonial_name', edit_testimonial_name);
+                formData.set('edit_testimonial_designation', edit_testimonial_designation);
+                formData.set('edit_testimonial_description', edit_testimonial_description);
+                formData.append('edit_testimonial_image', edit_testimonial_image);
+
+                let formAction = formElement.getAttribute('action');
+
+                const csrfToken = getCsrfToken();
+
+                fetch(formAction, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        console.log(data);
+
+                        if (data.errors) {
+                            var error = data.errors;
+                            for (const fieldName in error) {
+                                if (error.hasOwnProperty(fieldName)) {
+                                    const errorMessages = error[fieldName];
+                                    errorMessages.forEach(errorMessage => {
+                                        toastr.error(errorMessage);
+                                    });
+                                }
+                            }
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success(data.msg, 'Success', {
+                                onHidden: function() {
+                                    $("#edit_testimonial_slider_form").trigger('reset');
+                                    $("#EditTestimonialSliderModal").modal('hide');
+                                    $('#sliderTestimonialTable').DataTable().destroy();
+                                    getAllTestimonialSlider();
+                                },
+                            });
+                        }
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+            }
+
+        });
+
+
+        //change testimonial slider
+
+        function changeTestimonialSlider(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to change the status",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/TestimonialChange') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then((response) => response.json())
+                        .then(data => {
+
+                            if (data.errors) {
+
+                                toastr.error(data.errors);
+
+                            }
+
+                            if (data.code == 200) {
+                                toastr.success('Tastimonial status changed successfully', 'Success', {
+                                    onHidden: function() {
+
+                                        $('#sliderTestimonialTable').DataTable().destroy();
+                                        getAllTestimonialSlider();
+                                    }
+                                });
+                            }
+
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+        //delete testimonial slider
+
+        function deleteTestimonialSlider(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this record",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/TestimonialDelete') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then((response) => response.json())
+                        .then(data => {
+
+                            if (data.errors) {
+
+                                toastr.error(data.errors);
+
+                            }
+
+                            if (data.code == 200) {
+                                toastr.success('Tastimonial deleted successfully', 'Success', {
+                                    onHidden: function() {
+
+
+                                        $('#sliderTestimonialTable').DataTable().destroy();
+                                        getAllTestimonialSlider();
+                                    }
+                                });
+                            }
+
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+
+        //occasion image datatable
+
+
+        function getAllOccasionDatatable() {
+
+            $('#imageTable').DataTable().destroy();
+            const url = "{{ url('admin/getOccasionImages') }}";
+            const tableId = "imageTable";
+
+
+
+            fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const columns = [{
+                            data: null,
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+
+                                    if (row.status == 1) {
+                                        return `
+<i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editImage(${row.id})"></i>
+<i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeImage(${row.id})"></i>
+<i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteImage(${row.id})"></i>
+`;
+                                    } else {
+                                        return `
+<i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editImage(${row.id})"></i>
+<i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeImage(${row.id})"></i>
+<i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteImage(${row.id})"></i>
+`;
+                                    }
+
+
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'target'
+                        },
+                        {
+                            data: 'image',
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+                                    const imageUrl = `{{ asset('occasions/${data}') }}`;
+                                    return `<img src="${imageUrl}"  style="border-radius:5px; width:100px;height:auto;" />`;
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'type',
+                            render: function(data, type, row) {
+                                if (type == 'display') {
+                                    if (data == 1) {
+                                        return '<p class="text-danger">Large</p>';
+                                    } else if (data == 2) {
+                                        return '<p class="text-primary">Small</p>';
+                                    } else {
+                                        // Handle any other cases or unexpected values
+                                        return 'NA';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'button',
+                            render: function(data) {
+                                if (data !== "" && data !== null) {
+                                    return data;
+                                } else {
+                                    return 'NA';
+                                }
+                            }
+                        },
+
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (type == 'display') {
+                                    if (data == 1) {
+                                        return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                    } else if (data == 2) {
+                                        return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                    } else {
+                                        // Handle any other cases or unexpected values
+                                        return 'Unknown Status';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'created_at',
+                            render: function(data, type, row) {
+                                if (type === 'display' || type === 'filter') {
+
+                                    if (data === null || data === '1970-01-01') {
+                                        return 'NA';
+                                    }
+
+                                    // Assuming 'created_at' is in the default ISO 8601 format
+                                    var date = new Date(data);
+                                    var year = date.getFullYear();
+                                    var month = (date.getMonth() + 1).toString().padStart(2,
+                                        '0'); // Add 1 to month because it's zero-based
+                                    var day = date.getDate().toString().padStart(2, '0');
+                                    return year + '-' + month + '-' + day;
+                                } else {
+                                    return data;
+                                }
+                            }
+                        }
+
+
+                    ];
+
+                    populateTable(data, tableId, columns);
+                })
+                .catch(error => console.error(error));
+        }
+
+        //add occasion image form sub
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var add_occasion_image_form = document.getElementById('add_occasion_image_form');
+
+            add_occasion_image_form.onsubmit = function(event) {
+
+                event.preventDefault();
+
+                let formElement = event.target;
+                const formData = new FormData(formElement);
+                let formAction = formElement.getAttribute('action');
+
+                const csrfToken = getCsrfToken();
+
+                fetch(formAction, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then(data => {
+
+                        console.log(data);
+                        if (data.errors) {
+                            var error = data.errors;
+                            for (const fieldName in error) {
+                                if (error.hasOwnProperty(fieldName)) {
+                                    const errorMessages = error[fieldName];
+                                    errorMessages.forEach(errorMessage => {
+                                        toastr.error(errorMessage);
+                                    });
+                                }
+                            }
+                        }
+
+                        if (data.code == 200) {
+                            toastr.success(data.msg, 'Success', {
+                                onHidden: function() {
+
+                                    $("#add_occasion_image_form").trigger('reset');
+                                    $("#AddimageModal").modal('hide');
+                                    $('#imageTable').DataTable().destroy();
+                                    getAllOccasionDatatable();
+                                },
+                            });
+                        }
+
+
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+            }
+
+        });
+
+
 
 
         //edit occasion image form sub
@@ -1082,7 +2163,10 @@
                         if (data.code == 200) {
                             toastr.success(data.msg, 'Success', {
                                 onHidden: function() {
-                                    window.location.reload();
+                                    $("#edit_occasion_image_form").trigger('reset');
+                                    $("#EditimageModal").modal('hide');
+                                    $('#imageTable').DataTable().destroy();
+                                    getAllOccasionDatatable();
                                 },
                             });
                         }
@@ -1098,59 +2182,114 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function() {
-            var slider_form = document.getElementById('slider_form');
+        //change Occasion Image
+        function changeImage(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to change the status",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
 
-            slider_form.onsubmit = function(event) {
-
-                event.preventDefault();
-
-                let formElement = event.target;
-                const formData = new FormData(formElement);
-                let formAction = formElement.getAttribute('action');
-
-                const csrfToken = getCsrfToken();
-
-                fetch(formAction, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                    })
-                    .then((response) => response.json())
-                    .then(data => {
-
-                        console.log(data);
-
-                        if (data.errors) {
-                            var error = data.errors;
-                            for (const fieldName in error) {
-                                if (error.hasOwnProperty(fieldName)) {
-                                    const errorMessages = error[fieldName];
-                                    errorMessages.forEach(errorMessage => {
-                                        toastr.error(errorMessage);
-                                    });
-                                }
+                    fetch("{{ url('/admin/imageChange') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
                             }
-                        }
+                            return response.json();
+                        })
+                        .then(data => {
 
-                        if (data.code == 200) {
-                            toastr.success(data.msg, 'Success', {
+
+                            toastr.success('Occasion Image status changed successfully', 'Success', {
                                 onHidden: function() {
-                                    window.location.reload();
-                                },
+                                    $('#imageTable').DataTable().destroy();
+                                    getAllOccasionDatatable();
+                                }
                             });
-                        }
 
 
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
-            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
 
-        });
+
+
+                }
+            });
+        }
+
+        //Delete Occasion Image
+        function deleteImage(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this record",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/imageDelete') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+
+
+                            toastr.success('Occasion Image deleted successfully', 'Success', {
+                                onHidden: function() {
+                                    $('#imageTable').DataTable().destroy();
+                                    getAllOccasionDatatable();
+                                }
+                            });
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+
 
 
         function toggleSliders(event) {
@@ -1169,254 +2308,6 @@
                 event.currentTarget.classList.add('panel-active');
             }
         }
-
-
-        // add slider for testimonials
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var slider_form = document.getElementById('testimonial_slider_form');
-
-            slider_form.onsubmit = function(event) {
-
-                event.preventDefault();
-
-                let formElement = event.target;
-
-                let formData = new FormData(formElement);
-
-                let testimonial_name = document.getElementById('testimonial_name').value;
-                let testimonial_designation = document.getElementById('testimonial_designation').value;
-                let testimonial_description = tinymce.get('testimonial_description').getContent();
-                let testimonial_image = document.getElementById('testimonial_image').files[0];
-
-
-                formData.set('testimonial_name', testimonial_name);
-                formData.set('testimonial_designation', testimonial_designation);
-                formData.set('testimonial_description', testimonial_description);
-                formData.append('testimonial_image', testimonial_image);
-
-
-                // const serializedArray = [];
-                // formData.forEach((value, key) => {
-                //     serializedArray.push({
-                //         name: key,
-                //         value: value
-                //     });
-                // });
-
-                // let description = tinymce.get('testimonial_description').getContent();
-
-                // serializedArray.push({
-                //     name: 'testimonial_description',
-                //     value: description
-                // });
-
-                // console.log(serializedArray);
-
-                let formAction = formElement.getAttribute('action');
-
-                const csrfToken = getCsrfToken();
-
-                fetch(formAction, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                    })
-                    .then((response) => response.json())
-                    .then(data => {
-
-                        console.log(data);
-
-                        if (data.errors) {
-                            var error = data.errors;
-                            for (const fieldName in error) {
-                                if (error.hasOwnProperty(fieldName)) {
-                                    const errorMessages = error[fieldName];
-                                    errorMessages.forEach(errorMessage => {
-                                        toastr.error(errorMessage);
-                                    });
-                                }
-                            }
-                        }
-
-                        if (data.code == 200) {
-                            toastr.success(data.msg, 'Success', {
-                                onHidden: function() {
-                                    window.location.reload();
-                                },
-                            });
-                        }
-
-
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
-            }
-
-        });
-
-
-        // edit testimonial slider 
-        document.addEventListener("DOMContentLoaded", function() {
-            var slider_form = document.getElementById('edit_testimonial_slider_form');
-
-            slider_form.onsubmit = function(event) {
-
-                event.preventDefault();
-
-                let formElement = event.target;
-
-                let formData = new FormData(formElement);
-
-                let edit_testimonial_name = document.getElementById('edit_testimonial_name').value;
-                let edit_testimonial_designation = document.getElementById('edit_testimonial_designation')
-                    .value;
-                let edit_testimonial_description = tinymce.get('edit_testimonial_description').getContent();
-                let edit_testimonial_image = document.getElementById('edit_testimonial_image').files[0];
-
-
-                formData.set('edit_testimonial_name', edit_testimonial_name);
-                formData.set('edit_testimonial_designation', edit_testimonial_designation);
-                formData.set('edit_testimonial_description', edit_testimonial_description);
-                formData.append('edit_testimonial_image', edit_testimonial_image);
-
-                let formAction = formElement.getAttribute('action');
-
-
-                // var name = formData.get("name");
-                // var designation = formData.get("designation");
-
-                // const form_data = {
-                //     name:name,
-                //     designation:designation
-                // };
-
-                // console.log(form_data);
-
-
-                //     const serializedArray = [];
-                //     formData.forEach((value, key) => {
-                //         serializedArray.push({
-                //             name: key,
-                //             value: value
-                //         });
-                //     });
-
-
-
-                //     console.log(description);
-
-                //     serializedArray.push({
-                //         name: 'edit_testimonial_description',
-                //         value: description
-                //     });
-
-                //     console.log(serializedArray);
-
-                //     
-
-                const csrfToken = getCsrfToken();
-
-                fetch(formAction, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                    })
-                    .then((response) => response.json())
-                    .then(data => {
-
-                        console.log(data);
-
-                        if (data.errors) {
-                            var error = data.errors;
-                            for (const fieldName in error) {
-                                if (error.hasOwnProperty(fieldName)) {
-                                    const errorMessages = error[fieldName];
-                                    errorMessages.forEach(errorMessage => {
-                                        toastr.error(errorMessage);
-                                    });
-                                }
-                            }
-                        }
-
-                        if (data.code == 200) {
-                            toastr.success(data.msg, 'Success', {
-                                onHidden: function() {
-                                    window.location.reload();
-                                },
-                            });
-                        }
-
-
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
-            }
-
-        });
-
-
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var slider_form = document.getElementById('slider_form2');
-
-            slider_form.onsubmit = function(event) {
-
-                event.preventDefault();
-
-                let formElement = event.target;
-                const formData = new FormData(formElement);
-                let formAction = formElement.getAttribute('action');
-
-                const csrfToken = getCsrfToken();
-
-                fetch(formAction, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                    })
-                    .then((response) => response.json())
-                    .then(data => {
-
-                        console.log(data);
-
-                        if (data.errors) {
-                            var error = data.errors;
-                            for (const fieldName in error) {
-                                if (error.hasOwnProperty(fieldName)) {
-                                    const errorMessages = error[fieldName];
-                                    errorMessages.forEach(errorMessage => {
-                                        toastr.error(errorMessage);
-                                    });
-                                }
-                            }
-                        }
-
-                        if (data.code == 200) {
-                            toastr.success(data.msg, 'Success', {
-                                onHidden: function() {
-                                    window.location.reload();
-                                },
-                            });
-                        }
-
-
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
-            }
-
-        });
     </script>
 
 @endsection
