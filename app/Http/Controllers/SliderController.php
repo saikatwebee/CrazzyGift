@@ -228,6 +228,20 @@ class SliderController extends Controller
 
             $id = $request->input('id');
 
+            $res = Menu::where('id', $id)->delete();
+
+            if ($res) {
+                return response()->json(['code' => 200, 'msg' => 'Menu status changed successfully'], 200);
+            }
+        }
+    }
+
+    public function menuChange(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+
             $menu = Menu::find($id);
             $menu->status = ($menu->status == 1) ? 2 : 1;
             $menu->updated_at = date('Y-m-d H:i:s');
@@ -238,7 +252,7 @@ class SliderController extends Controller
         }
     }
 
-    public function bannerDelete(Request $request)
+    public function bannerChange(Request $request)
     {
         if ($request->has('id')) {
 
@@ -254,7 +268,21 @@ class SliderController extends Controller
         }
     }
 
-    public function imageDelete(Request $request)
+    public function bannerDelete(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+
+            $res = Banner::where('id', $id)->delete();
+
+            if ($res) {
+                return response()->json(['code' => 200, 'msg' => 'Banner deleted successfully'], 200);
+            }
+        }
+    }
+
+    public function imageChange(Request $request)
     {
         if ($request->has('id')) {
 
@@ -270,7 +298,32 @@ class SliderController extends Controller
         }
     }
 
-    public function TestimonialDelete(Request $request)
+    public function imageDelete(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+
+            $image = Occasionimage::find($id);
+            $existing_occasion_img = $image->image;
+            $uploadPath = public_path('occasions');
+            if ($existing_occasion_img) {
+                // Check if the image already exists and delete it
+                $existingImagePath = $uploadPath . '/' . $existing_occasion_img;
+                if (file_exists($existingImagePath)) {
+                    unlink($existingImagePath);
+                }
+            }
+
+            $res = Occasionimage::where('id',$id)->delete();
+           
+            if ($res) {
+                return response()->json(['code' => 200, 'msg' => 'Occasion Image deleted successfully'], 200);
+            }
+        }
+    }
+
+    public function TestimonialChange(Request $request)
     {
         if ($request->has('id')) {
 
@@ -286,7 +339,22 @@ class SliderController extends Controller
         }
     }
 
-    public function sliderDelete(Request $request)
+
+    public function TestimonialDelete(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+
+            $res = Testimonial::where('id',$id)->delete();
+           
+            if ($res) {
+                return response()->json(['code' => 200, 'msg' => 'Testimonial deleted successfully'], 200);
+            }
+        }
+    }
+
+    public function sliderChange(Request $request)
     {
         if ($request->has('id')) {
 
@@ -326,6 +394,29 @@ class SliderController extends Controller
             }
         }
     }
+
+    public function sliderDelete(Request $request)
+    {
+        if ($request->has('id')) {
+
+            $id = $request->input('id');
+
+            $slider = Slider::find($id);
+
+            $ch = Slider::where(['type' => $slider->type])->get();
+
+            if (count($ch) < 2) {
+                return response()->json(['errors' => ($slider->type == 1) ? "Atleast one Featured Collection is mandatory" : "Atleast one Best Selling is mandatory"], 400);
+            } else {
+                $res = Slider::where('id', $id)->delete();
+
+                if ($res) {
+                    return response()->json(['code' => 200, 'msg' => 'Slider deleted successfully'], 200);
+                }
+            }
+        }
+    }
+
 
     public function gstStatusUpdate(Request $request)
     {
@@ -1088,7 +1179,7 @@ class SliderController extends Controller
 
                         $mainCategory = $menu->page->mainCategory->name;
 
-                         // DB::enableQueryLog();
+                        // DB::enableQueryLog();
                         // $result = DB::table('products')->where(['main_category' => $main_category, 'status' => 1])->orWhere('tags', 'LIKE', '%' . $mainCategory . '%');
                         $result = DB::table('products')
                             ->where('status', 1)
@@ -1097,7 +1188,7 @@ class SliderController extends Controller
                                     ->orWhere('tags', 'LIKE', '%' . $mainCategory . '%');
                             });
 
-                            // $queryLog = DB::getQueryLog();
+                        // $queryLog = DB::getQueryLog();
 
                         if ($request->has('query')) {
 
@@ -1124,7 +1215,7 @@ class SliderController extends Controller
 
                         $url = $menu->url;
 
-                       
+
                         return view('Dynamicpage1', compact('title', 'products', 'heading', 'totalRecords', 'currentPage', 'recordsPerPage', 'query', 'url'));
                     } else {
                         //who has main and sub category as well
@@ -1137,7 +1228,7 @@ class SliderController extends Controller
                         //$mainCategory = $menu->page->mainCategory->name;
                         $subCategory = $menu->page->subCategory->name;
 
-                       
+
                         // $result = DB::table('products')->where(['main_category' => $main_category, 'sub_category' => $sub_category,'status'=>1])->orWhere('tags', 'LIKE', '%'.$subCategory.'%');
                         $result = DB::table('products')
                             ->where('status', 1)
@@ -1145,7 +1236,7 @@ class SliderController extends Controller
                                 $query->where(['main_category' => $main_category, 'sub_category' => $sub_category])
                                     ->orWhere('tags', 'LIKE', '%' . $subCategory . '%');
                             });
-                        
+
 
 
                         if ($request->has('query')) {

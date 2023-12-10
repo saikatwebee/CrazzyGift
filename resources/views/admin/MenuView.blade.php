@@ -32,7 +32,8 @@
 
 
                 <div class="col-lg-12 grid-margin stretch-card justify-content-end">
-                    <button class="btn btn-sm btn-primary" onclick="window.location.href='{{url('/admin/add-menu')}}';">Add New Menu</button>
+                    <button class="btn btn-sm btn-primary" onclick="window.location.href='{{ url('/admin/add-menu') }}';">Add
+                        New Menu</button>
                 </div>
 
 
@@ -146,33 +147,14 @@
     </div>
 
 
-   
+
 
     <script>
-        // tinymce.init({
-        //     selector: 'textarea#add_page_content',
-        //     plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-        //     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-        //     tinycomments_mode: 'embedded',
-        //     tinycomments_author: 'Author name',
-        //     mergetags_list: [{
-        //             value: 'First.Name',
-        //             title: 'First Name'
-        //         },
-        //         {
-        //             value: 'Email',
-        //             title: 'Email'
-        //         },
-        //     ],
-        //     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject(
-        //         "See docs to implement AI Assistant")),
-        // });
-
         tinymce.init({
-    selector: 'textarea#add_page_content',
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-  });
+            selector: 'textarea#add_page_content',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
     </script>
 
     <script>
@@ -234,6 +216,213 @@
                 .replace(/-+/g, '-');
 
             return str;
+        }
+    </script>
+
+    <script>
+        //menu data table 
+
+        function getAllMenuDatatable() {
+
+
+            const url = "{{ url('admin/getAllMenus') }}";
+            const tableId = "menuTable";
+
+
+            fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const columns = [{
+                            data: null,
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+
+                                    if (row.status == 1) {
+                                        return `
+    <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editMenu(${row.id})"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeMenu(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteMenu(${row.id})"></i>
+    
+`;
+                                    } else {
+                                        return `
+    <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editMenu(${row.id})"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="changeMenu(${row.id})"></i>
+    <i class="fa-solid fa-trash text-danger" title="Delete" style="margin-left:4px;font-size:22px;" onclick="deleteMenu(${row.id})"></i>
+`;
+                                    }
+
+
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            data: 'url'
+                        },
+
+                        {
+                            data: 'parent_name',
+                            render: function(data) {
+                                return data ? data : "NA"; // Display "NA" if 'icon' is blank or null
+                            }
+                        },
+
+                        // {
+                        //     data: 'parent_id',
+                        //     render: function(data) {
+                        //         return data ? data : "NA"; // Display "NA" if 'icon' is blank or null
+                        //     }
+                        // },
+
+                        {
+                            data: 'icon',
+                            render: function(data) {
+                                return data ? data : "NA"; // Display "NA" if 'icon' is blank or null
+                            }
+                        },
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (type == 'display') {
+                                    if (data == 1) {
+                                        return '<i class="fa-solid fa-power-off text-success" title="Active"></i>';
+                                    } else if (data == 2) {
+                                        return '<i class="fa-solid fa-power-off text-danger" title="Deactive"></i>';
+                                    } else {
+                                        // Handle any other cases or unexpected values
+                                        return 'Unknown Status';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+
+                    ];
+
+                    populateTable(data, tableId, columns);
+                })
+                .catch(error => console.error(error));
+        }
+
+
+        // delete menu
+        function deleteMenu(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this record",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/menuDelete') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+
+
+                            toastr.success('Menu deleted successfully', 'Success', {
+                                onHidden: function() {
+                                    $('#menuTable').DataTable().destroy();
+                                    getAllMenuDatatable();
+
+                                }
+                            });
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+        }
+
+
+        // change menu
+        function changeMenu(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to change the status",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/menuChange') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+
+
+                            toastr.success('Menu status changed successfully', 'Success', {
+                                onHidden: function() {
+                                    $('#menuTable').DataTable().destroy();
+                                    getAllMenuDatatable();
+                                }
+                            });
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
         }
     </script>
 
