@@ -217,8 +217,8 @@
                         </div>
                         <div class="form-group">
                             <label for="edit_gst">GST</label>
-                            <input type="number" name="gst" id="edit_gst"
-                                placeholder="Enter GST" class="form-control">
+                            <input type="number" name="gst" id="edit_gst" placeholder="Enter GST"
+                                class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="edit_product_status">Status</label>
@@ -300,25 +300,7 @@
 
 
     <script>
-        // tinymce.init({
-        //     selector: 'textarea#edit_description',
-        //     plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-        //     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-        //     tinycomments_mode: 'embedded',
-        //     tinycomments_author: 'Author name',
-        //     mergetags_list: [{
-        //             value: 'First.Name',
-        //             title: 'First Name'
-        //         },
-        //         {
-        //             value: 'Email',
-        //             title: 'Email'
-        //         },
-        //     ],
-        //     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject(
-        //         "See docs to implement AI Assistant")),
-        // });
-
+     
         tinymce.init({
             selector: 'textarea#edit_description',
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
@@ -390,6 +372,488 @@
 
         }
     </script>
+    <script>
+        $(() => {
+            AllProductsDatatable();
+        });
+        //All products datatable
 
+        function AllProductsDatatable() {
+
+
+            const url = "{{ url('admin/getAllProducts') }}";
+            const tableId = "productTable";
+            fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const columns = [
+
+
+
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+
+                                    if (row.status == 1) {
+                                        return `
+    <i class="fa-regular fa-pen-to-square" title="Edit" style="margin-left:4px;font-size:20px;" onclick="editProduct(${row.id},event)"></i>
+    <i class="fa-solid fa-toggle-on text-success" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="ProductChange(${row.id})"></i>
+    
+`;
+                                    } else {
+                                        return `
+    <i class="fa-regular fa-pen-to-square"  style="margin-left:4px;font-size:20px;" onclick="editProduct(${row.id},event)"></i>
+    <i class="fa-solid fa-toggle-off text-danger" title="Change Status" style="margin-left:4px;font-size:22px;" onclick="ProductChange(${row.id})"></i>
+    
+`;
+                                    }
+
+
+                                }
+                                return data;
+                            }
+                        },
+
+
+
+
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'title'
+                        },
+                        {
+                            data: 'sku'
+                        },
+                        {
+                            data: 'code'
+                        },
+                        {
+                            data: 'main_category.name',
+                            name: 'main_category.name',
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+                                    if (row.main_category && row.main_category.name !== null) {
+                                        return row.main_category.name;
+                                    } else {
+                                        return 'NA';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            data: 'sub_category.name',
+                            name: 'sub_category.name',
+                            render: function(data, type, row) {
+                                if (type === 'display') {
+                                    if (row.sub_category && row.sub_category.name !== null) {
+                                        return row.sub_category.name;
+                                    } else {
+                                        return 'NA';
+                                    }
+                                }
+                                return data;
+                            }
+                        },
+
+                        {
+                            "data": 'tags',
+                            "render": function(data, type, row) {
+                                if (data === null || data === '') {
+                                    return 'NA';
+                                } else {
+                                    var tagsArray = data.split(', '); // Split the string into an array
+                                    var buttons = '';
+
+                                    tagsArray.forEach(function(tag) {
+                                        buttons +=
+                                            '<button class="btn btn-primary tag-button p-2">' +
+                                            tag + '</button> ';
+                                    });
+
+                                    return buttons;
+                                }
+                            }
+                        },
+
+
+
+                        {
+                            data: 'price'
+                        },
+                        {
+                            data: 'actual_price',
+                            render: function(data) {
+                                if (data !== "" && data !== null) {
+                                    return data;
+                                } else {
+                                    return 'NA';
+                                }
+                            }
+                        },
+
+
+
+                        {
+                            data: 'created_at',
+                            render: function(data, type, row) {
+                                if (type === 'display' || type === 'filter') {
+                                    // Assuming 'created_at' is in the default ISO 8601 format
+                                    var datetime = new Date(data);
+                                    var year = datetime.getFullYear();
+                                    var month = (datetime.getMonth() + 1).toString().padStart(2, '0');
+                                    var day = datetime.getDate().toString().padStart(2, '0');
+                                    var hours = datetime.getHours().toString().padStart(2, '0');
+                                    var minutes = datetime.getMinutes().toString().padStart(2, '0');
+                                    var seconds = datetime.getSeconds().toString().padStart(2, '0');
+
+                                    // Format the date and time as 'yyyy-mm-dd HH:MM:SS'
+                                    return year + '-' + month + '-' + day + ' ' + hours + ':' +
+                                        minutes + ':' + seconds;
+                                } else {
+                                    return data;
+                                }
+                            }
+                        }
+
+
+
+                    ];
+
+                    populateTable(data, tableId, columns);
+                })
+                .catch(error => console.error(error));
+        }
+
+
+        // get product details
+
+        function editProduct(id, event) {
+
+            document.getElementById('edit_subcategory').innHTML = "";
+            var loader = document.querySelector(".loader-container");
+            loader.style.display = "flex";
+
+            const csrfToken = getCsrfToken();
+
+            const form_datas = {
+                id: id,
+            };
+
+            fetch("{{ url('/admin/getProduct') }}", {
+                    method: 'POST',
+                    body: JSON.stringify(form_datas),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    console.log(data.slug);
+
+                    const imgurl = "{{ asset('/products') }}/" + data.product_image;
+                    $("#edit_product_img").attr('src', imgurl);
+
+                    // Clear existing alt images
+                    $("#altImagesContainer").empty();
+
+                    // Display product_alt_images
+                    const altImages = JSON.parse(data.product_alt_images);
+
+
+                    // Check if altImages is an array
+                    if (Array.isArray(altImages) && altImages.length > 0) {
+                        altImages.forEach(altImage => {
+                            const altImageUrl = "{{ asset('/product_alt') }}/" + altImage;
+                            const altImageElement =
+                                `<img src="${altImageUrl}" class="img-thumbnail" alt="Product Alt Image">`;
+                            $("#altImagesContainer").append(altImageElement);
+                        });
+                    } else {
+                        console.log(typeof(data.product_alt_images));
+                        console.error('product_alt_images is not an array or is empty');
+                    }
+
+
+                    $("#edit_title").val(data.title);
+                    $("#edit_code").val(data.code);
+                    $("#edit_sku").val(data.sku);
+                    $("#edit_slug").val(data.slug);
+
+                    loader.style.display = "none";
+                    $("#editproductModal").modal('show');
+
+
+                    var edit_category = document.getElementById('edit_category');
+
+                    var edit_subcategory = document.getElementById('edit_subcategory');
+                    var edit_product_status = document.getElementById('edit_product_status');
+
+                    for (var i = 0; i < edit_category.options.length; i++) {
+
+                        if (edit_category.options[i].value == data.main_category) {
+
+                            edit_category.options[i].selected = true;
+                        }
+
+                    }
+
+                    for (var i = 0; i < edit_subcategory.options.length; i++) {
+
+                        if (edit_subcategory.options[i].value == data.sub_category) {
+
+                            edit_subcategory.options[i].selected = true;
+                        }
+
+                    }
+
+
+                    for (var i = 0; i < edit_product_status.options.length; i++) {
+
+                        if (edit_product_status.options[i].value == data.status) {
+
+                            edit_product_status.options[i].selected = true;
+                        }
+
+                    }
+
+                    $("#eid").val(data.id);
+
+                    tinymce.get('edit_description').setContent(data.description);
+                    $("#edit_weight").val(data.weight);
+                    $("#edit_height").val(data.height);
+                    $("#edit_length").val(data.length);
+
+                    $("#edit_breadth").val(data.breadth);
+                    $("#edit_price").val(data.price);
+                    $("#edit_gst").val(data.gst);
+
+                    console.log("Actual price" + data.actual_price);
+
+                    if (data.actual_price != "" && data.actual_price != null) {
+                        $("#edit_actual_price").val(data.actual_price);
+
+                    }
+
+                    $("#edit_product_height").val(data.product_height);
+                    $("#edit_product_breadth").val(data.product_breadth);
+                    $("#edit_product_length").val(data.product_length);
+
+                    var tagstr = data.tags;
+                    console.log(tagstr);
+
+                    if (tagstr && tagstr !== "") {
+                        // Trim any whitespace and then split the string by commas
+                        var tags = tagstr.split(',').map(tag => tag.trim());
+
+                        $('#edit_tags').selectpicker('val', tags);
+                    } else {
+                        $('#edit_tags').selectpicker('val', []);
+                    }
+
+
+
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+
+        }
+
+
+        //  product status change
+
+        function ProductChange(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#004a8c',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = getCsrfToken();
+                    const form_datas = {
+                        id: id,
+                    };
+
+                    fetch("{{ url('/admin/productChange') }}", {
+                            method: 'POST',
+                            body: JSON.stringify(form_datas),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+
+
+                            toastr.success('Product status changed successfully', 'Oops', {
+                                onHidden: function() {
+                                    // location.reload();
+                                    $('#productTable').DataTable().destroy();
+                                    AllProductsDatatable();
+                                }
+                            });
+
+
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+
+
+
+                }
+            });
+
+        }
+
+        // form submit for product edit
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var editProductForm = document.getElementById('editProductForm');
+
+            if (editProductForm) {
+                editProductForm.onsubmit = function(event) {
+
+                    event.preventDefault();
+
+                    let formElement = event.target;
+                    const formData = new FormData(formElement);
+                    let content = tinymce.get('edit_description').getContent();
+                    formData.set('description', content);
+                    let formAction = formElement.getAttribute('action');
+
+                    const csrfToken = getCsrfToken();
+
+
+                    const edit_product_image = document.getElementById('edit_product_image');
+                    var imageFile = edit_product_image.files[0];
+
+                    if (!imageFile) {
+                        fetch(formAction, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken,
+                                },
+                            })
+                            .then((response) => response.json())
+                            .then(data => {
+
+                                console.log(data);
+                                if (data.errors) {
+                                    var error = data.errors;
+                                    for (const fieldName in error) {
+                                        if (error.hasOwnProperty(fieldName)) {
+                                            const errorMessages = error[fieldName];
+                                            errorMessages.forEach(errorMessage => {
+                                                toastr.error(errorMessage);
+                                            });
+                                        }
+                                    }
+                                }
+
+                                if (data.code == 200) {
+                                    toastr.success(data.msg, 'Success', {
+                                        onHidden: function() {
+                                            //window.location.reload();
+
+                                            // refresh the DataTable
+
+                                            $("#editproductModal").modal('hide');
+                                            $('#productTable').DataTable().destroy();
+                                            AllProductsDatatable();
+                                        },
+                                    });
+                                }
+
+
+                            })
+                            .catch(error => {
+                                console.error('Fetch error:', error);
+                            });
+                    } else {
+                        if (imageFile.size > 5 * 1024 * 1024) {
+                            $("#uploadErrorSpan").html('Image shoul be less than 5MB');
+                        } else {
+
+                            fetch(formAction, {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-CSRF-TOKEN': csrfToken,
+                                    },
+                                })
+                                .then((response) => response.json())
+                                .then(data => {
+
+                                    console.log(data);
+                                    if (data.errors) {
+                                        var error = data.errors;
+                                        for (const fieldName in error) {
+                                            if (error.hasOwnProperty(fieldName)) {
+                                                const errorMessages = error[fieldName];
+                                                errorMessages.forEach(errorMessage => {
+                                                    toastr.error(errorMessage);
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    if (data.code == 200) {
+                                        toastr.success(data.msg, 'Success', {
+                                            onHidden: function() {
+                                                //window.location.reload();
+
+                                                // refresh the DataTable
+                                                $("#editproductModal").modal('hide');
+                                                $('#productTable').DataTable().destroy();
+                                                AllProductsDatatable();
+                                            },
+                                        });
+                                    }
+
+
+                                })
+                                .catch(error => {
+                                    console.error('Fetch error:', error);
+                                });
+                        }
+                    }
+
+
+
+                }
+            }
+
+
+
+        });
+    </script>
 
 @endsection

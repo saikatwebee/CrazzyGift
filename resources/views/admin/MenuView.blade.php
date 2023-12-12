@@ -85,66 +85,6 @@
     <!-- main-panel ends -->
 
 
-    <!-- menu model -->
-
-    <div class="modal fade" id="MenuModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Menu Details</h5>
-
-                    <i class="fa-solid fa-delete-left" data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body">
-
-                    <form id="editMenuForm" method="post" action="{{ url('/admin/editMenu') }}">
-                        <input type="hidden" name="id" id="mid">
-                        <div class="form-group">
-                            <label for="edit_menu_name">Menu Name</label>
-                            <input type="text" name="name" id="edit_menu_name" required placeholder="Enter Menu Name"
-                                class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit_menu_url"></label>
-                            <input type="text" name="url" id="edit_menu_url" required placeholder="Enter URL"
-                                class="form-control">
-                            <span class="text-primary" id="edit_create_url"><i class="fa-solid fa-gear"></i> Create
-                                Url</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit_menu_icon">Icon</label>
-                            <input type="text" name="icon" id="edit_menu_icon" placeholder="Enter Menu Icon"
-                                class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit_parent_id">Parent ID</label>
-                            <select name="parent_id" id="edit_parent_id" class="form-control">
-                                <option value="">Select</option>
-                                @foreach ($menus as $menu)
-                                    @if ($menu->parent_id == null && $menu->status == 1)
-                                        <option value="{{ $menu->id }}">{{ $menu->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-
-                        {{-- div.form-group --}}
-
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="editMenuBtn">Save changes</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -220,7 +160,11 @@
     </script>
 
     <script>
+        $(() => {
+            getAllMenuDatatable();
+        })
         //menu data table 
+
 
         function getAllMenuDatatable() {
 
@@ -315,6 +259,55 @@
                 })
                 .catch(error => console.error(error));
         }
+
+
+
+        function editMenu(id) {
+
+            const csrfToken = getCsrfToken();
+
+            const form_datas = {
+                id: id,
+            };
+
+
+            fetch("{{ url('/admin/showMenu') }}", {
+                    method: 'POST',
+                    body: JSON.stringify(form_datas),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    console.log(data);
+
+                    if (data) {
+                        var generatedURL = "{{ url('/admin/edit-menu') }}/" + data.url;
+                        console.log(generatedURL);
+                        window.location.href = generatedURL;
+
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+
+
+        }
+
+
+
+
+       
 
 
         // delete menu

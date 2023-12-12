@@ -847,6 +847,49 @@
         });
 
 
+        function editBanner(id) {
+
+            $("#bid").val(id);
+            $("#EditBannerModal").modal('show');
+
+            const csrfToken = getCsrfToken();
+
+            const form_datas = {
+                id: id,
+            };
+
+
+            fetch("{{ url('/admin/getBanner') }}", {
+                    method: 'POST',
+                    body: JSON.stringify(form_datas),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    console.log(data);
+                    $("#edit_target_url").val(data.target);
+                    const Bannerurl = "{{ asset('/banners') }}/" + data.image;
+                    $("#edit_banner_img").attr('src', Bannerurl);
+
+
+
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        }
+
+
+
         //banner datatable
 
         function getAllBannersDatatable() {
@@ -1368,6 +1411,64 @@
 
         });
 
+
+        function editSlider(id) {
+        $("#sid").val(id);
+        $("#EditSliderModal").modal('show');
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getSlider') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#sid").val(data.id);
+
+                var selectElement = document.getElementById("edit_type");
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    if (selectElement.options[i].value == data.type) {
+                        selectElement.options[i].selected = true;
+                        break;
+                    }
+                }
+
+
+                var productStr = data.products;
+
+                var products = productStr.split(',');
+
+                console.log(products);
+                $('#edit_products').selectpicker('val', products);
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
+
+    }
+
+
+
         // edit product slider
         document.addEventListener("DOMContentLoaded", function() {
             var slider_form = document.getElementById('slider_form2');
@@ -1425,6 +1526,9 @@
             }
 
         });
+
+
+        
 
 
         //status toggle for product slider
@@ -1729,6 +1833,56 @@
             }
 
         });
+
+
+
+        function editTestimonialSlider(id) {
+        $("#sid").val(id);
+        $("#EditTestimonialSliderModal").modal('show');
+
+        const csrfToken = getCsrfToken();
+
+        const form_datas = {
+            id: id,
+        };
+
+
+        fetch("{{ url('/admin/getTestimonialSlider') }}", {
+                method: 'POST',
+                body: JSON.stringify(form_datas),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                console.log(data);
+                $("#tid").val(data.id);
+
+                $("#edit_testimonial_name").val(data.name);
+                //$("#edit_testimonial_description").val(data.description);
+                $("#edit_testimonial_designation").val(data.designation);
+
+                tinymce.get('edit_testimonial_description').setContent(data.description);
+
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
+
+    }
+
 
 
         // edit testimonial slider 
