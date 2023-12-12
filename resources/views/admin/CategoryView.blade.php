@@ -349,6 +349,107 @@
         });
 
 
+        function editCategory(id) {
+
+            const csrfToken = getCsrfToken();
+            $("#cid").val(id);
+            const form_datas = {
+                id: id,
+            };
+
+
+            fetch("{{ url('/admin/getCategory') }}", {
+                    method: 'POST',
+                    body: JSON.stringify(form_datas),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    console.log(data);
+                    $("#EditCategoryModal").modal('show');
+                    $("#edit_category_name").val(data.name);
+                    //  const Bannerurl = "{{ asset('/banners') }}/"+data.image;
+                    //  $("#edit_banner_img").attr('src',Bannerurl);
+
+
+
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+
+        }
+
+
+
+
+        function editSubcategory(id) {
+
+
+            const csrfToken = getCsrfToken();
+            $("#subid").val(id);
+            const form_datas = {
+                id: id,
+            };
+
+            fetch("{{ url('/admin/getSubcategory') }}", {
+                    method: 'POST',
+                    body: JSON.stringify(form_datas),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    console.log(data);
+                    $("#EditSubModal").modal('show');
+                    $("#edit_sub_name").val(data.name);
+
+                    console.log(data.main_category);
+
+                    var selectElement = document.getElementById("edit_main_category");
+                    for (var i = 0; i < selectElement.options.length; i++) {
+                        if (selectElement.options[i].value == data.main_category) {
+                            selectElement.options[i].selected = true;
+                            break;
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         //category datatable
 
 

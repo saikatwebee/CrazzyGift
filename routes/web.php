@@ -226,6 +226,7 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
 
 
     Route::get('/getAllOrders', [OrderInventoryController::class, 'getAllOrders'])->name('getAllOrders');
+    Route::post('/cancellShipmentMailAdmin', [PaymentController::class, "cancellShipmentMailAdmin"]);
 
     Route::get('/getAllUsers', [AdminController::class, 'getAllUsers'])->name('getAllUsers');
 

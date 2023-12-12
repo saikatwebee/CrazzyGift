@@ -262,7 +262,7 @@
                                                                 Delivery<br><br><br><br>
 
                                                             </li>
-                                                            <li class="tracking-item {{ ($reason_code_number == 999 && $order->order_status == 5) ? 'active' : '' }}"
+                                                            <li class="tracking-item {{ $reason_code_number == 999 && $order->order_status == 5 ? 'active' : '' }}"
                                                                 data-status-text="Delivered">Order
                                                                 Delivered<br><br><br><br>
 
@@ -444,11 +444,29 @@
                                 console.log(data);
 
                                 if (data.code == 200) {
-                                    toastr.success(data.msg, 'Success', {
-                                        onHidden: function() {
-                                            location.reload();
-                                        }
-                                    })
+                                    
+                                    const callbackUrl = "{{ url('/cancellShipmentMailAdmin') }}";
+
+                                    fetch(callbackUrl, {
+                                            method: 'POST',
+                                            body: JSON.stringify(form_datas),
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': csrfToken,
+                                            },
+                                        })
+                                        .then(response => response.json())
+                                        .then(callbackData => {
+                                            console.log(callbackData);
+                                            if (callbackData.code == 200) {
+                                                toastr.success(data.msg, 'Success', {
+                                                    onHidden: function() {
+                                                        location.reload();
+                                                    }
+                                                });
+                                            }
+                                        })
+                                        .catch(callbackError => console.error(callbackError));
                                 } else {
                                     toastr.error("Something went wrong!", 'oops', {
                                         onHidden: function() {
@@ -462,9 +480,6 @@
                 })
 
             }
-
-
-           
         </script>
 
     @endsection

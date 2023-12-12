@@ -61,9 +61,11 @@ class UserController extends Controller
             $res1[] = $data1;
         }
 
+        // var_dump($best_products_ids);
         $res2 = [];
         foreach ($best_products_ids as $id2) {
             $best_products = Product::where('id', $id2)->first();
+
             $data2['id'] = $best_products->id;
             $data2['product_image'] = $best_products->product_image;
             $data2['title'] = $best_products->title;
@@ -240,7 +242,7 @@ class UserController extends Controller
 
     public function handleGoogleCallback()
     {
-        //  try {
+         try {
 
         $user = Socialite::driver('google')->user();
         $finduser = User::where('google_id', $user->id)->first();
@@ -263,7 +265,8 @@ class UserController extends Controller
                 }
             } else {
 
-                return redirect()->route('login');
+                return redirect()->route('login')->with('error', 'Your account is currently inactive. Please reach out to us at orders@crazzygift.com to activate your account. Thank you for your attention to this matter.');
+
             }
         } else {
 
@@ -294,14 +297,14 @@ class UserController extends Controller
                         return redirect('/');
                     }
                 } else {
-                    redirect()->route('login');
+                    return redirect()->route('login')->with('error', 'Your account is currently inactive. Please reach out to us at orders@crazzygift.com to activate your account. Thank you for your attention to this matter.');
                 }
             }
         }
-        // } 
-        // catch (Exception $e) {
-        //     return response()->json(['message' => $e->getMessage()], 502);
-        // }
+        } 
+        catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 502);
+        }
     }
 
 
