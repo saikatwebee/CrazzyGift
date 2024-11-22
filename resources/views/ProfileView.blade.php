@@ -651,8 +651,12 @@
                     @csrf
                     <div class="otp-input my-4">
                         <input type="hidden" name="phone" id="hidPhone">
+                        
                         <input type="text" name="otp1" id="otp1" maxlength="1"
-                            onkeyup="moveToNext(this, 'otp2')" required="">
+                            onkeyup="moveToNext(this, 'otp2')" onkeyup="moveToPreviousInput(this, 'otp1',event)"
+                            onkeypress="moveToPreviousInput(this, 'otp1',event)"
+                            onkeydown="moveToPreviousInput(this, 'otp1',event)" required="">
+
                         <input type="text" name="otp2" id="otp2" maxlength="1"
                             onkeyup="moveToNext(this, 'otp3')" required="">
                         <input type="text" name="otp3" id="otp3" maxlength="1"
