@@ -419,7 +419,7 @@ class UserController extends Controller
                     session(['tokenRegister' => $token_register]);
                     session(['register_' . $token_register => $registerData]);
 
-                    $response = ['msg' => 'Otp has been sent successfully', 'code' => 200];
+                    $response = ['msg' => 'Otp has been sent successfully', 'code' => 200,'registerData'=>$registerData];
                 } else {
                     $response = ['msg' => 'Something went wrong,check your Internet Connection & try again', 'code' => 210];
                 }
@@ -674,13 +674,23 @@ class UserController extends Controller
 
     public function verifyOtpProfile(Request $request)
     {
+        $id = auth()->user()->id;
+        $token_profile = session('tokenProfile');
+        $profileData = session('profile_' . $token_profile);
+
+
         $str = $request->input('otp1') . "" . $request->input('otp2') . "" . $request->input('otp3') . "" . $request->input('otp4');
         $userOtp = (int) $str;
         $user_id = auth()->user()->id;
 
         if ($userOtp != "") {
-            if (User::where(['id' => $user_id, 'otp' => $userOtp])->exists()) {
+
+            // if (User::where(['id' => $user_id, 'otp' => $userOtp])->exists()) {
+                if ($profileData['otp'] == $userOtp) {
                 //verfied
+
+                 $res = User::where('id', $id)->update($profileData);
+
                 if (User::where(['id' => auth()->user()->id, 'is_verified' => 0])->exists()) {
 
 
@@ -777,7 +787,7 @@ class UserController extends Controller
 
 
 
-            $id = auth()->user()->id;
+           
             $data['name'] = trim($request->input('name'));
             $data['phone'] = trim($request->input('phone'));
             $data['email'] = trim($request->input('email'));
@@ -815,7 +825,11 @@ class UserController extends Controller
                     //update the otp in database after succesfully call the msg91 api
                     $data['otp'] = (int) $otp;
 
-                    $res = User::where('id', $id)->update($data);
+                    $token_profile = uniqid(); // Generate a unique token
+                    session(['tokenProfile' => $token_profile]);
+                    session(['profile_' . $token_profile => $data]);
+
+                   
 
                     return response()->json(['msg' => 'Profile updated successfully!', 'code' => 200, 'is_verified' => '0'], 200);
                 } else {
